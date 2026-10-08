@@ -1,0 +1,9 @@
+---
+import SectionPage from "../components/SectionPage.astro";
+const items = [
+	{ title: "Growth", description: "데이터와 사용자 행동을 바탕으로 브랜드와 서비스의 성장을 설계합니다." },
+	{ title: "Content", description: "사람의 관심을 행동으로 연결하는 콘텐츠와 캠페인을 기획합니다." },
+	{ title: "Product", description: "문제를 정의하고 아이디어를 실제 사용자 경험과 제품으로 구현합니다." },
+];
+---
+<SectionPage current="work" kicker="03 · FREELANCE PORTFOLIO" title="WORK" description="브랜드와 서비스의 문제를 발견하고, 전략부터 실행까지 함께 만드는 프리랜서 포트폴리오입니다." accent="#d7cdf4" sectionTitle="할 수 있는 일" items={items} />

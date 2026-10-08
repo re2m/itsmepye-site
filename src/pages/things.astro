@@ -1,0 +1,9 @@
+---
+import SectionPage from "../components/SectionPage.astro";
+const items = [
+	{ title: "첫 번째 서비스", description: "프예가 발견한 작은 불편을 해결하는 첫 번째 웹서비스입니다." },
+	{ title: "다음 실험", description: "빠르게 만들고 사용자 반응을 확인하는 작은 제품 실험을 준비하고 있습니다." },
+	{ title: "Coming soon", description: "새로운 아이디어가 쓸모 있는 형태가 되는 과정을 곧 공개합니다." },
+];
+---
+<SectionPage current="things" kicker="01 · MADE BY PYE" title="THINGS" description="아이디어에 머무르지 않고 직접 작동하는 서비스로 만듭니다. 작은 문제에서 시작한 제품과 실험을 모았습니다." accent="#b9ead7" sectionTitle="만든 서비스" items={items} />

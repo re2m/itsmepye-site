@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+interface Item { title: string; description: string; href?: string; }
+interface Props { current: "things" | "note" | "work"; kicker: string; title: string; description: string; accent: string; sectionTitle: string; items: Item[]; }
+const { current, kicker, title, description, accent, sectionTitle, items } = Astro.props;
+---
+<BaseLayout title={`${title} — itsmepye`} description={description} current={current}>
+	<section class="page-hero" style={`--accent:${accent}`}>
+		<div class="container"><p class="page-kicker">{kicker}</p><h1 class="display-title">{title}</h1><p class="page-description">{description}</p></div>
+		<div class="hero-orbit" aria-hidden="true"></div>
+	</section>
+	<section class="content-section"><div class="container">
+		<div class="section-heading"><h2>{sectionTitle}</h2><span>SCROLL TO EXPLORE ↓</span></div>
+		<div class="item-grid">{items.map((item, index) => <a class="item-card" href={item.href ?? "#"}><span class="index">0{index + 1}</span><h3>{item.title}</h3><p>{item.description}</p><span class="arrow" aria-hidden="true">↗</span></a>)}</div>
+	</div></section>
+</BaseLayout>

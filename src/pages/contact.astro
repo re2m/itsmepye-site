@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+<BaseLayout title="Contact — itsmepye" description="프예에게 프로젝트와 협업을 제안해주세요." current="contact">
+	<section class="page-hero contact-hero" style="--accent:#ff684f"><div class="container"><p class="page-kicker">04 · GET IN TOUCH</p><h1 class="display-title">LET'S<br />TALK.</h1><div class="contact-links"><a href="mailto:hello@itsmepye.site">hello@itsmepye.site <span>↗</span></a><a href="https://www.instagram.com/itsme_pye/" rel="noreferrer">Instagram @itsme_pye <span>↗</span></a></div></div><div class="hero-orbit" aria-hidden="true"></div></section>
+</BaseLayout>
+<style>
+	.contact-hero { min-height: 700px; }
+	.contact-links { position: relative; z-index: 2; display: grid; max-width: 650px; margin: 70px 0 0 auto; }
+	.contact-links a { display: flex; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--ink); font-size: clamp(16px, 2vw, 22px); }
+</style>
