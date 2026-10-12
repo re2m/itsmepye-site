@@ -9,50 +9,53 @@ const sections = [
 <BaseLayout>
 	<section class="home-hero">
 		<div class="container">
-			<p class="eyebrow"><span></span> PYE'S CREATIVE PLAYGROUND · 2026</p>
-			<h1>MAKE<br /><em>USEFUL</em><br />THINGS.</h1>
+			<p class="eyebrow"><span></span> PYE'S CREATIVE PLAYGROUND</p>
+			<h1>THINK<br /><em>MAKE</em><br />THINGS.</h1>
 			<div class="hero-bottom"><p>작은 호기심을<br />쓸모 있는 것으로.</p><p>프예가 직접 만들고, 배우고, 기록하는 공간입니다.<br />누군가에게 도움이 되는 형태로 나눕니다.</p></div>
 		</div>
-		<div class="hero-sticker" aria-hidden="true">P</div>
 	</section>
 	<section class="about container">
 		<p class="section-number">00 — ABOUT</p>
 		<h2>관찰하고, 만들고,<br />배운 것을 나눕니다.</h2>
-		<p>마케터이자 메이커 프예입니다. 생활 속 작은 문제를 서비스로 만들고, 시행착오에서 얻은 정보를 기록하며, 브랜드의 성장을 돕습니다.</p>
+		<div><p>마케터이자, 새로운 것을 끊임없이 찾는 다능인 프예입니다. 생활 속 작은 문제를 서비스로 만들고, 시행착오에서 얻은 정보를 기록하며, 나의 기준대로 살아가는 방법을 공유합니다.</p><div class="about-image image-placeholder"><img src="/images/temporary-placeholder.svg" alt="About 이미지 준비 중" /></div></div>
 	</section>
 	<section class="section-grid container" aria-label="사이트 영역">
 		{sections.map((section) => <a class={`section-card ${section.accent}`} href={section.href}><div class="card-top"><span>{section.number}</span><span>↗</span></div><p class="card-label">{section.label}</p><h2>{section.title}</h2><p>{section.description}</p></a>)}
 	</section>
 </BaseLayout>
 <style>
-	.home-hero { position: relative; min-height: calc(100svh - 62px); overflow: hidden; color: white; background: #11110f; }
+	.home-hero { position: relative; min-height: calc(100svh - 72px); overflow: hidden; color: var(--paper); border-bottom: 0; background-color: var(--ink); background-image: linear-gradient(#173a2dcc, #173a2dcc), url('/images/temporary-placeholder.svg'); background-size: cover; background-position: center; }
 	.home-hero .container { position: relative; z-index: 2; padding-top: clamp(70px, 10vw, 125px); padding-bottom: 50px; }
-	.eyebrow { display: flex; align-items: center; gap: 10px; margin: 0 0 35px; color: #ffffff8f; font-size: 10px; font-weight: 700; letter-spacing: .15em; }
-	.eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: var(--lime); }
-	h1 { position: relative; z-index: 1; margin: 0; font-size: clamp(72px, 15vw, 190px); font-weight: 600; line-height: .72; letter-spacing: -.1em; }
-	h1 em { color: var(--lime); font-family: Georgia, serif; font-weight: 400; }
-	.hero-bottom { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-top: 70px; padding-top: 20px; border-top: 1px solid #ffffff36; }
-	.hero-bottom p { margin: 0; color: #ffffffaa; font-size: 13px; line-height: 1.6; }
-	.hero-bottom p:first-child { color: white; font-size: 18px; font-weight: 700; letter-spacing: -.04em; }
-	.hero-sticker { position: absolute; right: 4vw; top: 20%; display: grid; width: clamp(170px, 24vw, 330px); aspect-ratio: 1; place-items: center; border-radius: 50%; color: var(--ink); background: var(--coral); font: italic clamp(80px, 15vw, 210px)/1 Georgia, serif; transform: rotate(9deg); }
-	.about { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 35px; padding-block: 110px; border-bottom: 1px solid var(--line); }
-	.section-number { font-size: 10px; letter-spacing: .12em; }
-	.about h2 { margin: 0; font-size: clamp(38px, 6vw, 78px); line-height: 1.05; letter-spacing: -.075em; }
-	.about > p:last-child { margin: 8px 0 0; color: #65625b; font-size: 14px; line-height: 1.8; }
+	.eyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 35px; padding: 9px 15px; color: var(--ink); background: var(--sun); border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: .08em; }
+	.eyebrow span { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+	h1 { position: relative; z-index: 1; margin: 0; font-family: "SB Aggro Bold", Pretendard, sans-serif; font-size: clamp(72px, 15vw, 190px); font-weight: 800; line-height: .72; letter-spacing: -.1em; text-shadow: 7px 7px 0 var(--pink); }
+	h1 em { display: inline-block; padding: 0 .08em .04em 0; color: var(--ink); font-style: normal; font-weight: 800; background: var(--accent); text-shadow: none; }
+	.hero-bottom { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-top: 70px; padding-top: 20px; border-top: 2px solid var(--paper); }
+	.hero-bottom p { margin: 0; color: var(--paper); font-size: 15px; line-height: 1.6; }
+	.hero-bottom p:first-child { color: var(--ink); padding: 12px 16px; background: var(--ocean); font-size: 18px; font-weight: 700; letter-spacing: -.04em; }
+	.image-placeholder { border: 1px dashed var(--line); background: var(--placeholder); overflow: hidden; }
+	.image-placeholder img { display: block; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+	.about { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 35px; margin-top: 24px; padding: 70px 35px; border: 3px solid var(--ink); border-radius: 38px 10px 38px 10px; background: var(--accent); box-shadow: 12px 12px 0 var(--ink); }
+	.section-number { color: var(--muted); font-size: 13px; letter-spacing: .08em; }
+	.about h2 { margin: 0; font-family: "SB Aggro Bold", Pretendard, sans-serif; font-size: clamp(38px, 6vw, 78px); line-height: 1.05; letter-spacing: -.075em; }
+	.about > div p { margin: 8px 0 0; color: var(--ink); font-size: 15px; line-height: 1.8; }
+	.about-image { margin-top: 26px; aspect-ratio: 4 / 3; border: 3px solid var(--ink); border-radius: 22px 6px 22px 6px; }
 	.section-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-block: 90px 120px; }
-	.section-card { display: flex; flex-direction: column; min-height: 410px; padding: 24px; transition: transform .18s ease; }
-	.section-card:hover { transform: translateY(-6px); }
-	.mint { background: #b9ead7; }.yellow { background: #f4d94f; }.lavender { background: #d7cdf4; }
+	.section-card { display: flex; flex-direction: column; min-height: 340px; padding: 24px; border: 3px solid var(--ink); border-radius: 28px 8px 28px 8px; background: var(--paper); box-shadow: 8px 8px 0 var(--ink); transition: transform .2s ease, background .2s ease; }
+	.section-card:nth-child(2) { border-radius: 8px 28px 8px 28px; }
+	.section-card:nth-child(2) { background: var(--sun); }
+	.section-card:nth-child(3) { background: var(--ocean); }
+	.section-card:hover { transform: translateY(-8px) rotate(1deg); background: var(--orange); color: var(--ink); }
+	.mint, .yellow, .lavender { background: var(--placeholder); }
 	.card-top { display: flex; justify-content: space-between; font-size: 12px; }
-	.card-label { margin: auto 0 12px; font-size: 10px; font-weight: 800; letter-spacing: .15em; }
-	.section-card h2 { margin: 0; font-size: 30px; letter-spacing: -.06em; }
-	.section-card > p:last-child { max-width: 31ch; margin: 15px 0 0; color: #11110fa8; font-size: 13px; line-height: 1.65; }
+	.card-label { margin: auto 0 12px; color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .08em; }
+	.section-card h2 { margin: 0; font-family: "SB Aggro Bold", Pretendard, sans-serif; font-size: 30px; letter-spacing: -.06em; }
+	.section-card > p:last-child { max-width: 31ch; margin: 15px 0 0; color: var(--muted); font-size: 15px; line-height: 1.65; }
 	@media (max-width: 760px) {
 		.home-hero { min-height: 700px; }
 		h1 { font-size: clamp(66px, 24vw, 104px); }
-		.hero-sticker { right: -50px; top: 39%; }
 		.hero-bottom { align-items: start; flex-direction: column; margin-top: 180px; }
-		.about { grid-template-columns: 1fr; padding-block: 72px; }
+		.about { grid-template-columns: 1fr; margin-top: 16px; padding: 52px 24px; }
 		.section-grid { grid-template-columns: 1fr; padding-block: 64px 80px; }
 		.section-card { min-height: 270px; }
 	}
