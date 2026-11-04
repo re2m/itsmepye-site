@@ -1,0 +1,9 @@
+{
+	"redirects": [
+		{
+			"source": "/notes/tip-diary",
+			"destination": "https://bienvenuea.notion.site/notes-tip-diary",
+			"permanent": false
+		}
+	]
+}
