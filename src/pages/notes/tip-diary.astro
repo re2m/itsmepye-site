@@ -1,0 +1,164 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+	title="나만의 다이어리 만드는 방법 — 프예 TIP"
+	description="취향과 사용 방식에 맞춘 나만의 다이어리를 직접 만드는 방법을 단계별로 정리했습니다."
+	current="note"
+>
+	<article class="tip-page">
+		<header class="tip-hero">
+			<div class="tip-hero-inner">
+				<p class="eyebrow">PYE TIP · NOTE 01</p>
+				<h1>나만의<br /><em>다이어리</em><br />만드는 방법</h1>
+				<p class="hero-copy">아직도 다이어리를 못 정하셨다면,<br />취향과 사용 방식에 맞춘 나만의 다이어리를 직접 만들어보세요.</p>
+				<div class="hero-stamp" aria-hidden="true">MAKE<br />YOUR<br />YEAR</div>
+			</div>
+		</header>
+
+		<div class="tip-layout">
+			<aside class="tip-index" aria-label="본문 목차">
+				<p>CONTENTS</p>
+				<a href="#tools">00. 도구 준비하기</a>
+				<a href="#size">01. 판형 정하기</a>
+				<a href="#inside">02. 내지 정하기</a>
+				<a href="#cover">03. 표지 디자인하기</a>
+				<a href="#binding">04. 제본 형식 정하기</a>
+				<a href="#order">05. 발주하기</a>
+			</aside>
+
+			<div class="tip-content">
+				<div class="intro-callout"><span>💡</span><p>다이어리는 꼭 완성된 제품을 사야 하는 물건이 아니에요. 내가 자주 쓰는 방식과 필요한 페이지를 골라 직접 조합하면, 더 오래 애정하며 사용할 수 있습니다.</p></div>
+
+				<section id="tools" class="tip-section">
+					<p class="section-number">00</p><h2>도구 준비하기</h2>
+					<p>다이어리를 만들기 전에 먼저 작업할 도구를 정해요.</p>
+					<ul class="tool-list"><li><strong>일러스트·피그마</strong><span>표지와 내지를 직접 세밀하게 디자인하고 싶은 경우 · 난이도 중상 🔥🔥</span></li><li><strong>캔바·미리캔버스</strong><span>템플릿을 활용해 빠르게 만들고 싶은 경우 · 난이도 중 🔥</span></li><li><strong>PDF 저장 기능</strong><span>완성한 표지와 내지를 인쇄소에 전달할 때 필요해요 · 난이도 하 💧</span></li></ul>
+					<p>처음부터 새로운 디자인을 모두 만들 필요는 없습니다. <mark>템플릿</mark>을 고른 뒤 판형과 여백을 맞추고, 내 사용 방식에 맞게 페이지 구성과 색상만 수정해도 충분해요.</p>
+					<p class="note">작업을 시작하기 전에 제작 업체에서 제공하는 표지·내지 템플릿이 있는지도 확인하세요. 제본 방식에 따라 책등, 타공 위치, 안전 영역이 달라질 수 있으니 최종 파일은 업체 규격에 맞춰 저장하는 것이 가장 안전합니다.</p>
+				</section>
+
+				<section id="size" class="tip-section">
+					<p class="section-number">01</p><h2>판형 정하기</h2>
+					<p>먼저 나에게 맞는 다이어리 사이즈를 정해요. 저는 집에 있는 책들의 크기를 비교해 보면서 감을 잡았습니다.</p>
+					<p>B6과 A5 사이의 중간 사이즈가 가장 잘 맞을 것 같아 그 크기로 제작했어요. <a href="https://www.redprinting.co.kr/ko/guide3/view/available-book-sizes" target="_blank" rel="noreferrer">A5·B6 판형 안내</a>를 참고하되, 업체마다 표기 방식이 조금씩 다를 수 있으니 최종 발주 전에는 제작 업체의 규격을 확인하세요.</p>
+					<figure><img src="/images/tip-diary/size-guide.png" alt="A5, B6, A6 판형 예시" /><figcaption>판형 예시 · 출처: 레드프린팅</figcaption></figure>
+					<table><thead><tr><th>판형</th><th>완성 사이즈 참고</th><th>이런 경우에 잘 맞아요</th></tr></thead><tbody><tr><td>A5</td><td>148 × 210mm</td><td>기록량이 많고 책상에서 펼쳐 쓰는 다이어리</td></tr><tr><td>B6</td><td>128 × 182mm</td><td>휴대성과 기록 공간을 균형 있게 챙기고 싶은 경우</td></tr><tr><td>A6</td><td>105 × 148mm</td><td>가볍게 들고 다니며 짧게 기록하는 경우</td></tr></tbody></table>
+					<div class="warning"><strong>⚠️ 완성 사이즈와 작업 사이즈를 구분해야 해요.</strong><ul><li>완성 사이즈: 실제로 재단되어 나오는 크기</li><li>작업 사이즈: 재단 여분을 포함한 디자인 파일 크기</li><li>안전 영역: 글자와 로고를 재단선에서 충분히 안쪽에 배치하는 영역</li></ul><p>레드프린팅 책자 가이드에서는 책자 작업 시 재단 여유를 바깥 사방 5mm로 두고, 잘리면 안 되는 글자와 이미지는 재단선 안쪽 5mm 안전 영역에 배치하도록 안내합니다.</p><em>예) A5 완성 사이즈 148×210mm → 작업 사이즈 158×220mm</em></div>
+					<p>배경과 이미지는 작업 사이즈 끝까지 채우고, 글자·로고는 안전 영역 안에 배치하세요. <a href="https://www.redprinting.co.kr/ko/guide3/view/book-trim-work-size" target="_blank" rel="noreferrer">책 재단·작업 사이즈 안내</a>와 <a href="https://www.redprinting.co.kr/ko/guide3/view/stationery" target="_blank" rel="noreferrer">스테이셔너리 작업 가이드</a>에서 도식을 확인할 수 있어요.</p>
+				</section>
+
+				<section id="inside" class="tip-section">
+					<p class="section-number">02</p><h2>내지 정하기</h2>
+					<p>내지는 <mark>다이어리의 사용성을 결정</mark>하는 가장 중요한 부분이에요.</p>
+					<p>저는 먼슬리보다 위클리 구성이 더 중요했고, 매일 보는 페이지에는 아이디어를 적을 수 있는 빈 공간이 필요했습니다. 실제로 자주 쓰는 방식을 기준으로 내지를 직접 구성했어요.</p>
+					<ol class="page-plan"><li>연간 계획 <span>올해의 키워드, 목표, 중요한 날짜</span></li><li>먼슬리 <span>한 달 일정과 큰 마감일 확인</span></li><li>위클리 <span>일주일의 일정, 할 일, 우선순위 기록</span></li><li>데일리 또는 메모 <span>아이디어, 회의 내용, 갑자기 떠오른 생각 기록</span></li><li>회고 페이지 <span>이번 달에 잘한 일, 아쉬운 일, 다음 달에 바꿀 점</span></li></ol>
+					<figure><img src="/images/tip-diary/weekly-layout.png" alt="주간 내지 레이아웃 예시" /><figcaption>주간 내지 레이아웃 예시 · 출처: MUJI Weekly Planner</figcaption></figure>
+					<p>직접 구성하는 게 어렵다면 템플릿을 활용해도 충분합니다. <a href="https://www.canva.com/planners/templates/daily/" target="_blank" rel="noreferrer">Canva 데일리 플래너</a>, <a href="https://www.canva.com/journals/templates/" target="_blank" rel="noreferrer">Canva 저널</a>, <a href="https://www.miricanvas.com/ko" target="_blank" rel="noreferrer">미리캔버스</a>에서 레이아웃을 비교해 보세요.</p>
+					<p class="note">템플릿을 고른 뒤에는 최종 사이즈를 A5나 B6로 맞추고, 재단 여분을 추가한 작업 사이즈로 다시 설정하세요. 다운로드 전에는 상업적 이용 가능 여부와 폰트·이미지 라이선스도 확인하는 것이 안전합니다.</p>
+				</section>
+
+				<section id="cover" class="tip-section">
+					<p class="section-number">03</p><h2>표지 디자인하기</h2>
+					<p>표지는 앞표지와 뒷표지를 각각 준비해야 해요. 제본 방식에 따라 책등이나 날개가 필요한 경우도 있으니, 제작 업체의 표지 템플릿을 먼저 확인하면 실수를 줄일 수 있습니다.</p>
+					<p>좋아하는 사진을 넣거나 마음에 드는 글귀를 적어보세요. 앞으로 1년 동안 매일 보게 될 디자인인 만큼, 내가 좋아하는 요소를 마음껏 담아 나만의 표지를 완성하면 됩니다.</p>
+					<figure class="mockup"><img src="https://mockupbro-thumbnails.imgix.net/2021/01/600f2ad4596e6.jpg?name=wire-bound-notebook-mockup" alt="다이어리 표지 목업 예시" loading="lazy" /><figcaption>다이어리 표지 목업 예시 · 출처: Mockup Bro</figcaption></figure>
+				</section>
+
+				<section id="binding" class="tip-section">
+					<p class="section-number">04</p><h2>제본 형식 정하기</h2>
+					<p>제본은 다이어리를 얼마나 펼쳐 쓰는지, 페이지가 얼마나 두꺼운지, 책처럼 보이길 원하는지에 따라 선택하면 됩니다. 실제 가능 페이지 수와 최소 수량은 제작 업체마다 다를 수 있어요.</p>
+					<table><thead><tr><th>제본 형식</th><th>특징</th><th>잘 맞는 경우</th></tr></thead><tbody><tr><td>중철제본</td><td>가운데를 철심으로 고정하고 180도 펼쳐 쓰기 좋음. 얇은 책자에 적합하며 페이지 수는 4의 배수로 구성</td><td>얇고 가벼운 소책자형 다이어리</td></tr><tr><td>무선제본</td><td>책등을 접착제로 고정해 일반 책처럼 보임. 완전히 펼쳐 쓰기는 어려움</td><td>페이지가 많고 책 같은 느낌을 원하는 다이어리</td></tr><tr><td>스프링·링제본</td><td>구멍을 뚫어 고정하며 360도 접어 사용할 수 있음</td><td>메모가 많고 펼쳐 둔 채 자주 쓰는 실용적인 다이어리</td></tr><tr><td>양장·사철제본</td><td>표지와 내구성이 좋고 오래 보관하기 좋지만 단가와 기간이 커질 수 있음</td><td>선물용, 소장용, 고급스러운 다이어리</td></tr></tbody></table>
+					<figure><img src="/images/tip-diary/binding-guide.png" alt="제본 형태 안내" /><figcaption>제본 형태 안내 · 출처: 레드프린팅</figcaption></figure>
+					<p>발주 전에는 제본 형식, 페이지 수 제한, 중철 시 4의 배수 여부, 책등 두께와 제목 인쇄 가능 여부, 스프링·링의 타공 위치, 표지와 내지의 제본 방향을 업체에 함께 확인하세요.</p>
+					<p><a href="https://www.redprinting.co.kr/ko/product/item/PR/PRBKPSN/0" target="_blank" rel="noreferrer">레드프린팅 제본 형태 안내</a>와 <a href="https://www.redprinting.co.kr/ko/landing/books" target="_blank" rel="noreferrer">책자 상품 예시</a>에서 형태를 비교해 볼 수 있습니다.</p>
+				</section>
+
+				<section id="order" class="tip-section">
+					<p class="section-number">05</p><h2>발주하기</h2>
+					<p>작업이 끝나면 내지와 표지를 PDF 파일로 저장해 제작 업체에 발주합니다. PDF로 저장한 뒤에는 글꼴과 이미지가 깨지지 않는지, 페이지 순서와 제본 방향이 맞는지 꼭 확인하세요.</p>
+					<div class="flow"><span>디자인 원본</span><b>→</b><span>PDF 저장</span><b>→</b><span>업체 템플릿 대조</span><b>→</b><span>교정본 확인</span><b>→</b><span>최종 발주</span></div>
+					<div class="checklist"><strong>✅ 발주 전 체크리스트</strong><label><input type="checkbox" /> 완성 사이즈와 작업 사이즈를 구분했나요?</label><label><input type="checkbox" /> 표지 앞·뒤·책등 또는 제본 방향을 확인했나요?</label><label><input type="checkbox" /> 글자와 로고가 재단선에 너무 가깝지 않나요?</label><label><input type="checkbox" /> 내지 페이지 수가 제본 방식과 맞나요?</label><label><input type="checkbox" /> 흑백·컬러, 용지, 코팅·후가공을 선택했나요?</label><label><input type="checkbox" /> PDF 저장 후 글꼴과 이미지가 깨지지 않나요?</label><label><input type="checkbox" /> 가능하다면 본 발주 전에 1부 교정 인쇄를 받아봤나요?</label></div>
+					<p>업체에 파일을 보내기 전에는 표지 파일 규격, 내지 파일 규격, 최소 주문 수량, 교정본 가능 여부, 제본 방식을 한 번에 문의하면 시행착오를 줄일 수 있습니다. <a href="https://www.redprinting.co.kr/down/guide/PRT_DFT.pdf" target="_blank" rel="noreferrer">RED Printing 인쇄 기본 가이드 PDF</a>에서도 기본 인쇄 조건을 확인할 수 있어요.</p>
+					<div class="closing-callout">나에게 필요한 페이지와 좋아하는 디자인을 직접 조합하면, 시중 제품보다 더 오래 애정하며 쓸 수 있는 다이어리를 만들 수 있어요. ✦</div>
+				</section>
+			</div>
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	.tip-page { --tip-ink: #14251d; --tip-paper: #f4efe3; --tip-yellow: #f5d34e; --tip-pink: #ff684f; color: var(--tip-ink); background: var(--tip-paper); }
+	.tip-hero { color: var(--tip-paper); background: var(--tip-ink); border-bottom: 2px solid var(--tip-ink); }
+	.tip-hero-inner { position: relative; width: min(1180px, calc(100% - 48px)); min-height: 560px; margin: 0 auto; padding: 90px 0 84px; }
+	.eyebrow { display: inline-block; margin: 0 0 32px; padding: 9px 13px; color: var(--tip-ink); background: var(--tip-yellow); border-radius: 999px; font-size: 12px; font-weight: 900; letter-spacing: .1em; }
+	.tip-hero h1 { max-width: 750px; margin: 0; font-size: clamp(64px, 10vw, 140px); line-height: .84; letter-spacing: -.12em; }
+	.tip-hero h1 em { color: var(--tip-yellow); font-style: normal; text-shadow: 5px 5px 0 var(--tip-pink); }
+	.hero-copy { max-width: 380px; margin: 42px 0 0 auto; color: #e6e1d6; font-size: 17px; line-height: 1.7; }
+	.hero-stamp { position: absolute; right: 5%; bottom: 62px; display: grid; place-items: center; width: 138px; aspect-ratio: 1; color: var(--tip-ink); border: 2px solid var(--tip-ink); border-radius: 50%; background: var(--tip-yellow); font-size: 14px; font-weight: 900; line-height: 1.1; text-align: center; transform: rotate(11deg); }
+	.tip-layout { display: grid; grid-template-columns: 180px minmax(0, 760px); gap: 74px; width: min(1014px, calc(100% - 48px)); margin: 0 auto; padding: 78px 0 120px; }
+	.tip-index { position: sticky; top: 92px; align-self: start; display: grid; gap: 12px; font-size: 12px; line-height: 1.3; }
+	.tip-index p { margin: 0 0 8px; font-size: 11px; font-weight: 900; letter-spacing: .12em; }
+	.tip-index a { color: #69766c; }
+	.tip-index a:hover { color: var(--tip-ink); text-decoration: underline; text-underline-offset: 3px; }
+	.tip-content { min-width: 0; }
+	.intro-callout, .warning, .checklist, .closing-callout { padding: 25px 28px; border: 2px solid var(--tip-ink); box-shadow: 6px 6px 0 var(--tip-ink); }
+	.intro-callout { display: flex; gap: 18px; margin-bottom: 90px; background: var(--tip-yellow); }
+	.intro-callout span { font-size: 27px; }
+	.intro-callout p { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.65; }
+	.tip-section { scroll-margin-top: 92px; margin-bottom: 106px; }
+	.section-number { display: inline-block; margin: 0 0 12px; padding: 7px 10px; color: var(--tip-ink); background: var(--tip-pink); font-size: 12px; font-weight: 900; }
+	.tip-section h2 { margin: 0 0 26px; font-size: clamp(40px, 6vw, 68px); line-height: .95; letter-spacing: -.1em; }
+	.tip-section p { margin: 0 0 22px; font-size: 16px; line-height: 1.85; letter-spacing: -.025em; }
+	.tip-section a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+	.tip-section mark { padding: 0 3px; color: var(--tip-ink); background: var(--tip-yellow); }
+	.tip-section .note { color: #59685d; font-size: 14px; }
+	.tool-list, .page-plan { display: grid; gap: 10px; margin: 34px 0; padding: 0; list-style: none; }
+	.tool-list li { display: grid; grid-template-columns: 190px 1fr; gap: 18px; padding: 17px 0; border-top: 1px solid #b3b8ab; }
+	.tool-list li:last-child { border-bottom: 1px solid #b3b8ab; }
+	.tool-list strong { font-size: 17px; }
+	.tool-list span { color: #647268; font-size: 14px; line-height: 1.5; }
+	.page-plan { counter-reset: plan; }
+	.page-plan li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 14px 0; border-bottom: 1px solid #b3b8ab; font-weight: 800; }
+	.page-plan li::before { counter-increment: plan; content: counter(plan); display: grid; place-items: center; width: 24px; height: 24px; color: var(--tip-paper); background: var(--tip-ink); border-radius: 50%; font-size: 11px; }
+	.page-plan span { grid-column: 2; margin-top: -4px; color: #68756b; font-size: 14px; font-weight: 400; }
+	figure { margin: 38px 0; }
+	figure img { display: block; width: 100%; max-height: 520px; object-fit: contain; border: 1px solid #c2c5b8; background: #ebe5d8; }
+	figcaption { margin-top: 9px; color: #748078; font-size: 11px; }
+	.mockup img { max-height: 560px; object-fit: cover; }
+	table { width: 100%; margin: 35px 0; border-collapse: collapse; font-size: 14px; line-height: 1.5; }
+	th, td { padding: 14px 12px; border: 1px solid #aeb6aa; text-align: left; vertical-align: top; }
+	th { color: var(--tip-paper); background: var(--tip-ink); font-size: 12px; }
+	.warning { margin: 34px 0; background: #e8f0cf; box-shadow: none; }
+	.warning strong { display: block; margin-bottom: 15px; }
+	.warning ul { margin: 0 0 14px; padding-left: 20px; line-height: 1.8; }
+	.warning p { margin-bottom: 12px; font-size: 14px; }
+	.warning em { font-size: 13px; }
+	.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 36px 0; padding: 22px; color: var(--tip-paper); background: var(--tip-ink); font-size: 13px; font-weight: 800; }
+	.flow b { color: var(--tip-yellow); }
+	.checklist { display: grid; gap: 12px; margin: 32px 0; background: #dce9e1; box-shadow: none; }
+	.checklist strong { margin-bottom: 6px; }
+	.checklist label { display: flex; gap: 9px; align-items: flex-start; font-size: 14px; line-height: 1.4; }
+	.checklist input { margin-top: 3px; accent-color: var(--tip-pink); }
+	.closing-callout { margin-top: 42px; color: var(--tip-ink); background: var(--tip-yellow); font-size: 18px; font-weight: 800; line-height: 1.6; }
+	@media (max-width: 760px) {
+		.tip-hero-inner { width: calc(100% - 32px); min-height: 520px; padding-top: 68px; }
+		.tip-hero h1 { font-size: clamp(60px, 19vw, 104px); }
+		.hero-copy { margin-top: 38px; font-size: 15px; }
+		.hero-stamp { right: 2px; bottom: 34px; width: 104px; font-size: 11px; }
+		.tip-layout { display: block; width: calc(100% - 32px); padding-top: 52px; }
+		.tip-index { position: static; grid-template-columns: repeat(2, 1fr); gap: 9px 18px; margin-bottom: 62px; }
+		.tip-index p { grid-column: 1 / -1; }
+		.intro-callout { margin-bottom: 70px; padding: 20px; }
+		.intro-callout p { font-size: 15px; }
+		.tip-section { margin-bottom: 78px; }
+		.tip-section h2 { font-size: 48px; }
+		.tip-section p { font-size: 15px; }
+		.tool-list li { grid-template-columns: 1fr; gap: 5px; }
+		table { display: block; overflow-x: auto; white-space: normal; }
+		th, td { min-width: 130px; }
+		.flow { align-items: flex-start; flex-direction: column; }
+		.flow b { transform: rotate(90deg); }
+	}
+</style>
