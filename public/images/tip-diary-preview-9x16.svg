@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <rect width="1080" height="1920" fill="#ffffff"/>
+  <g fill="#37352f" font-family="-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+    <text x="92" y="150" font-size="52">📔</text>
+    <text x="92" y="275" font-size="54" font-weight="700">[프예 TIP]</text>
+    <text x="92" y="350" font-size="54" font-weight="700">나만의 다이어리 만드는 방법</text>
+    <rect x="92" y="430" width="896" height="250" rx="8" fill="#f1f1ef"/>
+    <text x="132" y="515" font-size="30">💡</text>
+    <text x="190" y="515" font-size="31">아직도 다이어리를 못 정하셨다면,</text>
+    <text x="190" y="570" font-size="31">취향과 사용 방식에 맞춘 나만의 다이어리를 직접 만들어보세요!</text>
+    <line x1="92" y1="760" x2="988" y2="760" stroke="#e9e9e7" stroke-width="2"/>
+    <text x="92" y="875" font-size="28" fill="#787774">0.</text>
+    <text x="150" y="875" font-size="34" font-weight="700">도구 준비하기</text>
+    <text x="92" y="970" font-size="28">처음부터 새로운 디자인을 모두 만들 필요는 없습니다.</text>
+    <text x="92" y="1030" font-size="28">템플릿을 고른 뒤 판형과 여백을 맞춰보세요.</text>
+    <rect x="92" y="1130" width="896" height="390" rx="8" fill="#fff4d6"/>
+    <text x="132" y="1225" font-size="30">⚠️</text>
+    <text x="190" y="1225" font-size="31" font-weight="700">완성 사이즈와 작업 사이즈를 구분해야 해요.</text>
+    <text x="190" y="1300" font-size="27">재단 여유와 안전 영역을 확인하고,</text>
+    <text x="190" y="1350" font-size="27">제작 업체의 규격에 맞춰 파일을 저장하세요.</text>
+    <g transform="translate(92 1640)">
+      <rect x="0" y="0" width="250" height="170" rx="5" fill="#f7f7f5" stroke="#d9d9d6" stroke-width="3"/>
+      <rect x="28" y="24" width="194" height="122" fill="#ffffff" stroke="#c9c9c5" stroke-width="2"/>
+      <line x1="58" y1="58" x2="192" y2="58" stroke="#d9d9d6" stroke-width="5"/>
+      <line x1="58" y1="84" x2="176" y2="84" stroke="#d9d9d6" stroke-width="5"/>
+      <line x1="58" y1="110" x2="186" y2="110" stroke="#d9d9d6" stroke-width="5"/>
+      <text x="292" y="80" font-size="30" fill="#787774">판형 · 내지 · 제본 · 발주</text>
+      <text x="292" y="130" font-size="25" fill="#a09f9a">직접 만든 다이어리 제작 가이드</text>
+    </g>
+  </g>
+</svg>
