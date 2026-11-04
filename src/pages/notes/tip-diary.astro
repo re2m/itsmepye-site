@@ -1,12 +1,16 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout
-	title="나만의 다이어리 만드는 방법 — 프예 TIP"
-	description="취향과 사용 방식에 맞춘 나만의 다이어리를 직접 만드는 방법을 단계별로 정리했습니다."
-	current="note"
->
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="취향과 사용 방식에 맞춘 나만의 다이어리를 직접 만드는 방법을 단계별로 정리했습니다." />
+		<title>나만의 다이어리 만드는 방법 — 프예 TIP</title>
+	</head>
+	<body>
 	<article class="tip-page">
 		<header class="tip-hero">
 			<div class="tip-hero-inner">
@@ -86,10 +90,15 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 			</div>
 		</div>
 	</article>
-</BaseLayout>
+	</body>
+</html>
 
 <style>
-	.tip-page { --notion-text: #37352f; --notion-muted: #787774; --notion-line: #e9e9e7; --notion-callout: #f1f1ef; color: var(--notion-text); background: #fff; font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+	:global(*) { box-sizing: border-box; }
+	:global(html) { background: #fff; }
+	:global(body) { margin: 0; color: #37352f; background: #fff; font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+	:global(a) { color: inherit; }
+	.tip-page { --notion-text: #37352f; --notion-muted: #787774; --notion-line: #e9e9e7; --notion-callout: #f1f1ef; color: var(--notion-text); background: #fff; }
 	.tip-hero { color: var(--notion-text); background: #fff; border-bottom: 0; }
 	.tip-hero-inner { width: min(900px, calc(100% - 48px)); margin: 0 auto; padding: 88px 0 42px; }
 	.eyebrow { margin: 0 0 18px; color: var(--notion-muted); font-size: 13px; font-weight: 500; letter-spacing: 0; }
