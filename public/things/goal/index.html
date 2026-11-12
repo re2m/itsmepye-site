@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>나만의 목표 시스템 만들기</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<style>
+:root{
+  --bg:#FFF8EF; --card:#fff; --ink:#2B2118; --sub:#7A6A5C; --line:#EFE2D2;
+  --accent:#F28C28; --accent-ink:#B85A00; --accent-soft:#FFE9D1; --warn:#C2410C;
+  --font: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
+#app{max-width:480px;margin:0 auto;min-height:100vh;padding:16px 20px 140px;position:relative}
+.logo{text-align:right;line-height:18px;margin-bottom:6px;pointer-events:none;font-family:"Pretendard",var(--font);font-weight:700;font-size:13px;letter-spacing:-.01em;color:var(--ink)}
+
+.top{display:flex;align-items:center;gap:12px;height:44px}
+.back{border:0;background:none;font-size:22px;padding:4px 8px 4px 0;color:var(--sub)}
+.bar{flex:1;height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .3s}
+.sec{font-size:12px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);padding:4px 10px;border-radius:99px;white-space:nowrap}
+
+h1{font-size:28px;line-height:1.3;margin:28px 0 12px;letter-spacing:-.5px}
+h2{font-size:22px;line-height:1.4;margin:24px 0 8px;letter-spacing:-.4px}
+.sub{color:var(--sub);font-size:15px;line-height:1.6;margin:0 0 20px}
+.qnum{font-size:14px;font-weight:800;color:var(--accent);margin-top:36px}
+.ctx{font-size:13px;color:var(--sub);margin-top:20px;font-weight:600}
+.cover{text-align:center;padding-top:56px}
+.cover h1{font-size:34px;margin:8px 0 10px}
+.cv-num{display:inline-block;font-size:14px;font-weight:800;color:var(--accent-ink);background:var(--accent-soft);padding:6px 14px;border-radius:99px}
+.cv-num span{opacity:.6;font-weight:700}
+.cv-emoji{font-size:84px;line-height:1;margin-top:28px}
+.cv-flow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;margin-top:28px;font-size:13px;font-weight:700;color:var(--ink)}
+.cv-flow span{background:var(--card);border:1.5px solid var(--line);border-radius:99px;padding:6px 10px}
+.cv-flow i{font-style:normal;color:var(--sub)}
+.cv-done{margin:28px auto 0;max-width:320px;font-size:13px;color:var(--sub);background:var(--card);border:1.5px dashed var(--line);border-radius:12px;padding:10px 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.opts{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+.opt{display:flex;align-items:center;gap:14px;text-align:left;font-size:17px;font-weight:600;padding:20px;border-radius:18px;border:2px solid var(--line);background:var(--card);color:var(--ink);transition:.15s}
+.opt .oe{font-size:28px}
+.opt .od{display:block;font-size:13px;font-weight:400;color:var(--sub);margin-top:4px}
+.opt.on,.opt:active{border-color:var(--accent);background:var(--accent-soft)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:10px 14px;font-size:14px;color:var(--ink)}
+.chip.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink);font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.tile{border:2px solid var(--line);background:var(--card);border-radius:16px;padding:16px 12px;text-align:left;font-size:15px;font-weight:700;color:var(--ink)}
+.tile .te{font-size:26px;display:block;margin-bottom:6px}
+.tile .td{display:block;font-size:12px;font-weight:400;color:var(--sub);margin-top:4px;line-height:1.4}
+.tile.on{border-color:var(--accent);background:var(--accent-soft)}
+
+label.f{display:block;font-size:13px;font-weight:700;color:var(--sub);margin:16px 0 6px}
+input.in{width:100%;font-size:16px;padding:14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);outline:none}
+input.in:focus{border-color:var(--accent)}
+.row{display:flex;gap:8px;align-items:center}
+.row .in{flex:1}
+.dates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dates .in{padding:12px 10px;font-size:15px;min-width:0}
+.btn-s{border:0;background:var(--ink);color:#fff;border-radius:12px;padding:14px 16px;font-size:15px;font-weight:700;white-space:nowrap}
+.btn-ghost{border:1.5px dashed var(--accent);background:none;color:var(--accent-ink);border-radius:12px;padding:10px 14px;font-size:14px;font-weight:700;margin-top:8px}
+.hint{font-size:13px;color:var(--sub);margin-top:8px;line-height:1.5}
+.warn{font-size:13px;color:var(--warn);background:#FFF1E6;border-radius:10px;padding:10px 12px;margin-top:12px;line-height:1.5}
+
+.acard{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px;margin-top:10px}
+.acard .in{padding:10px 12px;font-size:15px}
+.x{border:0;background:none;color:var(--sub);font-size:18px;padding:6px}
+.days{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap}
+.day{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-size:13px;font-weight:600;color:var(--sub);padding:0}
+.day.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.day.every{width:auto;border-radius:99px;padding:0 12px}
+.afreq{font-size:12px;color:var(--sub);margin-top:8px}
+.panel{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px;margin-top:16px}
+.panel .ptitle{font-size:15px;font-weight:800}
+.panel .ptitle span{display:block;font-size:12px;font-weight:400;color:var(--sub);margin-top:3px}
+.panel .acard{background:var(--bg)}
+.opt-badge{font-style:normal;font-size:11px;font-weight:700;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:2px 8px;margin-left:4px;vertical-align:2px}
+.sn{width:26px;height:26px;flex:none;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.steps{margin-top:8px;border-left:2px dashed var(--line);padding-left:12px}
+.steps div{font-size:14px;line-height:1.8}
+.dd{display:inline-block;font-size:12px;font-weight:800;color:#fff;background:var(--accent);border-radius:8px;padding:2px 8px;margin-left:6px;vertical-align:2px}
+
+.nav{position:fixed;left:0;right:0;bottom:0;padding:12px 20px calc(16px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 30%)}
+.nav .inner{max-width:440px;margin:0 auto}
+.copy{text-align:center;font-size:11px;color:var(--sub);opacity:.8;margin-top:10px;letter-spacing:-.01em}
+.copy.static{position:absolute;left:0;right:0;bottom:calc(20px + env(safe-area-inset-bottom));margin:0}
+.cta{width:100%;border:0;background:var(--accent);color:#fff;font-size:17px;font-weight:800;padding:18px;border-radius:16px;box-shadow:0 6px 16px rgba(242,140,40,.3)}
+.cta:disabled{background:#E5D6C5;box-shadow:none;color:#fff}
+.cta.dark{background:var(--ink);box-shadow:none}
+.link{display:block;margin:10px auto 0;border:0;background:none;color:var(--sub);font-size:14px;text-decoration:underline}
+.share-friend{display:block;width:100%;margin:28px 0 8px;border:0;border-radius:16px;background:var(--accent);color:#fff;font-size:18px;font-weight:800;padding:18px 16px;box-shadow:0 6px 16px rgba(242,140,40,.28)}
+.share-friend span{display:block;margin-top:4px;font-size:13px;font-weight:600;opacity:.9}
+
+.intro-hero{font-size:64px;margin-top:40px}
+.outs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:24px 0}
+.outs div{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px;font-size:14px;font-weight:700}
+.outs span{display:block;font-size:12px;font-weight:400;color:var(--sub);margin-top:4px}
+
+.loading{text-align:center;margin-top:30vh}
+.loading .spin{font-size:56px;display:inline-block;animation:bob 1s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-12px)}}
+
+/* result */
+.typecard{border-radius:22px;padding:28px 22px;margin-top:48px;text-align:center}
+.typecard .te{font-size:64px}
+.typecard .tn{font-size:24px;font-weight:800;margin-top:6px}
+.typecard .tdsc{font-size:15px;margin-top:6px;opacity:.85}
+.typecard .ttip{font-size:13px;margin-top:14px;background:rgba(255,255,255,.6);border-radius:12px;padding:10px 12px;line-height:1.5;text-align:left}
+.period{font-size:13px;color:var(--sub);text-align:center;margin:14px 0 4px}
+.gcard{background:var(--card);border-radius:20px;padding:20px;margin-top:16px;border:1.5px solid var(--line)}
+.gcard .gh{display:flex;justify-content:space-between;align-items:center}
+.gcard .gcat{font-size:12px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);padding:4px 10px;border-radius:99px}
+.gcard .edit{border:0;background:none;color:var(--sub);font-size:13px;text-decoration:underline}
+.gcard .gt{font-size:19px;font-weight:800;margin:10px 0 6px;line-height:1.4}
+.blk{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.blk .bl{font-size:12px;font-weight:800;color:var(--sub);margin-bottom:6px}
+.blk .bv{font-size:15px;line-height:1.6}
+.blk .bv small{color:var(--sub)}
+.ms{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.ms span{font-size:12px;background:var(--bg);border-radius:8px;padding:5px 8px}
+.ms b{color:var(--accent-ink)}
+table.week{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;background:var(--card);border-radius:14px;overflow:hidden}
+table.week th,table.week td{border:1px solid var(--line);padding:6px 4px;text-align:center;vertical-align:top}
+table.week th{background:var(--accent-soft);font-weight:700}
+table.week td.an{text-align:left;font-weight:600;width:34%}
+.rules{background:var(--card);border-radius:16px;padding:14px 16px;margin-top:16px;border:1.5px solid var(--line);font-size:14px;line-height:1.7}
+
+.export{background:var(--ink);color:#fff;border-radius:22px;padding:22px 18px;margin-top:28px}
+.export h3{margin:0 0 4px;font-size:18px}
+.export p{margin:0 0 14px;font-size:13px;opacity:.7;line-height:1.5}
+.export .big{width:100%;border:0;background:#fff;color:var(--ink);font-size:16px;font-weight:800;padding:16px;border-radius:14px}
+.export .lbl{font-size:12px;font-weight:700;opacity:.6;margin:18px 0 8px}
+.export .eg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.export .eb{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:14px;font-weight:600;padding:13px 8px;border-radius:12px}
+.export .eb.wide{grid-column:1/-1}
+.inapp{background:#FFF1E6;color:var(--warn);font-size:13px;border-radius:12px;padding:10px 12px;margin-top:12px;line-height:1.5}
+
+.modal{position:fixed;inset:0;background:rgba(20,14,8,.6);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal.hidden{display:none}
+.mbox{background:#fff;border-radius:20px;padding:20px;max-width:420px;width:100%;max-height:90vh;overflow:auto;text-align:center}
+.mbox img{max-width:100%;max-height:55vh;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.15)}
+.mbox h3{margin:4px 0 10px}
+.mbox ol{text-align:left;font-size:14px;line-height:1.8;padding-left:20px;color:var(--ink)}
+.mbox .hint{margin-bottom:12px}
+.toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:99px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:60;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* image stage */
+#stage{position:fixed;left:-20000px;top:0}
+.im{font-family:var(--font);color:#2B2118;position:relative;overflow:hidden;box-sizing:border-box}
+.im *{box-sizing:border-box}
+.im-foot{position:absolute;left:0;right:0;bottom:56px;text-align:center;font-size:30px;opacity:.55;font-weight:600}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="stage" aria-hidden="true"></div>
+<div id="modal" class="modal hidden"></div>
+<div id="toast" class="toast"></div>
+
+<script>
+/* ---------------- data ---------------- */
+const HANDLE = '@itsme_pye';
+const DAYS = [['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금'],['sat','토'],['sun','일']];
+const DAY_ICS = {mon:'MO',tue:'TU',wed:'WE',thu:'TH',fri:'FR',sat:'SA',sun:'SU'};
+const JS_DAY = {sun:0,mon:1,tue:2,wed:3,thu:4,fri:5,sat:6};
+
+const QUESTIONS = [
+  {q:'계획을 세울 때 나는?', o:[{e:'🗂',t:'시간 단위까지 촘촘하게'},{e:'🧭',t:'큰 방향만 정하고 유연하게'}]},
+  {q:'기록은 어디에 하는 게 편해요?', o:[{e:'✍️',t:'손으로 직접 쓰는 게 좋아요'},{e:'📲',t:'앱이나 노션이 편해요'}]},
+  {q:'일을 처리하는 스타일은?', o:[{e:'🐾',t:'매일 조금씩 꾸준히'},{e:'⚡️',t:'한 번에 몰아서 집중'}]},
+  {q:'계획이 무너지면?', o:[{e:'🔄',t:'처음부터 다시 시작해요'},{e:'🪜',t:'기준을 낮춰서라도 계속해요'}]},
+];
+
+const TYPES = {
+  turtle:{emoji:'🐢',name:'꾸준한 거북이형',desc:'작은 반복을 쌓아 결국 도착하는 사람',
+    tip:'습관은 작게, 체크는 매일. 빠진 날보다 이어간 날을 세어보세요.',bg:'#DFF1E4',ink:'#1F5A37',
+    days:['mon','tue','wed','thu','fri'],cycle:'weekly',
+    rules:['빠진 날은 그냥 넘어가고 다음 날 다시 하기','하루 10분이라도 했으면 성공으로 치기','매일 밤 습관 트래커 체크하기']},
+  fox:{emoji:'🦊',name:'전략가 여우형',desc:'숫자로 확인할 때 힘이 나는 사람',
+    tip:'매주 같은 요일에 KPI를 기록하고, 중간 목표와 비교해 액션을 조정하세요.',bg:'#FFE4CC',ink:'#8A3B00',
+    days:['mon','wed','fri'],cycle:'weekly',
+    rules:['매주 일요일 밤 KPI 기록하기','중간 목표에 못 미치면 다음 주 액션 1회 추가','2주 연속 미달이면 목표치 재조정']},
+  bear:{emoji:'🐻',name:'몰입형 곰',desc:'한 번 시작하면 깊게 파고드는 사람',
+    tip:'매일 하려 하지 말고 주 1~2회 긴 집중 블록을 확보하세요. 그 시간만은 지키기!',bg:'#EFE3D6',ink:'#5A3A1E',
+    days:['wed','sat'],cycle:'biweekly',
+    rules:['집중 블록 시간엔 알림 끄기','블록을 놓치면 같은 주 안에 한 번 보충하기','블록 끝나면 3줄 회고 쓰기']},
+  rabbit:{emoji:'🐰',name:'자유로운 토끼형',desc:'방향만 맞으면 어디로든 가는 사람',
+    tip:'규칙은 최소로, 대신 목표는 눈에 잘 보이게. 잠금화면 이미지를 꼭 써보세요.',bg:'#F3E4F5',ink:'#6B2D73',
+    days:['tue','sat'],cycle:'monthly',
+    rules:['계획이 틀어져도 방향만 맞으면 OK','한 달에 한 번 목표 다시 읽기','하기 싫은 날은 최소 버전만 하기']},
+};
+
+const CATS = [
+  {key:'health',name:'건강',emoji:'💪',examples:['12월 말까지 5kg 감량하기','10km 러닝 쉬지 않고 완주하기'],
+    kpi:{kind:'number',metric:'체중',unit:'kg'},actions:['러닝 30분','홈트 20분','식단 기록','물 2L 마시기','11시 전에 자기'],
+    habit:{trigger:'퇴근하고 집에 오면',behavior:'바로 운동복으로 갈아입기',minimum:'운동화만 신어보기'}},
+  {key:'career',name:'커리어',emoji:'💼',examples:['연말까지 포트폴리오 완성하기','이직 서류 5곳 지원하기'],
+    kpi:{kind:'result',metric:'',unit:''},actions:['포트폴리오 작업 1시간','업계 아티클 1개 읽기','링크드인 글 쓰기','사이드 프로젝트'],
+    habit:{trigger:'출근길 지하철에서',behavior:'업계 뉴스 1개 읽기',minimum:'헤드라인만 훑기'}},
+  {key:'money',name:'돈',emoji:'💰',examples:['3개월 동안 300만원 모으기','월 저축률 40% 만들기'],
+    kpi:{kind:'number',metric:'저축액',unit:'만원'},actions:['가계부 쓰기','무지출 데이','투자 공부 30분','부수입 작업'],
+    habit:{trigger:'자기 전 침대에서',behavior:'오늘 쓴 돈 기록하기',minimum:'가장 큰 지출 1개만 적기'}},
+  {key:'study',name:'공부',emoji:'📚',examples:['토익 850점 넘기기','강의 1개 완강하기'],
+    kpi:{kind:'number',metric:'모의고사 점수',unit:'점'},actions:['강의 1개 듣기','단어 30개 외우기','문제집 10쪽','공부 기록 남기기'],
+    habit:{trigger:'점심 먹고 나서',behavior:'단어장 펴기',minimum:'단어 5개만 보기'}},
+  {key:'content',name:'콘텐츠',emoji:'📱',examples:['릴스 30개 업로드하기','팔로워 1만 명 달성하기'],
+    kpi:{kind:'count',metric:'릴스 업로드',unit:'개'},actions:['릴스 기획','촬영·편집','업로드','댓글 소통 15분'],
+    habit:{trigger:'아침에 눈 뜨면',behavior:'콘텐츠 아이디어 1개 메모하기',minimum:'제목만 적기'}},
+  {key:'mind',name:'마음',emoji:'🌿',examples:['매일 일기 쓰는 사람 되기','스마트폰 사용 하루 2시간 이하'],
+    kpi:{kind:'ratio',metric:'일기 쓴 날 비율',unit:'%'},actions:['명상 10분','일기 쓰기','산책 20분','디지털 디톡스 1시간'],
+    habit:{trigger:'자기 전 침대에서',behavior:'오늘 감사한 일 3개 쓰기',minimum:'한 줄만 쓰기'}},
+  {key:'relation',name:'관계',emoji:'🤝',examples:['부모님께 매주 연락하기','한 달에 친구 2명 만나기'],
+    kpi:{kind:'count',metric:'연락·만남',unit:'회'},actions:['가족에게 전화','친구 약속 잡기','감사 메시지 보내기'],
+    habit:{trigger:'점심 먹고 나서',behavior:'안부 메시지 1개 보내기',minimum:'이모지 하나 보내기'}},
+  {key:'hobby',name:'취미',emoji:'🎨',examples:['책 12권 읽기','기타로 한 곡 완주하기'],
+    kpi:{kind:'count',metric:'독서',unit:'권'},actions:['책 30쪽 읽기','그림 그리기','악기 연습 30분'],
+    habit:{trigger:'자기 전 침대에서',behavior:'책 펴기',minimum:'한 페이지만 읽기'}},
+];
+
+const KPI_KINDS = [
+  {key:'number',emoji:'🔢',name:'수치',desc:'체중, 금액, 점수처럼 값이 변하는 것'},
+  {key:'count',emoji:'🔁',name:'횟수',desc:'업로드 수, 독서 권수처럼 쌓이는 것'},
+  {key:'result',emoji:'📦',name:'결과물',desc:'자격증, 완성작처럼 해냈는지로 판단'},
+  {key:'ratio',emoji:'📈',name:'비율',desc:'저축률, 출석률처럼 %로 보는 것'},
+];
+const CYCLES = {weekly:'매주',biweekly:'격주',monthly:'매월',end:'종료일에 1번'};
+const TRIGGERS = ['아침에 눈 뜨면','출근길 지하철에서','점심 먹고 나서','퇴근하고 집에 오면','자기 전 침대에서'];
+const PERIODS = [
+  {key:'month',e:'🗓',t:'이번 달'},{key:'quarter',e:'🎯',t:'이번 분기'},
+  {key:'year',e:'🕰️',t:'올해 남은 기간'},{key:'custom',e:'✏️',t:'직접 정하기'},
+];
+
+/* ---------------- state ---------------- */
+const STORE = 'goal-system-v1';
+const fresh = () => ({ver:2, step:0, answers:[], type:null, period:null, cats:[], goals:{}, rules:[]});
+const newGoal = () => ({title:'', kpi:{kind:null,metric:'',unit:'',current:'',target:'',done:'',due:'',track:null,steps:[],cycle:null}, actions:[], habit:{trigger:'',behavior:'',minimum:''}});
+// 결과물형 목표의 과정 지표 예시 (분야별)
+const LEAD = {
+  health:{metric:'최장 달리기 거리',unit:'km',cur:'10',tgt:'21'}, career:{metric:'완성한 작업물',unit:'개',cur:'0',tgt:'5'},
+  money:{metric:'모은 금액',unit:'만원',cur:'0',tgt:'300'}, study:{metric:'모의고사 점수',unit:'점',cur:'650',tgt:'850'},
+  content:{metric:'완성한 영상',unit:'개',cur:'0',tgt:'10'}, mind:{metric:'연속 실천 일수',unit:'일',cur:'0',tgt:'30'},
+  relation:{metric:'만난 횟수',unit:'회',cur:'0',tgt:'6'}, hobby:{metric:'연습한 곡 진도',unit:'%',cur:'0',tgt:'100'},
+};
+const STEP_PH = ['예: 전체의 25% 해내기','예: 절반 해내기','예: 실전처럼 리허설 해보기','예: 마지막 점검'];
+let S = fresh();
+let cur = null; // current screen object
+// 저장된 내용은 '이어서 하기'를 눌렀을 때만 불러옴. 공유 링크로 연 결과(보기 전용)는 내 저장 데이터를 건드리지 않음
+let viewOnly = false;
+let fromShare = false; // 공유 링크에서 '처음부터 다시 하기'로 온 인트로에서는 '이어서 하기'를 숨김
+const save = () => { if(viewOnly) return; try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} };
+const clearHash = () => { if(location.hash) history.replaceState(null,'',location.pathname+location.search); };
+
+/* ---------------- utils ---------------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parseD = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const fmtD = s => { const d = parseD(s); return `${d.getMonth()+1}월 ${d.getDate()}일`; };
+const fmtDot = s => { const d = parseD(s); return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`; };
+const round1 = n => Math.round(n*10)/10;
+const isMobile = () => matchMedia('(pointer:coarse)').matches;
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2200); }
+
+function periodFor(key, end, start){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const t = key==='custom' && start ? parseD(start) : today;
+  let e;
+  if(key==='month') e = new Date(t.getFullYear(), t.getMonth()+1, 0);
+  else if(key==='quarter') e = new Date(t.getFullYear(), Math.floor(t.getMonth()/3)*3+3, 0);
+  else if(key==='year') e = new Date(t.getFullYear(), 11, 31);
+  else e = end ? parseD(end) : new Date(today.getFullYear(), today.getMonth()+2, 0);
+  return {key, start:ymd(t), end:ymd(e)};
+}
+const weeksIn = p => Math.max(1, Math.ceil(((parseD(p.end)-parseD(p.start))/864e5+1)/7));
+const periodLabel = () => `${fmtDot(S.period.start)} – ${fmtDot(S.period.end)}`;
+
+function calcType(){
+  const [a1,,a3] = S.answers; const a2 = S.answers[1];
+  if(a3===1) return 'bear';
+  if(a1===1) return 'rabbit';
+  if(a2===1) return 'fox';
+  return 'turtle';
+}
+const T = () => TYPES[S.type || 'turtle'];
+const catOf = i => CATS.find(c => c.key===S.cats[i]);
+const goalAt = i => {
+  const key=S.cats[i]; if(!S.goals[key]) S.goals[key]=newGoal();
+  const g=S.goals[key], d=newGoal().kpi; // 이전 버전 저장 데이터 보정
+  for(const f in d) if(g.kpi[f]===undefined) g.kpi[f]=d[f];
+  if(g.kpi.kind==='result' && !g.kpi.due && S.period) g.kpi.due=S.period.end;
+  return g;
+};
+const allGoals = () => S.cats.map((k,i) => ({g:goalAt(i), c:catOf(i), i}));
+
+function daysLabel(days){
+  if(days.length===7) return '매일';
+  const ord = DAYS.filter(([k])=>days.includes(k));
+  if(days.length===5 && ['mon','tue','wed','thu','fri'].every(d=>days.includes(d))) return '평일';
+  if(days.length===2 && days.includes('sat') && days.includes('sun')) return '주말';
+  return ord.map(([,l])=>l).join('·');
+}
+const actionLine = a => `${a.name} · ${daysLabel(a.days)} (주 ${a.days.length}회)`;
+
+function dday(s){ const t=new Date(); t.setHours(0,0,0,0); const n=Math.round((parseD(s)-t)/864e5); return n>0?`D-${n}`:n===0?'D-DAY':`D+${-n}`; }
+const isNum = v => v!=='' && v!=null && !isNaN(parseFloat(v));
+// 최종 KPI 한 줄
+function kpiLine(k){
+  const cyc = CYCLES[k.cycle] || '';
+  if(k.kind==='result') return `🏁 ${k.done} · ${fmtDot(k.due)} 판정 (${dday(k.due)})`;
+  if(k.kind==='count') return `${k.metric} ${k.target}${k.unit} 달성 · ${cyc} 체크`;
+  return `${k.metric} ${k.current}${k.unit} → ${k.target}${k.unit} · ${cyc} 측정`;
+}
+// 과정 지표는 선택 사항: 실제로 채운 경우에만 결과에 반영
+const ls = k => (k.steps||[]).filter(s => s.name && s.name.trim() && s.date);
+const lt = k => {
+  if(k.kind!=='result') return null;
+  if(k.track==='metric' && k.metric.trim() && isNum(k.current) && isNum(k.target)) return 'metric';
+  if(k.track==='steps' && ls(k).length) return 'steps';
+  return null;
+};
+// 결과물형의 과정 지표 한 줄
+function leadLine(k){
+  if(k.kind!=='result') return '';
+  if(lt(k)==='metric') return `📈 ${k.metric} ${k.current}${k.unit} → ${k.target}${k.unit} · ${CYCLES[k.cycle]||''} 측정`;
+  if(lt(k)==='steps') return `🚩 ${ls(k).map(s=>s.name).join(' → ')}`;
+  return '';
+}
+function defaultSteps(k){
+  const s=parseD(S.period.start), e=parseD(k.due||S.period.end);
+  return [1,2,3].map(n=>({name:'', date: ymd(new Date(s.getTime()+(e-s)*n/4))}));
+}
+
+function milestones(k){
+  const leadMetric = k.kind==='result' && lt(k)==='metric';
+  if(!['number','count','ratio'].includes(k.kind) && !leadMetric) return [];
+  const c = k.kind==='count' ? (parseFloat(k.current)||0) : parseFloat(k.current);
+  const t = parseFloat(k.target);
+  if(isNaN(c)||isNaN(t)) return [];
+  const s = parseD(S.period.start), e = parseD(leadMetric && k.due ? k.due : S.period.end), total = (e-s)||1;
+  let pts = [];
+  for(let d=new Date(s.getFullYear(), s.getMonth()+1, 0); d<e; d=new Date(d.getFullYear(), d.getMonth()+2, 0))
+    if(d>s) pts.push({d:new Date(d), label:`${d.getMonth()+1}월 말`});
+  if(pts.length===0){
+    for(let x=new Date(s.getTime()+7*864e5); x<e; x=new Date(x.getTime()+7*864e5)) pts.push({d:x,label:`${x.getMonth()+1}/${x.getDate()}`});
+  }
+  if(pts.length>5) pts = pts.slice(0,5);
+  pts.push({d:e,label:'최종'});
+  return pts.map(p => ({label:p.label, value: round1(c+(t-c)*((p.d-s)/total))}));
+}
+
+function schedule(){ // day -> [action names]
+  const m = {}; DAYS.forEach(([k])=>m[k]=[]);
+  allGoals().forEach(({g}) => g.actions.forEach(a => a.days.forEach(d => m[d].push(a.name))));
+  return m;
+}
+const totalPerWeek = () => allGoals().reduce((s,{g})=>s+g.actions.reduce((x,a)=>x+a.days.length,0),0);
+
+/* ---------------- steps ---------------- */
+function steps(){
+  const a = ['intro','q:0','q:1','q:2','q:3','period','cats'];
+  S.cats.forEach((_,i) => a.push('cover:'+i,'title:'+i,'kpi:'+i,'actions:'+i,'habit:'+i));
+  a.push('rules','loading','result');
+  return a;
+}
+const SEC = {cover:'목표',q:'성향 테스트',period:'목표',cats:'목표',title:'목표',kpi:'KPI',actions:'액션플랜',habit:'습관',rules:'나만의 규칙'};
+
+function goalCtx(i){ const c=catOf(i); return `<div class="ctx">목표 ${i+1}/${S.cats.length} · ${c.emoji} ${c.name}</div>`; }
+
+const SCREENS = {
+  intro(){
+    let saved=null; try{ saved=JSON.parse(localStorage.getItem(STORE)); }catch(e){}
+    const canResume = !fromShare && saved && saved.step>0;
+    return {nav:false, html:`
+      <div class="intro-hero">📓✏️</div>
+      <h1>나만의 목표 시스템<br>만들기</h1>
+      <p class="sub">노트 2권과 펜 2자루로 만들던 시스템을<br>3분 만에 질문에 답하면서 완성해요.</p>
+      <div class="outs">
+        <div>🎯 목표<span>기간 안에 이룰 것</span></div>
+        <div>📊 KPI<span>달성 여부를 확인하는 기준</span></div>
+        <div>🏃 액션플랜<span>목표를 달성하기 위한 행동</span></div>
+        <div>🌱 습관<span>액션을 돕는 작은 반복</span></div>
+      </div>
+      <p class="hint">결과는 노션에 바로 붙여넣거나 이미지로 저장할 수 있어요.</p>
+      <div class="nav"><div class="inner">
+        <button class="cta" data-act="start">시작하기</button>
+        ${canResume?`<button class="link" data-act="resume">이어서 하기</button>`:''}
+      </div></div>`};
+  },
+  q(n){
+    const q = QUESTIONS[n];
+    return {nav:false, html:`
+      <div class="qnum">Q${n+1}</div><h2>${q.q}</h2>
+      <div class="opts">${q.o.map((o,j)=>`<button class="opt ${S.answers[n]===j?'on':''}" data-act="answer" data-a="${n}" data-b="${j}"><span class="oe">${o.e}</span><span>${o.t}</span></button>`).join('')}</div>`};
+  },
+  period(){
+    const p = S.period;
+    return {valid:()=>!!p && p.end>p.start, html:`
+      <h2>언제까지 이루고 싶어요?</h2>
+      <p class="sub">기간이 정해져야 KPI 중간 목표를 계산할 수 있어요.</p>
+      <div class="grid2">${PERIODS.map(o=>`<button class="tile ${p&&p.key===o.key?'on':''}" data-act="period" data-a="${o.key}"><span class="te">${o.e}</span>${o.t}${p&&p.key===o.key?`<span class="td">${fmtD(p.start)} ~ ${fmtD(p.end)} · ${weeksIn(p)}주</span>`:''}</button>`).join('')}</div>
+      ${p&&p.key==='custom'?`<div class="dates"><div><label class="f">시작일</label><input class="in" type="date" data-bind="period.start" value="${p.start}" max="${p.end}"></div><div><label class="f">종료일</label><input class="in" type="date" data-bind="period.end" value="${p.end}" min="${p.start}"></div></div>${p.end<=p.start?`<p class="sub" style="color:var(--warn);margin-top:8px">종료일은 시작일보다 뒤여야 해요.</p>`:''}`:''}`};
+  },
+  cats(){
+    return {valid:()=>S.cats.length>0, html:`
+      <h2>어떤 분야의 목표인가요?</h2>
+      <p class="sub">2~3개를 추천해요. 최대 3개까지 고를 수 있어요.</p>
+      <div class="grid2">${CATS.map(c=>{const ix=S.cats.indexOf(c.key);return `<button class="tile ${ix>=0?'on':''}" data-act="cat" data-a="${c.key}"><span class="te">${c.emoji}</span>${c.name}${ix>=0?`<span class="td">목표 ${ix+1}</span>`:''}</button>`}).join('')}</div>`};
+  },
+  cover(i){
+    const c=catOf(i), n=S.cats.length, prev=i>0?S.goals[S.cats[i-1]]:null, pc=i>0?catOf(i-1):null;
+    return {cta:`${c.name} 목표 세우기`, html:`<div class="cover">
+      <div class="cv-num">목표 ${i+1} <span>/ ${n}</span></div>
+      <div class="cv-emoji">${c.emoji}</div>
+      <h1>${c.name}</h1>
+      <p class="sub">지금부터는 <b>${c.name}</b> 목표만 생각해요.</p>
+      <div class="cv-flow"><span>🎯 목표</span><i>→</i><span>📊 KPI</span><i>→</i><span>🏃 액션</span><i>→</i><span>🌱 습관</span></div>
+      ${prev&&prev.title?`<div class="cv-done">✓ ${pc.emoji} ${pc.name} 목표 완성 · ${esc(prev.title)}</div>`:''}
+    </div>`};
+  },
+  title(i){
+    const g=goalAt(i), c=catOf(i);
+    return {valid:()=>g.title.trim().length>0, html:`${goalCtx(i)}
+      <h2>${c.name} 목표를 한 문장으로 적어주세요</h2>
+      <p class="sub">"~까지 ~하기"처럼 쓰면 좋아요.</p>
+      <input class="in" data-bind="title" value="${esc(g.title)}" placeholder="예: ${esc(c.examples[0])}" maxlength="40">
+      <div class="chips">${c.examples.map(x=>`<button class="chip" data-act="fill" data-a="${esc(x)}">${esc(x)}</button>`).join('')}</div>`};
+  },
+  kpi(i){
+    const g=goalAt(i), k=g.kpi, lead=LEAD[S.cats[i]]||LEAD.health;
+    const metricOk = () => k.metric.trim()!=='' && isNum(k.target) && (k.kind==='count' || isNum(k.current));
+    const valid = () => {
+      if(!k.kind) return false;
+      if(k.kind!=='result') return !!k.cycle && metricOk();
+      if(!k.done.trim() || !k.due || k.due < S.period.start) return false;
+      // 과정 지표는 선택: 숫자형은 시작했다면 끝까지 채워야 함 (비워두면 통과)
+      if(k.track==='metric'){ const empty = !k.metric.trim() && !k.current && !k.target; return empty || (!!k.cycle && metricOk()); }
+      return true;
+    };
+    const cycleChips = () => `<label class="f">얼마나 자주 확인할까요?</label><div class="chips">${Object.entries(CYCLES).map(([ck,cl])=>`<button class="chip ${k.cycle===ck?'on':''}" data-act="cycle" data-a="${ck}">${cl}</button>`).join('')}</div>`;
+    let fields='';
+    if(k.kind==='result'){
+      fields = `
+      <div class="panel">
+        <div class="ptitle">🏁 최종 판정 <span>마지막 날에 결과가 나와요</span></div>
+        <label class="f">완료 조건</label>
+        <input class="in" data-bind="kpi.done" value="${esc(k.done)}" placeholder="예: 하프 마라톤 2시간 30분 안에 완주">
+        <label class="f">판정일</label>
+        <input class="in" type="date" data-bind="kpi.due" value="${esc(k.due)}" min="${S.period.start}">
+        <p class="hint">대회·시험·발표처럼 날짜가 정해져 있으면 그 날로 바꿔주세요.</p>
+      </div>
+      <div class="panel">
+        <div class="ptitle">📈 그 전까지는 어떻게 확인할까요? <em class="opt-badge">선택</em><span>잘 가고 있는지 보는 과정 지표예요. 정하지 않아도 넘어갈 수 있어요.</span></div>
+        <div class="grid2" style="margin-top:8px">
+          <button class="tile ${k.track==='metric'?'on':''}" data-act="track" data-a="metric"><span class="te">📏</span>숫자로 진척 보기<span class="td">예: 최장 달리기 거리, 모의고사 점수</span></button>
+          <button class="tile ${k.track==='steps'?'on':''}" data-act="track" data-a="steps"><span class="te">🚩</span>단계별 체크포인트<span class="td">예: 5km → 10km → 15km 완주</span></button>
+        </div>
+        ${k.track==='metric'?`
+          <div class="row" style="gap:10px"><div style="flex:2"><label class="f">과정 지표</label><input class="in" data-bind="kpi.metric" value="${esc(k.metric)}" placeholder="예: ${esc(lead.metric)}"></div>
+          <div style="flex:1"><label class="f">단위</label><input class="in" data-bind="kpi.unit" value="${esc(k.unit)}" placeholder="${esc(lead.unit)}"></div></div>
+          <div class="row" style="gap:10px"><div style="flex:1"><label class="f">지금</label><input class="in" inputmode="decimal" data-bind="kpi.current" value="${esc(k.current)}" placeholder="${esc(lead.cur)}"></div>
+          <div style="flex:1"><label class="f">판정일까지</label><input class="in" inputmode="decimal" data-bind="kpi.target" value="${esc(k.target)}" placeholder="${esc(lead.tgt)}"></div></div>
+          ${cycleChips()}`:''}
+        ${k.track==='steps'?`
+          ${k.steps.map((s,ix)=>`<div class="acard"><div class="row">
+            <span class="sn">${ix+1}</span>
+            <input class="in" data-bind="step.${ix}.name" value="${esc(s.name)}" placeholder="${esc(STEP_PH[ix]||'예: 다음 단계')}" maxlength="30">
+            <button class="x" data-act="rmStep" data-a="${ix}" aria-label="삭제">✕</button></div>
+            <div class="row" style="margin-top:8px"><span class="sn" style="visibility:hidden">0</span><input class="in" type="date" data-bind="step.${ix}.date" value="${esc(s.date)}" min="${S.period.start}"></div></div>`).join('')}
+          ${k.steps.length<4?`<button class="btn-ghost" data-act="addStep">+ 체크포인트 추가</button>`:''}
+          <div class="acard" style="background:var(--accent-soft);border-color:var(--accent)"><b>🏁 ${esc(k.done||'최종 판정')}</b> <small style="color:var(--sub)">${k.due?fmtD(k.due):''}</small></div>`:''}
+      </div>`;
+    } else if(k.kind){
+      fields = `<div class="row" style="gap:10px"><div style="flex:2"><label class="f">지표 이름</label><input class="in" data-bind="kpi.metric" value="${esc(k.metric)}" placeholder="예: 체중"></div>
+        <div style="flex:1"><label class="f">단위</label><input class="in" data-bind="kpi.unit" value="${esc(k.unit)}" placeholder="kg"></div></div>
+        <div class="row" style="gap:10px">${k.kind!=='count'?`<div style="flex:1"><label class="f">현재값</label><input class="in" inputmode="decimal" data-bind="kpi.current" value="${esc(k.current)}" placeholder="65"></div>`:''}
+        <div style="flex:1"><label class="f">${k.kind==='count'?'기간 내 목표 횟수':'목표값'}</label><input class="in" inputmode="decimal" data-bind="kpi.target" value="${esc(k.target)}" placeholder="${k.kind==='count'?'30':'60'}"></div></div>`;
+    }
+    return {valid, html:`${goalCtx(i)}
+      <h2>달성했는지 어떻게 확인할까요?</h2>
+      <p class="sub">"${esc(g.title)}"의 KPI를 정해요.</p>
+      <div class="grid2">${KPI_KINDS.map(o=>`<button class="tile ${k.kind===o.key?'on':''}" data-act="kind" data-a="${o.key}"><span class="te">${o.emoji}</span>${o.name}<span class="td">${o.desc}</span></button>`).join('')}</div>
+      ${fields}
+      ${k.kind && k.kind!=='result' ? cycleChips() : ''}`};
+  },
+  actions(i){
+    const g=goalAt(i), c=catOf(i);
+    const names = g.actions.map(a=>a.name);
+    const tot = totalPerWeek();
+    return {valid:()=>g.actions.length>0 && g.actions.every(a=>a.name.trim() && a.days.length), html:`${goalCtx(i)}
+      <h2>KPI를 움직일 행동을 정해요</h2>
+      <p class="sub">${esc(kpiLine(g.kpi))}<br>이걸 위해 무엇을 할까요? 최대 3개, 요일도 골라주세요.</p>
+      <div class="chips">${c.actions.map(x=>`<button class="chip ${names.includes(x)?'on':''}" data-act="sug" data-a="${esc(x)}">${names.includes(x)?'✓ ':'+ '}${esc(x)}</button>`).join('')}</div>
+      <div class="row"><input class="in" id="customAction" placeholder="직접 입력" maxlength="24"><button class="btn-s" data-act="addCustom">추가</button></div>
+      ${g.actions.map((a,ix)=>`<div class="acard">
+        <div class="row"><input class="in" data-bind="action.${ix}" value="${esc(a.name)}"><button class="x" data-act="rmAction" data-a="${ix}" aria-label="삭제">✕</button></div>
+        <div class="days">${DAYS.map(([k,l])=>`<button class="day ${a.days.includes(k)?'on':''}" data-act="day" data-a="${ix}" data-b="${k}">${l}</button>`).join('')}<button class="day every" data-act="everyday" data-a="${ix}">매일</button></div>
+        <div class="afreq">주 ${a.days.length}회</div></div>`).join('')}
+      ${tot>15?`<div class="warn">⚠️ 모든 목표의 액션을 합치면 주 ${tot}회예요. 조금 많아 보여요. 줄이면 오래 갈 수 있어요.</div>`:''}`};
+  },
+  habit(i){
+    const g=goalAt(i), c=catOf(i), h=g.habit;
+    return {valid:()=>h.trigger.trim() && h.behavior.trim(), html:`${goalCtx(i)}
+      <h2>액션을 돕는 습관 하나</h2>
+      <p class="sub">"언제/어디서 → 무엇을"로 정하면 덜 까먹어요.</p>
+      <label class="f">① 언제 / 어디서</label>
+      <input class="in" data-bind="habit.trigger" value="${esc(h.trigger)}" placeholder="예: ${esc(c.habit.trigger)}">
+      <div class="chips">${TRIGGERS.map(x=>`<button class="chip ${h.trigger===x?'on':''}" data-act="trigger" data-a="${esc(x)}">${esc(x)}</button>`).join('')}</div>
+      <label class="f">② 무엇을</label>
+      <input class="in" data-bind="habit.behavior" value="${esc(h.behavior)}" placeholder="예: ${esc(c.habit.behavior)}">
+      <label class="f">③ 힘든 날 최소 버전 (선택)</label>
+      <input class="in" data-bind="habit.minimum" value="${esc(h.minimum)}" placeholder="예: ${esc(c.habit.minimum)}">
+      <button class="btn-ghost" data-act="habitEx">예시로 채우기</button>`};
+  },
+  rules(){
+    const sugg = T().rules;
+    const custom = S.rules.filter(r=>!sugg.includes(r));
+    return {valid:()=>true, html:`
+      <h2>나만의 규칙을 정해볼까요?</h2>
+      <p class="sub">${T().emoji} ${T().name}에게 잘 맞는 규칙이에요. 건너뛰어도 괜찮아요.</p>
+      <div class="chips" style="flex-direction:column;align-items:flex-start">${sugg.concat(custom).map(x=>`<button class="chip ${S.rules.includes(x)?'on':''}" data-act="rule" data-a="${esc(x)}">${S.rules.includes(x)?'✓ ':''}${esc(x)}</button>`).join('')}</div>
+      <div class="row"><input class="in" id="customRule" placeholder="직접 입력" maxlength="40"><button class="btn-s" data-act="addRule">추가</button></div>`};
+  },
+  loading(){
+    return {nav:false, html:`<div class="loading"><div class="spin">${T().emoji}</div><h2>나만의 시스템을 만드는 중…</h2><p class="sub">목표 · KPI · 액션플랜 · 습관 정리 중</p></div>`};
+  },
+  result(){ return {nav:false, html: resultHTML()}; },
+};
+
+/* ---------------- render ---------------- */
+function render(){
+  const list = steps();
+  if(S.step >= list.length) S.step = list.length-1;
+  const [name, arg] = list[S.step].split(':');
+  cur = SCREENS[name](arg!==undefined ? +arg : undefined);
+  let top = '';
+  if(!['intro','loading','result'].includes(name)){
+    const pct = Math.round(S.step/(list.length-3)*100);
+    top = `<div class="top"><button class="back" data-act="back" aria-label="뒤로">←</button><div class="bar"><i style="width:${pct}%"></i></div><span class="sec">${SEC[name]}</span></div>`;
+  }
+  let nav = '';
+  if(cur.nav!==false){
+    const last = name==='rules';
+    nav = `<div class="nav"><div class="inner"><button class="cta" id="nextBtn" data-act="next">${last?'결과 보기 ✨':(cur.cta||'다음')}</button></div></div>`;
+  }
+  const logo = `<div class="logo">@itsme_pye</div>`;
+  $('#app').innerHTML = logo + top + cur.html + nav;
+  const copy = `© 2026 itsme_pye. All rights reserved.`;
+  const navInner = $('#app .nav .inner');
+  if(navInner) navInner.insertAdjacentHTML('beforeend', `<div class="copy">${copy}</div>`);
+  else $('#app').insertAdjacentHTML('beforeend', `<div class="copy static">${copy}</div>`);
+  refreshNav();
+  if(name!=='intro') save(); // 시작 화면에서는 저장된 진행 상황을 덮어쓰지 않음
+  if(name==='loading') setTimeout(()=>{ S.step++; render(); }, 1500);
+}
+function refreshNav(){ const b=$('#nextBtn'); if(b && cur.valid) b.disabled = !cur.valid(); }
+function go(n){ S.step = n; render(); window.scrollTo(0,0); }
+function curGoalIdx(){ const p=steps()[S.step].split(':'); return p[1]!==undefined ? +p[1] : -1; }
+
+/* ---------------- result ---------------- */
+function kpiBlockHTML(k, ms){
+  const chips = ms.length?`<div class="ms">${ms.map(m=>`<span>${m.label} <b>${m.value}${esc(k.unit)}</b></span>`).join('')}</div>`:'';
+  if(k.kind!=='result') return `<div class="bv">${esc(kpiLine(k))}</div>${chips}`;
+  let h = `<div class="bv"><small>최종 판정</small><br>🏁 <b>${esc(k.done)}</b><span class="dd">${dday(k.due)}</span><br><small>${fmtDot(k.due)} 판정</small></div>`;
+  if(lt(k)==='metric') h += `<div class="bv" style="margin-top:10px"><small>과정 지표</small><br>${esc(leadLine(k))}</div>${chips}`;
+  if(lt(k)==='steps') h += `<div class="bv" style="margin-top:10px"><small>체크포인트</small></div><div class="steps">${ls(k).map(s=>`<div>🚩 ${esc(s.name)} <small style="color:var(--sub)">${fmtD(s.date)}</small></div>`).join('')}<div>🏁 <b>${esc(k.done)}</b> <small style="color:var(--sub)">${fmtD(k.due)}</small></div></div>`;
+  return h;
+}
+function resultHTML(){
+  const t = T(), sch = schedule();
+  const inApp = /Instagram|FBAN|FBAV|KAKAOTALK|NAVER\(inapp/i.test(navigator.userAgent);
+  const goals = allGoals().map(({g,c,i})=>{
+    const ms = milestones(g.kpi);
+    return `<div class="gcard">
+      <div class="gh"><span class="gcat">${c.emoji} ${c.name} · 목표 ${i+1}</span><button class="edit" data-act="edit" data-a="${i}">수정</button></div>
+      <div class="blk" style="border:0;margin:0;padding-top:10px"><div class="bl">🎯 목표</div><div class="gt" style="margin:0">${esc(g.title)}</div></div>
+      <div class="blk"><div class="bl">📊 KPI</div>${kpiBlockHTML(g.kpi, ms)}</div>
+      <div class="blk"><div class="bl">🏃 액션플랜</div><div class="bv">${g.actions.map(a=>`· ${esc(a.name)} <small>${daysLabel(a.days)} · 주 ${a.days.length}회</small>`).join('<br>')}</div></div>
+      <div class="blk"><div class="bl">🌱 습관</div><div class="bv">${esc(g.habit.trigger)} → <b>${esc(g.habit.behavior)}</b>${g.habit.minimum?`<br><small>힘든 날: ${esc(g.habit.minimum)}</small>`:''}</div></div>
+    </div>`;
+  }).join('');
+  const acts = allGoals().flatMap(({g})=>g.actions);
+  const week = `<h2 style="font-size:17px;margin-top:28px">📅 주간 액션 캘린더</h2>
+    <table class="week"><tr><th>액션</th>${DAYS.map(([,l])=>`<th>${l}</th>`).join('')}</tr>
+    ${acts.map(a=>`<tr><td class="an">${esc(a.name)}</td>${DAYS.map(([k])=>`<td>${a.days.includes(k)?'●':''}</td>`).join('')}</tr>`).join('')}</table>`;
+  return `
+    <div class="typecard" style="background:${t.bg};color:${t.ink}">
+      <div style="font-size:13px;font-weight:700;opacity:.7">나의 실행 유형은</div>
+      <div class="te">${t.emoji}</div><div class="tn">${t.name}</div><div class="tdsc">${t.desc}</div>
+      <div class="ttip">💡 ${t.tip}</div>
+    </div>
+    <div class="period">${periodLabel()} · ${weeksIn(S.period)}주</div>
+    ${goals}
+    ${week}
+    ${S.rules.length?`<div class="rules"><b>📌 나만의 규칙</b><br>${S.rules.map(r=>'· '+esc(r)).join('<br>')}</div>`:''}
+    <div class="export">
+      <h3>결과 가져가기</h3>
+      <p>노션에 붙여넣으면 KPI 표, 액션 체크리스트, 습관 트래커, 회고 칸까지 한 번에 만들어져요.</p>
+      <button class="big" data-act="copyNotion">📋 노션에 붙여넣기용 복사</button>
+      <div class="lbl">이미지로 저장</div>
+      <div class="eg">
+        <button class="eb" data-act="img" data-a="story">📱 스토리 카드</button>
+        <button class="eb" data-act="img" data-a="lock">🔒 잠금화면</button>
+        ${allGoals().map(({i})=>`<button class="eb ${S.cats.length===1?'wide':''}" data-act="img" data-a="goal" data-b="${i}">🖼 목표 ${i+1} 카드</button>`).join('')}
+      </div>
+      <div class="lbl">더 활용하기</div>
+      <div class="eg">
+        <button class="eb" data-act="ics">📅 캘린더에 추가</button>
+        <button class="eb" data-act="link">🔗 다시 보기 링크</button>
+        <button class="eb wide" data-act="copyMd">📝 마크다운으로 복사 (다른 앱용)</button>
+      </div>
+      ${inApp?`<div class="inapp">인스타·카톡 앱 안에서는 이미지 저장이 안 될 수 있어요. 오른쪽 위 ⋯ 메뉴에서 <b>외부 브라우저로 열기</b>를 눌러주세요.</div>`:''}
+    </div>
+    <p class="hint" style="text-align:center;margin-top:20px">📢 이루고 싶은 목표 1가지를 ${HANDLE} 릴스 댓글로 공유해 주세요!</p>
+    <button class="link" data-act="restart">처음부터 다시 하기</button>
+    <button class="share-friend" data-act="shareApp">💌 친구에게 공유하기<span>친구도 3분 만에 목표 시스템을 만들 수 있어요</span></button>`;
+}
+
+/* ---------------- notion / markdown ---------------- */
+function trackerWeeks(){ return Math.min(weeksIn(S.period), 26); }
+function monthsIn(){ const s=parseD(S.period.start), e=parseD(S.period.end), out=[];
+  for(let d=new Date(s.getFullYear(),s.getMonth(),1); d<=e; d=new Date(d.getFullYear(),d.getMonth()+1,1)) out.push(`${d.getMonth()+1}월`);
+  return out; }
+
+function buildNotionHTML(){
+  const t=T(); const e=esc;
+  let h = `<h1>🎯 나의 목표 시스템 (${periodLabel()})</h1>`;
+  h += `<p>나의 실행 유형: <strong>${t.emoji} ${t.name}</strong> — ${t.desc}</p><p>💡 ${t.tip}</p>`;
+  if(S.rules.length) h += `<h3>📌 나만의 규칙</h3><ul>${S.rules.map(r=>`<li>${e(r)}</li>`).join('')}</ul>`;
+  allGoals().forEach(({g,c,i})=>{
+    const k=g.kpi, ms=milestones(k);
+    h += `<hr><h2>${c.emoji} 목표 ${i+1}. ${e(g.title)}</h2>`;
+    h += `<h3>📊 KPI</h3>`;
+    if(k.kind==='result'){
+      h += `<p>🏁 <strong>최종 판정</strong> — ${fmtDot(k.due)}</p><ul><li><input type="checkbox"> ${e(k.done)}</li></ul>`;
+      if(lt(k)==='steps'){
+        h += `<p>🚩 <strong>체크포인트</strong></p><table><tr><th>단계</th><th>기한</th><th>완료</th></tr>${ls(k).map((s,ix)=>`<tr><td>${ix+1}. ${e(s.name)}</td><td>${fmtDot(s.date)}</td><td>☐</td></tr>`).join('')}<tr><td>🏁 ${e(k.done)}</td><td>${fmtDot(k.due)}</td><td>☐</td></tr></table>`;
+      }
+    }
+    if(k.kind==='result' && lt(k)==='metric') h += `<p>📈 <strong>과정 지표</strong></p>`;
+    if(k.kind!=='result' || lt(k)==='metric'){
+      h += `<table><tr><th>지표</th><th>현재</th><th>목표</th><th>측정 주기</th></tr><tr><td>${e(k.metric)}${k.unit?` (${e(k.unit)})`:''}</td><td>${k.kind==='count'?(k.current||0):e(k.current)}</td><td>${e(k.target)}</td><td>${CYCLES[k.cycle]}</td></tr></table>`;
+      if(ms.length) h += `<p><strong>중간 목표</strong></p><table><tr><th>시점</th>${ms.map(m=>`<th>${m.label}</th>`).join('')}</tr><tr><td>목표치</td>${ms.map(m=>`<td>${m.value}</td>`).join('')}</tr><tr><td>실제</td>${ms.map(()=>`<td></td>`).join('')}</tr></table>`;
+    }
+    h += `<h3>🏃 액션플랜</h3><ul>${g.actions.map(a=>`<li><input type="checkbox"> ${e(actionLine(a))}</li>`).join('')}</ul>`;
+    h += `<h3>🌱 습관</h3><p><strong>${e(g.habit.trigger)}</strong> → ${e(g.habit.behavior)}</p>`;
+    if(g.habit.minimum) h += `<p>힘든 날 최소 버전: ${e(g.habit.minimum)}</p>`;
+    h += `<p><strong>습관 트래커</strong></p><table><tr><th>주차</th>${DAYS.map(([,l])=>`<th>${l}</th>`).join('')}</tr>`;
+    for(let w=1; w<=trackerWeeks(); w++) h += `<tr><td>${w}주</td>${DAYS.map(()=>'<td>☐</td>').join('')}</tr>`;
+    h += `</table>`;
+  });
+  const sch = schedule();
+  h += `<hr><h2>📅 주간 데일리 태스크</h2><table><tr>${DAYS.map(([,l])=>`<th>${l}</th>`).join('')}</tr><tr>${DAYS.map(([k])=>`<td>${sch[k].map(e).join('<br>')||'-'}</td>`).join('')}</tr></table>`;
+  h += `<hr><h2>📝 월간 회고</h2>`;
+  monthsIn().forEach(m => h += `<h3>${m}</h3><ul><li>KPI 결과: </li><li>잘한 점: </li><li>아쉬운 점: </li><li>다음 달 조정: </li></ul>`);
+  h += `<p>만든 곳: ${HANDLE} · 나만의 목표 시스템 만들기</p>`;
+  return h;
+}
+
+function buildMarkdown(){
+  const t=T(); const L=[];
+  const row = a => `| ${a.join(' | ')} |`;
+  const sep = n => `|${' --- |'.repeat(n)}`;
+  L.push(`# 🎯 나의 목표 시스템 (${periodLabel()})`, '', `나의 실행 유형: **${t.emoji} ${t.name}** — ${t.desc}`, '', `💡 ${t.tip}`, '');
+  if(S.rules.length){ L.push('### 📌 나만의 규칙'); S.rules.forEach(r=>L.push(`- ${r}`)); L.push(''); }
+  allGoals().forEach(({g,c,i})=>{
+    const k=g.kpi, ms=milestones(k);
+    L.push('---', `## ${c.emoji} 목표 ${i+1}. ${g.title}`, '', '### 📊 KPI');
+    if(k.kind==='result'){
+      L.push(`🏁 **최종 판정** — ${fmtDot(k.due)}`, '', `- [ ] ${k.done}`);
+      if(lt(k)==='steps'){
+        L.push('', '🚩 **체크포인트**', '', row(['단계','기한','완료']), sep(3));
+        ls(k).forEach((s,ix)=>L.push(row([`${ix+1}. ${s.name}`, fmtDot(s.date), '☐'])));
+        L.push(row([`🏁 ${k.done}`, fmtDot(k.due), '☐']));
+      }
+      if(lt(k)==='metric') L.push('', '📈 **과정 지표**', '');
+    }
+    if(k.kind!=='result' || lt(k)==='metric'){
+      L.push(row(['지표','현재','목표','측정 주기']), sep(4), row([`${k.metric}${k.unit?` (${k.unit})`:''}`, k.kind==='count'?(k.current||0):k.current, k.target, CYCLES[k.cycle]]));
+      if(ms.length){ L.push('', '**중간 목표**', '', row(['시점',...ms.map(m=>m.label)]), sep(ms.length+1), row(['목표치',...ms.map(m=>m.value)]), row(['실제',...ms.map(()=>' ')])); }
+    }
+    L.push('', '### 🏃 액션플랜'); g.actions.forEach(a=>L.push(`- [ ] ${actionLine(a)}`));
+    L.push('', '### 🌱 습관', `**${g.habit.trigger}** → ${g.habit.behavior}`);
+    if(g.habit.minimum) L.push('', `힘든 날 최소 버전: ${g.habit.minimum}`);
+    L.push('', '**습관 트래커**', '', row(['주차',...DAYS.map(([,l])=>l)]), sep(8));
+    for(let w=1; w<=trackerWeeks(); w++) L.push(row([`${w}주`,...DAYS.map(()=>'☐')]));
+    L.push('');
+  });
+  const sch=schedule();
+  L.push('---','## 📅 주간 데일리 태스크','', row(DAYS.map(([,l])=>l)), sep(7), row(DAYS.map(([k])=>sch[k].join(', ')||'-')), '');
+  L.push('---','## 📝 월간 회고');
+  monthsIn().forEach(m=>L.push('', `### ${m}`, '- KPI 결과: ', '- 잘한 점: ', '- 아쉬운 점: ', '- 다음 달 조정: '));
+  L.push('', `만든 곳: ${HANDLE} · 나만의 목표 시스템 만들기`);
+  return L.join('\n');
+}
+
+async function copyRich(html, text){
+  try{
+    if(navigator.clipboard && window.ClipboardItem){
+      await navigator.clipboard.write([new ClipboardItem({
+        'text/html': new Blob([html],{type:'text/html'}),
+        'text/plain': new Blob([text],{type:'text/plain'})})]);
+      return true;
+    }
+  }catch(e){}
+  const div=document.createElement('div'); div.contentEditable='true'; div.innerHTML=html;
+  Object.assign(div.style,{position:'fixed',left:'-9999px',top:'0'}); document.body.appendChild(div);
+  const r=document.createRange(); r.selectNodeContents(div); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r);
+  let ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+  sel.removeAllRanges(); div.remove(); return ok;
+}
+async function copyText(text){
+  try{ await navigator.clipboard.writeText(text); return true; }catch(e){}
+  const ta=document.createElement('textarea'); ta.value=text; Object.assign(ta.style,{position:'fixed',left:'-9999px'}); document.body.appendChild(ta); ta.select();
+  let ok=false; try{ ok=document.execCommand('copy'); }catch(e){} ta.remove(); return ok;
+}
+
+function modal(html){ const m=$('#modal'); m.innerHTML=`<div class="mbox">${html}</div>`; m.classList.remove('hidden'); }
+function closeModal(){ $('#modal').classList.add('hidden'); $('#modal').innerHTML=''; }
+
+/* ---------------- images ---------------- */
+function imgStory(){
+  const t=T();
+  const goals = allGoals().map(({g,c})=>`
+    <div style="background:rgba(255,255,255,.75);border-radius:36px;padding:40px 44px;margin-bottom:28px">
+      <div style="font-size:28px;font-weight:700;opacity:.6">${c.emoji} ${c.name}</div>
+      <div class="clamp2" style="font-size:46px;font-weight:800;margin-top:10px;line-height:1.35">${esc(g.title)}</div>
+      <div style="font-size:30px;margin-top:18px;line-height:1.5">📊 ${esc(kpiLine(g.kpi))}</div>
+      <div style="font-size:30px;margin-top:8px;line-height:1.5">🌱 ${esc(g.habit.trigger)} → ${esc(g.habit.behavior)}</div>
+    </div>`).join('');
+  return `<div class="im" style="width:1080px;height:1920px;background:linear-gradient(170deg,${t.bg},#FFF8EF 70%);color:${t.ink};padding:120px 80px">
+    <div style="font-size:32px;font-weight:700;opacity:.7;text-align:center">나의 목표 시스템 · ${periodLabel()}</div>
+    <div style="text-align:center;font-size:170px;margin-top:40px;line-height:1">${t.emoji}</div>
+    <div style="text-align:center;font-size:72px;font-weight:900;margin-top:24px">${t.name}</div>
+    <div style="text-align:center;font-size:36px;margin-top:12px;opacity:.8">${t.desc}</div>
+    <div style="margin-top:70px;color:#2B2118">${goals}</div>
+    <div class="im-foot">${HANDLE} · 나만의 목표 시스템 만들기</div></div>`;
+}
+function imgGoal(i){
+  const g=goalAt(i), c=catOf(i), t=T(), ms=milestones(g.kpi);
+  const blk = (lbl, body) => `<div style="background:#fff;border-radius:32px;padding:34px 40px;margin-top:22px"><div style="font-size:26px;font-weight:800;color:#7A6A5C;margin-bottom:10px">${lbl}</div>${body}</div>`;
+  return `<div class="im" style="width:1080px;height:1350px;background:${t.bg};padding:70px 70px">
+    <div style="display:flex;justify-content:space-between;align-items:center;font-size:28px;font-weight:700;color:${t.ink}">
+      <span style="background:rgba(255,255,255,.7);padding:10px 24px;border-radius:99px">${c.emoji} ${c.name} · 목표 ${i+1}</span><span style="opacity:.7">${t.emoji} ${t.name}</span></div>
+    <div style="font-size:26px;font-weight:800;color:${t.ink};opacity:.6;margin-top:44px">🎯 목표</div>
+    <div class="clamp2" style="font-size:58px;font-weight:900;line-height:1.3;margin-top:8px;color:#2B2118">${esc(g.title)}</div>
+    ${blk('📊 KPI', `<div style="font-size:34px;line-height:1.45">${esc(kpiLine(g.kpi))}</div>${g.kpi.kind==='result'&&lt(g.kpi)?`<div style="font-size:30px;line-height:1.45;margin-top:10px;color:#5A4A3C">${lt(g.kpi)==='steps'?ls(g.kpi).map(s=>`🚩 ${esc(s.name)} <span style="color:#7A6A5C;font-size:24px">${fmtD(s.date)}</span>`).join('<br>'):esc(leadLine(g.kpi))}</div>`:''}${ms.length?`<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">${ms.map(m=>`<span style="font-size:24px;background:#FFF8EF;border-radius:14px;padding:8px 14px">${m.label} <b>${m.value}${esc(g.kpi.unit)}</b></span>`).join('')}</div>`:''}`)}
+    ${blk('🏃 액션플랜', g.actions.map(a=>`<div style="font-size:34px;line-height:1.55">· ${esc(a.name)} <span style="color:#7A6A5C;font-size:28px">${daysLabel(a.days)} · 주 ${a.days.length}회</span></div>`).join(''))}
+    ${blk('🌱 습관', `<div style="font-size:34px;line-height:1.45">${esc(g.habit.trigger)} → <b>${esc(g.habit.behavior)}</b></div>${g.habit.minimum?`<div style="font-size:26px;color:#7A6A5C;margin-top:8px">힘든 날: ${esc(g.habit.minimum)}</div>`:''}`)}
+    <div class="im-foot" style="bottom:36px;font-size:24px">${HANDLE} · 나만의 목표 시스템 만들기</div></div>`;
+}
+function imgLock(){
+  const t=T(), sch=schedule();
+  return `<div class="im" style="width:1170px;height:2532px;background:linear-gradient(180deg,${t.ink} 0%,#2B2118 100%);color:#fff;padding:880px 90px 0">
+    <div style="background:rgba(255,255,255,.1);border-radius:48px;padding:56px 60px">
+      <div style="font-size:30px;font-weight:700;opacity:.6">🎯 ${periodLabel()}</div>
+      ${allGoals().map(({g,c})=>`<div class="clamp2" style="font-size:46px;font-weight:800;margin-top:22px;line-height:1.35">${c.emoji} ${esc(g.title)}${g.kpi.kind==='result'?` <span style="font-size:30px;background:#F28C28;border-radius:12px;padding:2px 12px;vertical-align:6px">${dday(g.kpi.due)}</span>`:''}</div>`).join('')}
+    </div>
+    <div style="background:rgba(255,255,255,.1);border-radius:48px;padding:48px 60px;margin-top:32px">
+      <div style="font-size:30px;font-weight:700;opacity:.6;margin-bottom:14px">🏃 이번 주 액션</div>
+      ${DAYS.map(([k,l])=>`<div style="display:flex;gap:28px;font-size:34px;line-height:1.75"><b style="width:44px;opacity:.7">${l}</b><span class="clamp2" style="-webkit-line-clamp:1">${sch[k].length?esc(sch[k].join(' · ')):'<span style="opacity:.4">쉬는 날</span>'}</span></div>`).join('')}
+    </div>
+    <div style="background:rgba(255,255,255,.1);border-radius:48px;padding:48px 60px;margin-top:32px">
+      <div style="font-size:30px;font-weight:700;opacity:.6;margin-bottom:10px">🌱 습관</div>
+      ${allGoals().map(({g})=>`<div style="font-size:34px;line-height:1.6">${esc(g.habit.trigger)} → ${esc(g.habit.behavior)}</div>`).join('')}
+    </div>
+    <div class="im-foot" style="color:#fff;opacity:.4;bottom:70px">${HANDLE}</div></div>`;
+}
+
+let lastImg = null;
+async function makeImage(kind, idx){
+  if(!window.htmlToImage){ toast('이미지 모듈을 불러오지 못했어요. 새로고침해 주세요.'); return; }
+  const html = kind==='story'?imgStory():kind==='lock'?imgLock():imgGoal(+idx);
+  const stage=$('#stage'); stage.innerHTML=html;
+  modal(`<h3>이미지 만드는 중…</h3>`);
+  try{
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    const node = stage.firstElementChild;
+    const url = await htmlToImage.toPng(node, {pixelRatio:1, width:node.offsetWidth, height:node.offsetHeight, skipFonts:true});
+    const name = {story:'목표시스템_스토리',lock:'목표시스템_잠금화면',goal:`목표시스템_목표${+idx+1}`}[kind]+'.png';
+    lastImg = {url, name};
+    modal(`<h3>${{story:'📱 스토리 카드',lock:'🔒 잠금화면',goal:'🖼 목표 카드'}[kind]}</h3>
+      <img src="${url}" alt="결과 이미지">
+      <p class="hint">${isMobile()?'저장이 안 되면 이미지를 꾹 눌러 "사진에 저장"을 선택하세요.':''}${kind==='lock'?'<br>사진 앱에서 배경화면으로 설정하면 매일 보게 돼요.':''}</p>
+      <button class="cta" data-act="saveImg">${isMobile()?'사진에 저장 / 공유':'PNG 다운로드'}</button>
+      <button class="link" data-act="closeModal">닫기</button>`);
+  }catch(e){ console.error(e); modal(`<h3>이미지를 만들지 못했어요</h3><p class="hint">${esc(e.message||e)}</p><button class="cta" data-act="closeModal">닫기</button>`); }
+  finally{ stage.innerHTML=''; }
+}
+async function saveImg(){
+  if(!lastImg) return;
+  const blob = await (await fetch(lastImg.url)).blob();
+  const file = new File([blob], lastImg.name, {type:'image/png'});
+  if(isMobile() && navigator.canShare && navigator.canShare({files:[file]})){
+    try{ await navigator.share({files:[file]}); return; }catch(e){ if(e.name==='AbortError') return; }
+  }
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=lastImg.name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 3000);
+  toast('이미지를 저장했어요');
+}
+
+/* ---------------- calendar / link ---------------- */
+function buildICS(){
+  const s=parseD(S.period.start), until=S.period.end.replace(/-/g,'');
+  const stamp = new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//itsme_pye//goal-system//KO','CALSCALE:GREGORIAN','X-WR-CALNAME:나의 목표 시스템'];
+  let n=0;
+  allGoals().forEach(({g})=>g.actions.forEach(a=>{
+    if(!a.days.length) return;
+    const want = a.days.map(d=>JS_DAY[d]);
+    let d=new Date(s); while(!want.includes(d.getDay())) d.setDate(d.getDate()+1);
+    const d2=new Date(d); d2.setDate(d2.getDate()+1);
+    const f=x=>`${x.getFullYear()}${pad(x.getMonth()+1)}${pad(x.getDate())}`;
+    L.push('BEGIN:VEVENT',`UID:goal-${Date.now()}-${n++}@itsme-pye`,`DTSTAMP:${stamp}`,`DTSTART;VALUE=DATE:${f(d)}`,`DTEND;VALUE=DATE:${f(d2)}`,
+      `RRULE:FREQ=WEEKLY;BYDAY=${a.days.map(x=>DAY_ICS[x]).join(',')};UNTIL=${until}`,
+      `SUMMARY:🏃 ${a.name}`,`DESCRIPTION:목표: ${g.title.replace(/[,;\\]/g,' ')}`,'END:VEVENT');
+  }));
+  // 결과물형: 체크포인트와 판정일을 하루 종일 일정으로
+  const allDay = (date, summary, desc) => { const d=parseD(date), d2=new Date(d); d2.setDate(d2.getDate()+1);
+    const f=x=>`${x.getFullYear()}${pad(x.getMonth()+1)}${pad(x.getDate())}`;
+    L.push('BEGIN:VEVENT',`UID:goal-${Date.now()}-${n++}@itsme-pye`,`DTSTAMP:${stamp}`,`DTSTART;VALUE=DATE:${f(d)}`,`DTEND;VALUE=DATE:${f(d2)}`,
+      `SUMMARY:${summary}`,`DESCRIPTION:${desc.replace(/[,;\\]/g,' ')}`,'END:VEVENT'); };
+  allGoals().forEach(({g})=>{ const k=g.kpi; if(k.kind!=='result' || !k.due) return;
+    if(lt(k)==='steps') ls(k).forEach((s,ix)=>allDay(s.date, `🚩 체크포인트 ${ix+1}: ${s.name}`, `목표: ${g.title}`));
+    allDay(k.due, `🏁 판정일: ${k.done}`, `목표: ${g.title}`); });
+  L.push('END:VCALENDAR');
+  return L.join('\r\n');
+}
+function encodeState(){ const json=JSON.stringify({...S, step:0}); return btoa(unescape(encodeURIComponent(json))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function decodeState(str){ const b=str.replace(/-/g,'+').replace(/_/g,'/'); return JSON.parse(decodeURIComponent(escape(atob(b)))); }
+
+/* ---------------- actions ---------------- */
+const ACT = {
+  start(){ viewOnly=false; clearHash(); S=fresh(); go(1); },
+  resume(){ viewOnly=false; clearHash(); let saved=null; try{ saved=JSON.parse(localStorage.getItem(STORE)); }catch(e){}
+    if(!saved){ toast('저장된 내용이 없어요'); return; } S=saved;
+    if(!S.ver){ // 목표 표지 화면이 생기기 전 저장본: 같은 화면을 가리키도록 단계 번호 보정
+      const list=steps(), old=list.filter(x=>!x.startsWith('cover:')), ix=list.indexOf(old[S.step]);
+      if(ix>=0) S.step=ix; S.ver=2; }
+    render(); },
+  back(){ if(S.step>0) go(S.step-1); },
+  next(){ if(cur.valid && !cur.valid()) return; go(S.step+1); },
+  answer(a,b){ S.answers[+a]=+b; if(+a===3) S.type=calcType(); render(); setTimeout(()=>go(S.step+1),220); },
+  period(a){ const c=S.period&&S.period.key==='custom'; S.period=periodFor(a, c?S.period.end:null, c?S.period.start:null); render(); },
+  cat(a){ const ix=S.cats.indexOf(a); if(ix>=0) S.cats.splice(ix,1); else if(S.cats.length<3) S.cats.push(a); else toast('최대 3개까지 고를 수 있어요'); render(); },
+  fill(a){ goalAt(curGoalIdx()).title=a; render(); },
+  kind(a){ const i=curGoalIdx(), k=goalAt(i).kpi, c=catOf(i);
+    if(k.kind!==a){
+      k.kind=a; k.metric=''; k.unit=''; k.current=''; k.target='';
+      if(a==='result'){ k.due = k.due || S.period.end; }
+      else if(c.kpi.kind===a){ k.metric=c.kpi.metric; k.unit=c.kpi.unit; }
+      else if(a==='ratio') k.unit='%'; else if(a==='count') k.unit='회';
+    }
+    if(!k.cycle) k.cycle=T().cycle; render(); },
+  cycle(a){ goalAt(curGoalIdx()).kpi.cycle=a; render(); },
+  track(a){ const k=goalAt(curGoalIdx()).kpi; k.track = k.track===a ? null : a; // 다시 누르면 선택 해제
+    if(k.track==='steps' && !k.steps.length) k.steps=defaultSteps(k); render(); },
+  addStep(){ const k=goalAt(curGoalIdx()).kpi; const last=k.steps.length?k.steps[k.steps.length-1].date:S.period.start;
+    k.steps.push({name:'', date: last}); render(); },
+  rmStep(a){ goalAt(curGoalIdx()).kpi.steps.splice(+a,1); render(); },
+  sug(a){ const g=goalAt(curGoalIdx()); const ix=g.actions.findIndex(x=>x.name===a);
+    if(ix>=0) g.actions.splice(ix,1); else if(g.actions.length<3) g.actions.push({name:a, days:T().days.slice()}); else toast('액션은 최대 3개까지예요'); render(); },
+  addCustom(){ const v=$('#customAction').value.trim(); if(!v) return; const g=goalAt(curGoalIdx());
+    if(g.actions.length>=3){ toast('액션은 최대 3개까지예요'); return; } g.actions.push({name:v, days:T().days.slice()}); render(); },
+  rmAction(a){ goalAt(curGoalIdx()).actions.splice(+a,1); render(); },
+  day(a,b){ const act=goalAt(curGoalIdx()).actions[+a]; const ix=act.days.indexOf(b); if(ix>=0) act.days.splice(ix,1); else act.days.push(b);
+    act.days.sort((x,y)=>DAYS.findIndex(d=>d[0]===x)-DAYS.findIndex(d=>d[0]===y)); render(); },
+  everyday(a){ const act=goalAt(curGoalIdx()).actions[+a]; act.days = act.days.length===7 ? [] : DAYS.map(d=>d[0]); render(); },
+  trigger(a){ goalAt(curGoalIdx()).habit.trigger=a; render(); },
+  habitEx(){ const i=curGoalIdx(); Object.assign(goalAt(i).habit, catOf(i).habit); render(); },
+  rule(a){ const ix=S.rules.indexOf(a); if(ix>=0) S.rules.splice(ix,1); else S.rules.push(a); render(); },
+  addRule(){ const v=$('#customRule').value.trim(); if(v && !S.rules.includes(v)) S.rules.push(v); render(); },
+  edit(a){ go(steps().indexOf('title:'+a)); },
+  restart(){ if(confirm('입력한 내용을 지우고 처음부터 할까요?')){ if(viewOnly) fromShare=true; else localStorage.removeItem(STORE); viewOnly=false; clearHash(); S=fresh(); go(0); } },
+  async copyNotion(){
+    const ok = await copyRich(buildNotionHTML(), buildMarkdown());
+    if(!ok){ toast('복사에 실패했어요. 마크다운 복사를 써보세요.'); return; }
+    modal(`<h3>✅ 복사 완료!</h3><ol>
+      <li>노션에서 <b>새 페이지</b>를 만들어요</li>
+      <li>본문을 한 번 누르고 <b>붙여넣기</b> (PC: ⌘/Ctrl + V, 모바일: 길게 눌러 붙여넣기)</li>
+      <li>KPI 표 · 액션 체크리스트 · 습관 트래커 · 회고 칸이 만들어져요</li></ol>
+      <button class="cta" data-act="closeModal">확인</button>`);
+  },
+  async copyMd(){ toast(await copyText(buildMarkdown()) ? '마크다운을 복사했어요' : '복사에 실패했어요'); },
+  img(a,b){ makeImage(a,b); },
+  saveImg(){ saveImg(); },
+  closeModal(){ closeModal(); },
+  ics(){ const blob=new Blob([buildICS()],{type:'text/calendar;charset=utf-8'}); const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='나의_목표_액션.ics'; document.body.appendChild(a); a.click(); a.remove();
+    toast('캘린더 파일을 받았어요. 열면 반복 일정으로 추가돼요'); },
+  async shareApp(){ const url=location.origin+location.pathname, t=T();
+    const text = viewOnly ? '3분 만에 나만의 목표 시스템 만들기 📓✏️' : `나는 ${t.emoji} ${t.name}! 너도 3분 만에 나만의 목표 시스템 만들어 봐 📓✏️`;
+    if(navigator.share){ try{ await navigator.share({title:'나만의 목표 시스템 만들기', text, url}); return; }catch(e){ if(e.name==='AbortError') return; } }
+    toast(await copyText(text+'\n'+url) ? '링크를 복사했어요. 친구에게 붙여넣어 보내주세요' : '복사에 실패했어요'); },
+  async link(){ const url=location.origin+location.pathname+'#d='+encodeState();
+    toast(await copyText(url) ? '링크를 복사했어요. 북마크해 두면 언제든 다시 볼 수 있어요' : '복사에 실패했어요'); },
+};
+
+document.addEventListener('click', e=>{
+  if(e.target.id==='modal'){ closeModal(); return; }
+  const el=e.target.closest('[data-act]'); if(!el) return;
+  const fn=ACT[el.dataset.act]; if(fn) fn(el.dataset.a, el.dataset.b, el);
+});
+document.addEventListener('input', e=>{
+  const el=e.target, p=el.dataset.bind; if(!p) return;
+  const v=el.value, i=curGoalIdx();
+  if(p==='period.end'){ S.period=periodFor('custom', v, S.period.start); }
+  else if(p==='period.start'){ S.period=periodFor('custom', S.period.end, v); }
+  else if(p==='title') goalAt(i).title=v;
+  else if(p.startsWith('kpi.')) goalAt(i).kpi[p.slice(4)]=v;
+  else if(p.startsWith('habit.')) goalAt(i).habit[p.slice(6)]=v;
+  else if(p.startsWith('action.')) goalAt(i).actions[+p.slice(7)].name=v;
+  else if(p.startsWith('step.')){ const [,ix,f]=p.split('.'); goalAt(i).kpi.steps[+ix][f]=v; }
+  save(); refreshNav();
+});
+document.addEventListener('keydown', e=>{
+  if(e.key!=='Enter' || e.isComposing) return;
+  if(e.target.id==='customAction') ACT.addCustom();
+  else if(e.target.id==='customRule') ACT.addRule();
+  else if(e.target.dataset && e.target.dataset.bind){ const b=$('#nextBtn'); if(b && !b.disabled) ACT.next(); }
+});
+document.addEventListener('change', e=>{ if(/^period\.(start|end)$/.test(e.target.dataset.bind||'')) render(); });
+
+/* ---------------- boot ---------------- */
+(function boot(){
+  const m=location.hash.match(/^#d=(.+)$/);
+  if(m){ try{ S=decodeState(m[1]); S.step=steps().indexOf('result'); viewOnly=true; }catch(e){ S=fresh(); } }
+  render();
+})();
+</script>
+</body>
+</html>
