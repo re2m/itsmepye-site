@@ -356,7 +356,7 @@ function milestones(k){
   }
   if(pts.length>5) pts = pts.slice(0,5);
   pts.push({d:e,label:'최종'});
-  return pts.map(p => ({label:p.label, value: round1(c+(t-c)*((p.d-s)/total))}));
+  return pts.map(p => ({label:p.label, date: ymd(p.d), value: round1(c+(t-c)*((p.d-s)/total))}));
 }
 
 function schedule(){ // day -> [action names]
@@ -605,8 +605,9 @@ function resultHTML(){
     ${S.rules.length?`<div class="rules"><b>📌 나만의 규칙</b><br>${S.rules.map(r=>'· '+esc(r)).join('<br>')}</div>`:''}
     <div class="export">
       <h3>결과 가져가기</h3>
-      <p>노션에 붙여넣으면 KPI 표, 액션 체크리스트, 습관 트래커, 회고 칸까지 한 번에 만들어져요.</p>
-      <button class="big" data-act="copyNotion">📋 노션에 붙여넣기용 복사</button>
+      <p>내 노션에 KPI · 액션 · 습관 트래커 · 회고 데이터베이스를 한 번에 만들어 드려요.</p>
+      <button class="big" data-act="notionDb">🗂 노션에 바로 추가</button>
+      <button class="eb wide" style="margin-top:8px;display:block;width:100%" data-act="copyNotion">📋 노션에 붙여넣기용 복사 (표 형태)</button>
       <div class="lbl">이미지로 저장</div>
       <div class="eg">
         <button class="eb" data-act="img" data-a="story">📱 스토리 카드</button>
@@ -631,6 +632,90 @@ function trackerWeeks(){ return Math.min(weeksIn(S.period), 26); }
 function monthsIn(){ const s=parseD(S.period.start), e=parseD(S.period.end), out=[];
   for(let d=new Date(s.getFullYear(),s.getMonth(),1); d<=e; d=new Date(d.getFullYear(),d.getMonth()+1,1)) out.push(`${d.getMonth()+1}월`);
   return out; }
+
+// '노션에 바로 추가'용 데이터: 서버(/api/notion/create)가 이대로 노션 데이터베이스를 만들어요
+function buildNotionSpec(){
+  const t=T(), goals=allGoals();
+  const today=new Date(); today.setHours(0,0,0,0);
+  const ps=parseD(S.period.start), pe=parseD(S.period.end);
+  const from = ps>today ? ps : today;                       // 오늘(또는 시작일)부터
+  const to = new Date(Math.min(pe, new Date(from.getTime()+27*864e5)));  // 최대 4주치
+  const days=[]; for(let d=new Date(from); d<=to; d=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1)) days.push(d);
+  const dayKey = d => DAYS[(d.getDay()+6)%7][0];
+  const dayLbl = d => `${d.getMonth()+1}/${d.getDate()} (${DAYS[(d.getDay()+6)%7][1]})`;
+  const goalName = ({g,c}) => `${c.emoji} ${g.title || c.name}`.slice(0,90);
+  const goalOpts = goals.map(goalName);
+
+  // 📊 KPI
+  const kpiRows=[];
+  goals.forEach(x=>{
+    const {g}=x, k=g.kpi, gn=goalName(x);
+    if(k.kind==='result'){
+      if(lt(k)==='steps') ls(k).forEach((s,ix)=>kpiRows.push({'항목':`🚩 ${ix+1}. ${s.name}`,'목표':gn,'시점':s.date}));
+      kpiRows.push({'항목':`🏁 ${k.done || g.title}`,'목표':gn,'시점':k.due||S.period.end});
+    }
+    const unit = k.unit||'';
+    const ms = milestones(k);
+    if(ms.length) ms.forEach(m=>kpiRows.push({'항목':`${k.metric} · ${m.label}`,'목표':gn,'시점':m.date,'목표치':m.value,'단위':unit}));
+    else if(k.kind && k.kind!=='result' && k.metric) kpiRows.push({'항목':`${k.metric} · 최종`,'목표':gn,'시점':S.period.end,'목표치':k.target,'단위':unit});
+  });
+  // 🏃 액션 (날짜마다 한 줄)
+  const actRows=[];
+  days.forEach(d=>goals.forEach(x=>x.g.actions.forEach(a=>{
+    if(a.name && a.days.includes(dayKey(d))) actRows.push({'액션':a.name,'목표':goalName(x),'날짜':ymd(d)});
+  })));
+  // 🌱 습관 트래커 (하루에 한 줄, 습관마다 체크박스)
+  const habitCols=[], used=new Set(['날짜','일자','메모']);
+  goals.forEach(({g,c})=>{
+    let n=`${c.emoji} ${(g.habit.behavior||c.name+' 습관').trim()}`.slice(0,60);
+    while(used.has(n)) n+=' ';
+    used.add(n); habitCols.push(n);
+  });
+  const habitRows = days.map(d=>{ const r={'날짜':dayLbl(d),'일자':ymd(d)}; return r; });
+
+  const intro=[`나의 실행 유형: ${t.emoji} ${t.name} — ${t.desc}`, `💡 ${t.tip}`];
+  if(S.rules.length) intro.push('📌 나만의 규칙: '+S.rules.join(' / '));
+  goals.forEach(({g,c})=>{ if(g.habit.trigger||g.habit.behavior) intro.push(`🌱 ${c.emoji} ${g.habit.trigger} → ${g.habit.behavior}${g.habit.minimum?` (힘든 날: ${g.habit.minimum})`:''}`); });
+  intro.push(`액션과 습관 트래커는 ${fmtD(ymd(from))}부터 ${fmtD(ymd(to))}까지 만들었어요. 행을 복제해서 이어 쓰면 돼요.`);
+  intro.push(`만든 곳: ${HANDLE} · 나만의 목표 시스템 만들기`);
+
+  const dbs=[];
+  if(kpiRows.length) dbs.push({title:'📊 KPI', cols:[
+    {name:'항목',type:'title'},{name:'목표',type:'select',options:goalOpts},{name:'시점',type:'date'},
+    {name:'목표치',type:'number'},{name:'실제',type:'number'},{name:'단위',type:'text'},{name:'완료',type:'checkbox'}], rows:kpiRows});
+  if(actRows.length) dbs.push({title:'🏃 액션', cols:[
+    {name:'액션',type:'title'},{name:'목표',type:'select',options:goalOpts},{name:'날짜',type:'date'},{name:'완료',type:'checkbox'}], rows:actRows});
+  dbs.push({title:'🌱 습관 트래커', cols:[
+    {name:'날짜',type:'title'},{name:'일자',type:'date'},...habitCols.map(n=>({name:n,type:'checkbox'})),{name:'메모',type:'text'}], rows:habitRows});
+  dbs.push({title:'📝 월간 회고', cols:[
+    {name:'월',type:'title'},{name:'KPI 결과',type:'text'},{name:'잘한 점',type:'text'},{name:'아쉬운 점',type:'text'},{name:'다음 달 조정',type:'text'}],
+    rows:monthsIn().map(m=>({'월':m}))});
+  // 서버 한도(300줄)를 넘지 않게 액션을 줄여요
+  const total = dbs.reduce((s,d)=>s+d.rows.length,0);
+  if(total>300){ const a=dbs.find(d=>d.title==='🏃 액션'); if(a) a.rows=a.rows.slice(0, Math.max(0, a.rows.length-(total-300))); }
+  return {title:`🎯 나의 목표 시스템 (${periodLabel()})`, intro, dbs};
+}
+
+const NOTION_PENDING='goal-notion-pending';
+async function createNotion(){
+  modal(`<h3>🗂 노션에 만드는 중…</h3><p class="sub" style="margin:8px 0 0">KPI · 액션 · 습관 트래커 · 회고 데이터베이스를 만들고 있어요. 20~40초 정도 걸려요. 이 화면을 닫지 말아 주세요.</p>`);
+  let out={};
+  try{
+    const r = await fetch('/api/notion/create', {method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin', body: JSON.stringify(buildNotionSpec())});
+    out = await r.json().catch(()=>({}));
+    if(!r.ok) out.error = out.error || 'http_'+r.status;
+  }catch(e){ out={error:'network'}; }
+  if(out.url){
+    modal(`<h3>✅ 노션에 추가했어요!</h3><p class="sub" style="margin:8px 0 14px">허용한 노션 페이지 아래에 <b>나의 목표 시스템</b> 페이지와 데이터베이스 4개를 만들었어요.</p>
+      <a class="cta" style="display:block;text-align:center;text-decoration:none" href="${esc(out.url)}" target="_blank" rel="noopener">노션에서 열기</a>
+      <button class="link" data-act="closeModal">닫기</button>`);
+    return;
+  }
+  const msg = {no_page:'노션에서 페이지를 하나 이상 골라 허용해야 해요. 다시 시도해 주세요.', no_token:'노션 연결 시간이 지났어요. 다시 시도해 주세요.', too_big:'내용이 너무 많아요. 마크다운 복사를 써 주세요.'}[out.error]
+    || '노션에 만들지 못했어요. 잠시 후 다시 시도하거나 붙여넣기용 복사를 써 주세요.';
+  modal(`<h3>😢 노션에 추가하지 못했어요</h3><p class="sub" style="margin:8px 0 14px">${msg}</p>
+    <button class="cta" data-act="notionDb">다시 시도</button><button class="link" data-act="closeModal">닫기</button>`);
+}
 
 function buildNotionHTML(){
   const t=T(); const e=esc;
@@ -882,6 +967,11 @@ const ACT = {
   addRule(){ const v=$('#customRule').value.trim(); if(v && !S.rules.includes(v)) S.rules.push(v); render(); },
   edit(a){ go(steps().indexOf('title:'+a)); },
   restart(){ if(confirm('입력한 내용을 지우고 처음부터 할까요?')){ if(viewOnly) fromShare=true; else localStorage.removeItem(STORE); viewOnly=false; clearHash(); S=fresh(); go(0); } },
+  notionDb(){
+    // 노션 권한 허용 화면에 다녀오는 동안 결과를 이 탭에만 잠시 맡겨 둬요
+    try{ sessionStorage.setItem(NOTION_PENDING, JSON.stringify({d:encodeState(), v:viewOnly, t:Date.now()})); }catch(e){}
+    location.href='/api/notion/start';
+  },
   async copyNotion(){
     const ok = await copyRich(buildNotionHTML(), buildMarkdown());
     if(!ok){ toast('복사에 실패했어요. 마크다운 복사를 써보세요.'); return; }
@@ -935,6 +1025,22 @@ document.addEventListener('change', e=>{ if(/^period\.(start|end)$/.test(e.targe
 (function boot(){
   const m=location.hash.match(/^#d=(.+)$/);
   if(m){ try{ S=decodeState(m[1]); S.step=steps().indexOf('result'); viewOnly=true; }catch(e){ S=fresh(); } }
+  // 노션 권한 허용 화면에서 돌아온 경우: 맡겨 둔 결과를 다시 띄우고 데이터베이스 만들기를 이어서 해요
+  const nq=new URLSearchParams(location.search).get('notion');
+  let nGo=false;
+  if(nq){
+    history.replaceState(null,'',location.pathname);
+    let p=null; try{ p=JSON.parse(sessionStorage.getItem(NOTION_PENDING)); sessionStorage.removeItem(NOTION_PENDING); }catch(e){}
+    if(p && p.d && Date.now()-p.t < 30*60*1000){
+      try{ S=decodeState(p.d); S.step=steps().indexOf('result'); viewOnly=!!p.v; nGo = nq==='ready'; }catch(e){ S=fresh(); }
+    }
+    render();
+    if(nGo) createNotion();
+    else if(nq==='denied') toast('노션 연결을 취소했어요.');
+    else if(nq!=='ready') toast('노션 연결에 실패했어요. 다시 시도해 주세요.');
+    else toast('결과를 찾지 못했어요. 결과 화면에서 다시 눌러 주세요.');
+    return;
+  }
   render();
 })();
 </script>
