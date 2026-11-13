@@ -1,12 +1,15 @@
-// 앱이 보낸 결과(spec)로 사용자가 허용한 노션 페이지 아래에 페이지 1개 + 데이터베이스들을 만들어요.
+// 앱이 보낸 설계(spec)대로, 사용자가 허용한 노션 페이지 아래에 페이지 1개와
+// 서로 관계로 이어진 데이터베이스들(목표 · KPI · 액션 플랜 · 습관 · 데일리 체크 · 회고)을 만들어요.
 // 접근 토큰은 쿠키에서 읽고, 끝나면 바로 지워요. 서버에는 아무것도 저장하지 않아요.
 const NV = '2022-06-28';
-const LIMITS = { dbs: 6, rows: 300, cols: 20, text: 1900, intro: 20 };
+const LIMITS = { dbs: 8, rows: 300, cols: 20, links: 12, rollups: 8, text: 1900, intro: 20 };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const clip = (s, n = LIMITS.text) => String(s ?? '').slice(0, n);
 const rt = s => [{ type: 'text', text: { content: clip(s) } }];
 const isDate = s => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s);
-const SELECT_COLORS = ['orange', 'blue', 'green', 'purple', 'pink', 'yellow', 'red', 'brown', 'gray'];
+const optName = s => clip(s, 100).replace(/,/g, ' ');
+const COLORS = ['orange', 'blue', 'green', 'purple', 'pink', 'yellow', 'red', 'brown', 'gray'];
+const ROLLUP_FNS = new Set(['percent_checked', 'checked', 'count', 'sum', 'average', 'max', 'min', 'percent_not_empty']);
 
 function parseCookies(h) {
   return Object.fromEntries((h || '').split(';').map(s => s.trim().split('=')).filter(p => p[0])
@@ -40,14 +43,16 @@ async function notion(token, path, body, method = 'POST') {
   const e = new Error('notion busy'); e.status = 429; throw e;
 }
 
-// spec 스키마 → 노션 속성 정의
+// spec 열 종류 → 노션 속성 정의
 function propDef(type, opts) {
+  const options = () => (opts || []).slice(0, 30).map((name, i) => ({ name: optName(name), color: COLORS[i % COLORS.length] }));
   switch (type) {
     case 'title': return { title: {} };
     case 'number': return { number: { format: 'number' } };
     case 'checkbox': return { checkbox: {} };
     case 'date': return { date: {} };
-    case 'select': return { select: { options: (opts || []).slice(0, 30).map((name, i) => ({ name: clip(name, 100).replace(/,/g, ' '), color: SELECT_COLORS[i % SELECT_COLORS.length] })) } };
+    case 'select': return { select: { options: options() } };
+    case 'multi_select': return { multi_select: { options: options() } };
     default: return { rich_text: {} };
   }
 }
@@ -62,7 +67,8 @@ function propVal(type, v) {
       if (isDate(v)) return { date: { start: v } };
       if (v && isDate(v.start)) return { date: isDate(v.end) && v.end > v.start ? { start: v.start, end: v.end } : { start: v.start } };
       return null;
-    case 'select': return { select: { name: clip(v, 100).replace(/,/g, ' ') } };
+    case 'select': return { select: { name: optName(v) } };
+    case 'multi_select': return Array.isArray(v) && v.length ? { multi_select: v.slice(0, 30).map(n => ({ name: optName(n) })) } : null;
     default: return { rich_text: rt(v) };
   }
 }
@@ -70,54 +76,34 @@ function propVal(type, v) {
 function validate(spec) {
   if (!spec || typeof spec !== 'object' || !Array.isArray(spec.dbs)) return 'bad_spec';
   if (spec.dbs.length === 0 || spec.dbs.length > LIMITS.dbs) return 'bad_spec';
+  const links = spec.links || [], rollups = spec.rollups || [];
+  if (!Array.isArray(links) || !Array.isArray(rollups) || links.length > LIMITS.links || rollups.length > LIMITS.rollups) return 'bad_spec';
+  const keys = new Set(), names = {};
   let rows = 0;
   for (const db of spec.dbs) {
-    if (!db || !Array.isArray(db.cols) || !Array.isArray(db.rows)) return 'bad_spec';
+    if (!db || !db.key || keys.has(db.key) || !Array.isArray(db.cols) || !Array.isArray(db.rows)) return 'bad_spec';
     if (db.cols.length === 0 || db.cols.length > LIMITS.cols) return 'bad_spec';
     if (db.cols.filter(c => c.type === 'title').length !== 1) return 'bad_spec';
-    const names = new Set(db.cols.map(c => c.name));
-    if (names.size !== db.cols.length || [...names].some(n => !n || String(n).length > 100)) return 'bad_spec';
-    if (db.relation && [db.relation.name, db.relation.back, db.relation.rollup && db.relation.rollup.name].some(n => n && names.has(n))) return 'bad_spec';
+    const set = new Set(db.cols.map(c => c.name));
+    if (set.size !== db.cols.length || [...set].some(n => !n || String(n).length > 100)) return 'bad_spec';
+    keys.add(db.key); names[db.key] = set;
     rows += db.rows.length;
   }
   if (rows > LIMITS.rows) return 'too_big';
+  // 관계 속성 이름이 기존 열과 겹치지 않아야 해요
+  for (const l of links) {
+    if (!keys.has(l.from) || !keys.has(l.to) || l.from === l.to || !l.name || !l.back) return 'bad_spec';
+    if (names[l.from].has(l.name) || names[l.to].has(l.back)) return 'bad_spec';
+    names[l.from].add(l.name); names[l.to].add(l.back);
+  }
+  for (const r of rollups) {
+    if (!keys.has(r.db) || !r.name || !r.rel || !r.of || !ROLLUP_FNS.has(r.fn) || names[r.db].has(r.name)) return 'bad_spec';
+    names[r.db].add(r.name);
+  }
   return null;
 }
 
-// 같은 DB 안에서 줄끼리 잇는 관계 속성(상위 목표 ↔ 하위 항목)과 진행률(롤업)을 추가해요.
-// 실패해도 DB 자체는 쓸 수 있으니 관계 없이 계속 진행해요.
-async function addSelfRelation(token, dbId, rel) {
-  try {
-    const upd = await notion(token, '/databases/' + dbId, {
-      properties: { [rel.name]: { relation: { database_id: dbId, type: 'dual_property', dual_property: {} } } },
-    }, 'PATCH');
-    const props = upd.properties || {};
-    const back = Object.keys(props).find(k => k !== rel.name && props[k].type === 'relation'
-      && String(props[k].relation && props[k].relation.database_id).replace(/-/g, '') === dbId.replace(/-/g, ''));
-    let backName = back;
-    if (back && rel.back && back !== rel.back) {
-      await notion(token, '/databases/' + dbId, { properties: { [back]: { name: rel.back } } }, 'PATCH');
-      backName = rel.back;
-    }
-    if (backName && rel.rollup) {
-      try {
-        await notion(token, '/databases/' + dbId, { properties: { [rel.rollup.name]: { rollup: {
-          relation_property_name: backName, rollup_property_name: rel.rollup.of, function: rel.rollup.fn || 'percent_checked' } } } }, 'PATCH');
-      } catch (e) { console.error('rollup failed', e.message); }
-    }
-    return true;
-  } catch (e) {
-    console.error('dual relation failed, trying single', e.message);
-    try {
-      await notion(token, '/databases/' + dbId, {
-        properties: { [rel.name]: { relation: { database_id: dbId, type: 'single_property', single_property: {} } } },
-      }, 'PATCH');
-      return true;
-    } catch (e2) { console.error('relation failed', e2.message); return false; }
-  }
-}
-
-// 동시에 3개씩 행을 만들어요 (노션 속도 제한: 초당 약 3회)
+// 동시에 n개씩 처리해요 (노션 속도 제한: 초당 약 3회)
 async function pool(items, n, fn) {
   let i = 0;
   const workers = Array.from({ length: n }, async () => {
@@ -152,30 +138,57 @@ export default async function handler(req, res) {
       children: intro,
     });
 
-    // 3) 데이터베이스 만들기 → 4) 행 채우기
+    // 3) 데이터베이스 만들기 (페이지 안에 순서대로 놓여요)
+    const dbId = {};
     for (const db of spec.dbs) {
       const properties = {};
       for (const c of db.cols) properties[c.name] = propDef(c.type, c.options);
       const made = await notion(token, '/databases', {
-        parent: { type: 'page_id', page_id: page.id },
-        is_inline: true,
-        title: rt(clip(db.title || '데이터베이스', 200)),
-        properties,
+        parent: { type: 'page_id', page_id: page.id }, is_inline: true,
+        title: rt(clip(db.title || '데이터베이스', 200)), properties,
       });
-      const rel = db.relation && db.relation.name ? db.relation : null;
-      const linked = rel ? await addSelfRelation(token, made.id, rel) : false;
-      const ids = {};
-      const makeRow = async row => {
+      dbId[db.key] = made.id;
+    }
+
+    // 4) 데이터베이스끼리 관계 잇기 (양방향) → 반대쪽에 생긴 속성 이름 바꾸기
+    const linked = new Set();
+    for (const l of spec.links || []) {
+      try {
+        const upd = await notion(token, '/databases/' + dbId[l.from], {
+          properties: { [l.name]: { relation: { database_id: dbId[l.to], type: 'dual_property', dual_property: {} } } },
+        }, 'PATCH');
+        const dual = upd.properties && upd.properties[l.name] && upd.properties[l.name].relation && upd.properties[l.name].relation.dual_property;
+        const syncedKey = dual && (dual.synced_property_id || dual.synced_property_name);
+        if (syncedKey) {
+          await notion(token, '/databases/' + dbId[l.to], { properties: { [syncedKey]: { name: l.back } } }, 'PATCH')
+            .catch(e => console.error('rename failed', l.back, e.message));
+        }
+        linked.add(l.from + '.' + l.name);
+      } catch (e) { console.error('link failed', l.from, l.name, e.message); }
+    }
+
+    // 5) 롤업(진행률 등) 추가 — 실패해도 계속해요
+    for (const r of spec.rollups || []) {
+      await notion(token, '/databases/' + dbId[r.db], { properties: { [r.name]: { rollup: {
+        relation_property_name: r.rel, rollup_property_name: r.of, function: r.fn } } } }, 'PATCH')
+        .catch(e => console.error('rollup failed', r.db, r.name, e.message));
+    }
+
+    // 6) 줄 채우기: 노션은 나중에 만든 줄이 위에 보여서, 거꾸로 만들어 원래 순서로 보이게 해요
+    const rowId = {};
+    for (const db of spec.dbs) {
+      const rows = db.rows.slice().reverse();
+      await pool(rows, rows.length > 12 ? 3 : 1, async row => {
         const props = {};
         for (const c of db.cols) { const v = propVal(c.type, row[c.name]); if (v) props[c.name] = v; }
-        if (linked && row._parent && ids[row._parent]) props[rel.name] = { relation: [{ id: ids[row._parent] }] };
-        const p = await notion(token, '/pages', { parent: { database_id: made.id }, properties: props });
-        if (row._key) ids[row._key] = p.id;
-      };
-      // 상위 줄(목표)을 먼저 순서대로 만들고, 나머지는 행이 많으면 3개씩 동시에 만들어요 (날짜 열로 정렬 가능)
-      const heads = db.rows.filter(r => r._key), rest = db.rows.filter(r => !r._key);
-      await pool(heads, 1, makeRow);
-      await pool(rest, rest.length > 12 ? 3 : 1, makeRow);
+        for (const [name, ref] of Object.entries(row._links || {})) {
+          if (!linked.has(db.key + '.' + name)) continue;
+          const ids = (Array.isArray(ref) ? ref : [ref]).map(k => rowId[k]).filter(Boolean);
+          if (ids.length) props[name] = { relation: ids.slice(0, 50).map(id => ({ id })) };
+        }
+        const p = await notion(token, '/pages', { parent: { database_id: dbId[db.key] }, properties: props });
+        if (row._id) rowId[row._id] = p.id;
+      });
     }
     return send(res, 200, { url: page.url });
   } catch (e) {
