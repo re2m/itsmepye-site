@@ -58,7 +58,10 @@ function propVal(type, v) {
     case 'title': return { title: rt(v) };
     case 'number': { const n = Number(v); return Number.isFinite(n) ? { number: n } : null; }
     case 'checkbox': return { checkbox: !!v };
-    case 'date': return isDate(v) ? { date: { start: v } } : null;
+    case 'date':
+      if (isDate(v)) return { date: { start: v } };
+      if (v && isDate(v.start)) return { date: isDate(v.end) && v.end > v.start ? { start: v.start, end: v.end } : { start: v.start } };
+      return null;
     case 'select': return { select: { name: clip(v, 100).replace(/,/g, ' ') } };
     default: return { rich_text: rt(v) };
   }
@@ -74,10 +77,44 @@ function validate(spec) {
     if (db.cols.filter(c => c.type === 'title').length !== 1) return 'bad_spec';
     const names = new Set(db.cols.map(c => c.name));
     if (names.size !== db.cols.length || [...names].some(n => !n || String(n).length > 100)) return 'bad_spec';
+    if (db.relation && [db.relation.name, db.relation.back, db.relation.rollup && db.relation.rollup.name].some(n => n && names.has(n))) return 'bad_spec';
     rows += db.rows.length;
   }
   if (rows > LIMITS.rows) return 'too_big';
   return null;
+}
+
+// 같은 DB 안에서 줄끼리 잇는 관계 속성(상위 목표 ↔ 하위 항목)과 진행률(롤업)을 추가해요.
+// 실패해도 DB 자체는 쓸 수 있으니 관계 없이 계속 진행해요.
+async function addSelfRelation(token, dbId, rel) {
+  try {
+    const upd = await notion(token, '/databases/' + dbId, {
+      properties: { [rel.name]: { relation: { database_id: dbId, type: 'dual_property', dual_property: {} } } },
+    }, 'PATCH');
+    const props = upd.properties || {};
+    const back = Object.keys(props).find(k => k !== rel.name && props[k].type === 'relation'
+      && String(props[k].relation && props[k].relation.database_id).replace(/-/g, '') === dbId.replace(/-/g, ''));
+    let backName = back;
+    if (back && rel.back && back !== rel.back) {
+      await notion(token, '/databases/' + dbId, { properties: { [back]: { name: rel.back } } }, 'PATCH');
+      backName = rel.back;
+    }
+    if (backName && rel.rollup) {
+      try {
+        await notion(token, '/databases/' + dbId, { properties: { [rel.rollup.name]: { rollup: {
+          relation_property_name: backName, rollup_property_name: rel.rollup.of, function: rel.rollup.fn || 'percent_checked' } } } }, 'PATCH');
+      } catch (e) { console.error('rollup failed', e.message); }
+    }
+    return true;
+  } catch (e) {
+    console.error('dual relation failed, trying single', e.message);
+    try {
+      await notion(token, '/databases/' + dbId, {
+        properties: { [rel.name]: { relation: { database_id: dbId, type: 'single_property', single_property: {} } } },
+      }, 'PATCH');
+      return true;
+    } catch (e2) { console.error('relation failed', e2.message); return false; }
+  }
 }
 
 // 동시에 3개씩 행을 만들어요 (노션 속도 제한: 초당 약 3회)
@@ -125,12 +162,20 @@ export default async function handler(req, res) {
         title: rt(clip(db.title || '데이터베이스', 200)),
         properties,
       });
-      // 행이 적으면 순서대로 하나씩, 많으면 3개씩 동시에 만들어요 (날짜 열로 정렬 가능)
-      await pool(db.rows, db.rows.length > 12 ? 3 : 1, async row => {
+      const rel = db.relation && db.relation.name ? db.relation : null;
+      const linked = rel ? await addSelfRelation(token, made.id, rel) : false;
+      const ids = {};
+      const makeRow = async row => {
         const props = {};
         for (const c of db.cols) { const v = propVal(c.type, row[c.name]); if (v) props[c.name] = v; }
-        await notion(token, '/pages', { parent: { database_id: made.id }, properties: props });
-      });
+        if (linked && row._parent && ids[row._parent]) props[rel.name] = { relation: [{ id: ids[row._parent] }] };
+        const p = await notion(token, '/pages', { parent: { database_id: made.id }, properties: props });
+        if (row._key) ids[row._key] = p.id;
+      };
+      // 상위 줄(목표)을 먼저 순서대로 만들고, 나머지는 행이 많으면 3개씩 동시에 만들어요 (날짜 열로 정렬 가능)
+      const heads = db.rows.filter(r => r._key), rest = db.rows.filter(r => !r._key);
+      await pool(heads, 1, makeRow);
+      await pool(rest, rest.length > 12 ? 3 : 1, makeRow);
     }
     return send(res, 200, { url: page.url });
   } catch (e) {
