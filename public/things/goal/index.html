@@ -94,6 +94,8 @@ input.in:focus{border-color:var(--accent)}
 .cta.dark{background:var(--ink);box-shadow:none}
 .link{display:block;margin:10px auto 0;border:0;background:none;color:var(--sub);font-size:14px;text-decoration:underline}
 .share-friend{display:block;width:100%;margin:28px 0 8px;border:0;border-radius:16px;background:var(--accent);color:#fff;font-size:18px;font-weight:800;padding:18px 16px;box-shadow:0 6px 16px rgba(242,140,40,.28)}
+.share-ig{display:block;width:100%;margin:10px 0 8px;border:1.5px solid var(--accent);border-radius:16px;background:#fff;color:var(--ink);font-size:14px;font-weight:700;line-height:1.45;padding:14px 16px;text-align:center;text-decoration:none;word-break:keep-all}
+.share-ig span{display:block;margin-top:3px;font-size:12px;font-weight:600;color:var(--sub)}
 .share-friend span{display:block;margin-top:4px;font-size:13px;font-weight:600;opacity:.9}
 
 .intro-hero{font-size:64px;margin-top:40px}
@@ -619,9 +621,9 @@ function resultHTML(){
       </div>
       ${inApp?`<div class="inapp">인스타·카톡 앱 안에서는 이미지 저장이 안 될 수 있어요. 오른쪽 위 ⋯ 메뉴에서 <b>외부 브라우저로 열기</b>를 눌러주세요.</div>`:''}
     </div>
-    <p class="hint" style="text-align:center;margin-top:20px">📢 이루고 싶은 목표 1가지를 ${HANDLE} 릴스 댓글로 공유해 주세요!</p>
     <button class="link" data-act="restart">처음부터 다시 하기</button>
-    <button class="share-friend" data-act="shareApp">💌 친구에게 공유하기<span>친구도 3분 만에 목표 시스템을 만들 수 있어요</span></button>`;
+    <button class="share-friend" data-act="shareApp">💌 친구에게 공유하기<span>친구도 3분 만에 목표 시스템을 만들 수 있어요</span></button>
+    <a class="share-ig" href="https://www.instagram.com/itsme_pye/" target="_blank" rel="noopener">📢 댓글로 목표 다짐하기!<span>목표의 완성은 주변에 알리기~</span></a>`;
 }
 
 /* ---------------- notion / markdown ---------------- */
