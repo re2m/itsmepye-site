@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>개인정보 처리방침 · 나만의 목표 시스템</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#FFF8EF;--card:#fff;--ink:#2B2118;--sub:#7A6A5C;--line:#EFE2D2;--accent:#F28C28;--accent-ink:#B85A00;--accent-soft:#FFE9D1}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+main{max-width:640px;margin:0 auto;padding:16px 20px 48px}
+.logo{text-align:right;font-weight:700;font-size:13px;margin-bottom:6px}
+.back{display:inline-block;color:var(--sub);text-decoration:none;font-size:14px;margin:8px 0}
+h1{font-size:26px;line-height:1.3;margin:20px 0 6px;letter-spacing:-.5px}
+.date{color:var(--sub);font-size:13px;margin:0 0 20px}
+.summary{background:var(--accent-soft);color:var(--accent-ink);border-radius:14px;padding:14px 16px;font-size:15px;line-height:1.6;font-weight:600;margin-bottom:8px}
+h2{font-size:17px;margin:28px 0 8px;letter-spacing:-.3px}
+p,li{font-size:15px;line-height:1.7}
+ul{padding-left:20px;margin:6px 0}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);border-radius:12px;overflow:hidden;margin:8px 0}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5}
+th{background:#FBF1E4;font-weight:700;font-size:13px}
+tr:last-child td{border-bottom:0}
+@media (max-width:560px){table,tbody,tr,td{display:block;width:100%}tr:first-child{display:none}tr{border-bottom:1px solid var(--line);padding:6px 0}tr:last-child{border-bottom:0}td{border:0;padding:4px 14px}td:first-child{font-weight:700;padding-top:10px}td[data-label]::before{content:attr(data-label);display:block;font-size:12px;color:var(--sub);font-weight:600}}
+a{color:var(--accent-ink)}
+.copy{text-align:center;font-size:11px;color:var(--sub);margin-top:40px}
+</style>
+</head>
+<body>
+<main>
+<div class="logo">@itsme_pye</div>
+<a class="back" href="/things/goal/">← 목표 시스템 만들기로 돌아가기</a>
+<h1>개인정보 처리방침</h1>
+<p class="date">시행일: 2026년 11월 13일</p>
+
+<div class="summary">한 줄 요약: 내가 입력한 목표는 내 기기에만 저장돼요. '노션에 바로 추가'를 쓸 때만 노션으로 보내지고, 저희 서버에는 아무것도 남지 않아요.</div>
+
+<p>'나만의 목표 시스템 만들기'(이하 '서비스', 운영: itsme_pye)는 이용자의 개인정보를 소중히 다루며, 「개인정보 보호법」 등 관련 법령을 지켜요. 이 방침은 서비스가 어떤 정보를 어떻게 다루는지 알려 드려요.</p>
+
+<h2>1. 회원가입 없이 이용해요</h2>
+<p>서비스는 회원가입이나 로그인 없이 이용할 수 있어요. 이름, 이메일, 전화번호 같은 정보를 받지 않아요.</p>
+
+<h2>2. 입력한 내용은 내 기기에만 저장돼요</h2>
+<p>성향 테스트 답, 목표, KPI, 액션, 습관, 규칙 등 입력한 내용은 '이어서 하기'를 위해 이용자 브라우저의 저장소(localStorage)에만 저장돼요. 저희 서버로 보내지지 않아요.</p>
+<ul>
+  <li>'처음부터 다시 하기'를 누르거나 브라우저의 사이트 데이터를 지우면 바로 삭제돼요.</li>
+  <li>'다시 보기 링크'와 친구 공유 링크에는 입력한 결과가 주소 안에 담겨요. 이 부분(# 뒤)은 서버로 전송되지 않지만, 링크를 받은 사람은 내용을 볼 수 있으니 공유할 때 주의해 주세요.</li>
+  <li>이미지 저장, 캘린더 파일, 복사 기능은 모두 이용자 기기 안에서 만들어져요.</li>
+</ul>
+
+<h2>3. '노션에 바로 추가'를 쓸 때</h2>
+<p>이 기능은 이용자가 직접 버튼을 누르고 노션에서 접근을 허용했을 때만 동작해요.</p>
+<table>
+  <tr><th>처리하는 정보</th><th>목적</th><th>보관 기간</th></tr>
+  <tr><td>노션 접근 토큰<br>(노션이 발급)</td><td data-label="목적">이용자가 고른 노션 페이지 아래에 데이터베이스를 만들기 위해</td><td data-label="보관 기간">데이터베이스를 만든 직후 삭제. 최대 10분 동안만 브라우저 보안 쿠키에 보관하며 서버에 저장하지 않아요.</td></tr>
+  <tr><td>결과 화면의 목표 내용</td><td data-label="목적">노션 데이터베이스에 채워 넣기 위해</td><td data-label="보관 기간">노션으로 보내는 순간에만 처리하고 저장하지 않아요.</td></tr>
+</table>
+<ul>
+  <li>서비스는 이용자가 허용한 페이지에만 접근할 수 있고, 다른 노션 페이지를 읽거나 바꾸지 않아요.</li>
+  <li>노션에 만들어진 데이터베이스는 이용자의 노션 계정에 있으며, 노션의 개인정보 처리방침을 따라요.</li>
+  <li>노션 설정의 '연결' 메뉴에서 언제든 서비스의 접근 권한을 끊을 수 있어요.</li>
+</ul>
+
+<h2>4. 자동으로 수집될 수 있는 정보</h2>
+<p>서비스는 광고나 분석 도구를 쓰지 않아요. 다만 사이트를 운영하는 호스팅 업체(Vercel)가 보안과 안정적인 운영을 위해 접속 기록(IP 주소, 브라우저 종류, 접속 시각 등)을 일정 기간 남길 수 있어요.</p>
+
+<h2>5. 외부 서비스</h2>
+<table>
+  <tr><th>업체</th><th>역할</th></tr>
+  <tr><td>Vercel Inc.</td><td data-label="역할">웹사이트 호스팅, 서버 함수 실행</td></tr>
+  <tr><td>Notion Labs, Inc.</td><td data-label="역할">'노션에 바로 추가' 기능 이용 시 데이터베이스 생성</td></tr>
+  <tr><td>jsDelivr</td><td data-label="역할">글꼴, 이미지 저장 기능 등 공개 파일 전달</td></tr>
+</table>
+<p>이 업체들은 해외에 있을 수 있으며, 서비스 제공에 꼭 필요한 범위에서만 위 정보가 처리돼요.</p>
+
+<h2>6. 이용자의 권리</h2>
+<p>서비스는 이용자를 식별할 수 있는 정보를 보관하지 않아요. 기기에 저장된 내용은 이용자가 직접 지울 수 있고, 노션 접근 권한도 노션에서 직접 끊을 수 있어요. 궁금한 점이나 요청은 아래로 연락해 주세요.</p>
+
+<h2>7. 문의</h2>
+<p>운영자: itsme_pye<br>연락: <a href="https://www.instagram.com/itsme_pye/" target="_blank" rel="noopener">인스타그램 @itsme_pye</a> DM</p>
+
+<h2>8. 방침의 변경</h2>
+<p>이 방침이 바뀌면 이 페이지에 시행일과 함께 알려 드려요.</p>
+
+<p class="copy">© 2026 itsme_pye. All rights reserved.</p>
+</main>
+</body>
+</html>
