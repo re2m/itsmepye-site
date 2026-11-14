@@ -3,6 +3,7 @@
 // 접근 토큰은 쿠키에서 읽고, 끝나면 바로 지워요. 서버에는 아무것도 저장하지 않아요.
 const NV = '2022-06-28';
 const LIMITS = { dbs: 8, rows: 300, cols: 20, links: 12, rollups: 8, text: 1900, intro: 20 };
+const TIME_BUDGET = 48000; // 줄 만들기를 멈출 시점(ms). 한 번에 최대 3개 요청이 끝나길 기다려도 60초 안에 들어와요.
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const clip = (s, n = LIMITS.text) => String(s ?? '').slice(0, n);
 const rt = s => [{ type: 'text', text: { content: clip(s) } }];
@@ -113,6 +114,7 @@ async function pool(items, n, fn) {
 }
 
 export default async function handler(req, res) {
+  const started = Date.now();
   if (req.method !== 'POST') return send(res, 405, { error: 'method' });
   const token = parseCookies(req.headers.cookie).ntk;
   if (!token) return send(res, 401, { error: 'no_token' });
@@ -180,10 +182,13 @@ export default async function handler(req, res) {
     }
 
     // 6) 줄 채우기: 노션은 나중에 만든 줄이 위에 보여서, 거꾸로 만들어 원래 순서로 보이게 해요
+    //    서버 시간 한도(60초)에 가까워지면 남은 줄은 건너뛰고, 만든 데까지 링크를 돌려줘요.
     const rowId = {};
+    let partial = false;
     for (const db of spec.dbs) {
       const rows = db.rows.slice().reverse();
       await pool(rows, rows.length > 12 ? 3 : 1, async row => {
+        if (Date.now() - started > TIME_BUDGET) { partial = true; return; }
         const props = {};
         for (const c of db.cols) { const v = propVal(c.type, row[c.name]); if (v) props[c.name] = v; }
         for (const [name, ref] of Object.entries(row._links || {})) {
@@ -195,7 +200,7 @@ export default async function handler(req, res) {
         if (row._id) rowId[row._id] = p.id;
       });
     }
-    return send(res, 200, { url: page.url });
+    return send(res, 200, partial ? { url: page.url, partial: true } : { url: page.url });
   } catch (e) {
     console.error('notion create failed', e.status, e.code, e.message);
     if (e.status === 401) return send(res, 401, { error: 'no_token' });
