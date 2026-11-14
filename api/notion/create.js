@@ -104,6 +104,22 @@ function validate(spec) {
   return null;
 }
 
+// 검색 결과(하위 페이지·DB 줄일 수 있어요)에서 부모를 따라 올라가, 접근할 수 있는 가장 위 페이지를 찾아요.
+// 앱은 사용자가 허용한 페이지와 그 하위만 볼 수 있으니, 더 못 올라가는 곳이 바로 허용한 페이지예요.
+async function topPage(token, start) {
+  let cur = start, best = start;
+  for (let hop = 0; hop < 12; hop++) {
+    const p = cur.parent || {};
+    const path = p.type === 'page_id' ? '/pages/' + p.page_id
+      : p.type === 'database_id' ? '/databases/' + p.database_id
+      : p.type === 'block_id' ? '/blocks/' + p.block_id : null;
+    if (!path) break;                         // workspace 등: 더 위가 없어요
+    try { cur = await notion(token, path, null, 'GET'); } catch { break; }  // 권한 밖이면 멈춰요
+    if (cur.object === 'page' && !cur.archived && !cur.in_trash) best = cur;
+  }
+  return best;
+}
+
 // 동시에 n개씩 처리해요 (노션 속도 제한: 초당 약 3회)
 async function pool(items, n, fn) {
   let i = 0;
@@ -130,10 +146,10 @@ export default async function handler(req, res) {
     const found = await notion(token, '/search', { filter: { property: 'object', value: 'page' }, page_size: 100 });
     const pages = (found.results || []).filter(p => !p.archived && !p.in_trash);
     const ids = new Set(pages.map(p => p.id));
-    const parent = pages.find(p => p.parent && p.parent.type === 'workspace')
+    const first = pages.find(p => p.parent && p.parent.type === 'workspace')
       || pages.find(p => p.parent && p.parent.type === 'page_id' && !ids.has(p.parent.page_id))
-      || pages.find(p => p.parent && p.parent.type === 'page_id')
       || pages[0];
+    const parent = first && await topPage(token, first);
     if (!parent) return send(res, 400, { error: 'no_page' });
 
     // 2) 담을 페이지 만들기
