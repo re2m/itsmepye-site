@@ -605,7 +605,7 @@ function resultHTML(){
     ${S.rules.length?`<div class="rules"><b>📌 나만의 규칙</b><br>${S.rules.map(r=>'· '+esc(r)).join('<br>')}</div>`:''}
     <div class="export">
       <h3>결과 가져가기</h3>
-      <p>내 노션에 목표 · KPI · 액션 · 습관이 서로 연결된 데이터베이스를 한 번에 만들어 드려요.</p>
+      <p>내 노션에 목표 · KPI · 액션 플랜 · 습관 · 데일리 체크 · 회고를 서로 연결된 데이터베이스로 한 번에 만들어 드려요.</p>
       <button class="big" data-act="notionDb">🗂 노션에 바로 추가</button>
       <button class="eb wide" style="margin-top:8px;display:block;width:100%" data-act="copyNotion">📋 노션에 붙여넣기용 복사 (표 형태)</button>
       <div class="lbl">이미지로 저장</div>
@@ -633,8 +633,11 @@ function monthsIn(){ const s=parseD(S.period.start), e=parseD(S.period.end), out
   for(let d=new Date(s.getFullYear(),s.getMonth(),1); d<=e; d=new Date(d.getFullYear(),d.getMonth()+1,1)) out.push(`${d.getMonth()+1}월`);
   return out; }
 
-// '노션에 바로 추가'용 데이터: 서버(/api/notion/create)가 노션 데이터베이스 하나를 만들어요.
-// 목표 · KPI · 액션 · 습관 · 회고가 한 DB에 들어가고, '상위 목표' 관계로 목표 줄에 이어져요.
+// '노션에 바로 추가'용 설계: 서버(/api/notion/create)가 이대로 관계형 데이터베이스들을 만들어요.
+// 🎯 목표 ─┬─ 📊 KPI
+//          ├─ 🏃 액션 플랜 ─┐
+//          ├─ 🌱 습관 ──────┼─ ✅ 데일리 체크 (날짜별 실행 기록)
+//          └─ 📝 월간 회고   ┘
 function buildNotionSpec(){
   const t=T(), goals=allGoals();
   const today=new Date(); today.setHours(0,0,0,0);
@@ -643,59 +646,84 @@ function buildNotionSpec(){
   const to = new Date(Math.min(pe, new Date(from.getTime()+27*864e5)));   // 최대 4주치
   const days=[]; for(let d=new Date(from); d<=to; d=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1)) days.push(d);
   const dayKey = d => DAYS[(d.getDay()+6)%7][0];
-  const goalName = ({g,c}) => `${c.emoji} ${g.title || c.name}`.slice(0,90);
-  const K = {goal:'🎯 목표', kpi:'📊 KPI', act:'🏃 액션', habit:'🌱 습관', review:'📝 회고'};
+  const dayLabels = DAYS.map(([,l])=>l);
+  const md = d => `${d.getMonth()+1}/${d.getDate()}`;
 
-  const heads=[], kpis=[], acts=[], habits=[], reviews=[];
-  goals.forEach((x,i)=>{
-    const {g}=x, k=g.kpi, gn=goalName(x), key='g'+i;
-    heads.push({'이름':g.title || x.c.name, '구분':K.goal, '목표':gn, '날짜':{start:S.period.start, end:(k.kind==='result'&&k.due)||S.period.end}, '메모':k.kind?kpiLine(k):'', _key:key});
+  const goalRows=[], kpiRows=[], planRows=[], habitRows=[], checkRows=[], reviewRows=[];
+  goals.forEach(({g,c},i)=>{
+    const k=g.kpi, gid='g'+i;
+    goalRows.push({_id:gid, '목표':g.title||c.name, '분야':`${c.emoji} ${c.name}`, '기간':{start:S.period.start, end:(k.kind==='result'&&k.due)||S.period.end}, 'KPI':k.kind?kpiLine(k):'', '상태':'진행 중'});
+    // 📊 KPI
+    const link={'목표':gid};
     if(k.kind==='result'){
-      if(lt(k)==='steps') ls(k).forEach((s,ix)=>kpis.push({'이름':`🚩 ${ix+1}. ${s.name}`,'구분':K.kpi,'목표':gn,'날짜':s.date,_parent:key}));
-      kpis.push({'이름':`🏁 ${k.done || g.title}`,'구분':K.kpi,'목표':gn,'날짜':k.due||S.period.end,_parent:key});
+      if(lt(k)==='steps') ls(k).forEach((s,ix)=>kpiRows.push({'항목':`🚩 ${ix+1}. ${s.name}`,'시점':s.date,_links:link}));
+      kpiRows.push({'항목':`🏁 ${k.done || g.title}`,'시점':k.due||S.period.end,_links:link});
     }
     const unit=k.unit||'', ms=milestones(k);
-    if(ms.length) ms.forEach(m=>kpis.push({'이름':`${k.metric} · ${m.label}`,'구분':K.kpi,'목표':gn,'날짜':m.date,'목표치':m.value,'단위':unit,_parent:key}));
-    else if(k.kind && k.kind!=='result' && k.metric) kpis.push({'이름':`${k.metric} · 최종`,'구분':K.kpi,'목표':gn,'날짜':S.period.end,'목표치':k.target,'단위':unit,_parent:key});
+    if(ms.length) ms.forEach(m=>kpiRows.push({'항목':`${k.metric} · ${m.label}`,'시점':m.date,'목표치':m.value,'단위':unit,_links:link}));
+    else if(k.kind && k.kind!=='result' && k.metric) kpiRows.push({'항목':`${k.metric} · 최종`,'시점':S.period.end,'목표치':k.target,'단위':unit,_links:link});
+    // 🏃 액션 플랜
+    g.actions.forEach((a,j)=>{ if(a.name) planRows.push({_id:`a${i}_${j}`,'액션':a.name,'요일':DAYS.filter(([d])=>a.days.includes(d)).map(([,l])=>l),'주 횟수':a.days.length,_links:link}); });
+    // 🌱 습관
+    const h=g.habit;
+    if(h.behavior) habitRows.push({_id:'h'+i,'습관':h.behavior,'언제':h.trigger,'힘든 날 최소 버전':h.minimum,_links:link});
   });
-  days.forEach(d=>goals.forEach((x,i)=>{
-    x.g.actions.forEach(a=>{ if(a.name && a.days.includes(dayKey(d))) acts.push({'이름':a.name,'구분':K.act,'목표':goalName(x),'날짜':ymd(d),_parent:'g'+i}); });
-    const h=x.g.habit;
-    if(h.behavior) habits.push({'이름':h.behavior,'구분':K.habit,'목표':goalName(x),'날짜':ymd(d),'메모':[h.trigger&&`${h.trigger} →`, h.minimum&&`힘든 날: ${h.minimum}`].filter(Boolean).join(' · '),_parent:'g'+i});
+  // ✅ 데일리 체크: 날짜마다 그날 할 액션과 습관
+  days.forEach(d=>goals.forEach(({g},i)=>{
+    g.actions.forEach((a,j)=>{ if(a.name && a.days.includes(dayKey(d))) checkRows.push({'할 일':`${md(d)} ${a.name}`,'날짜':ymd(d),'종류':'🏃 액션',_links:{'목표':'g'+i,'액션 플랜':`a${i}_${j}`}}); });
+    if(g.habit.behavior) checkRows.push({'할 일':`${md(d)} ${g.habit.behavior}`,'날짜':ymd(d),'종류':'🌱 습관',_links:{'목표':'g'+i,'습관':'h'+i}});
   }));
+  // 📝 월간 회고
   monthsIn().forEach((m,ix)=>{
-    const s=parseD(S.period.start), me=new Date(s.getFullYear(), s.getMonth()+ix+1, 0);
-    reviews.push({'이름':`${m} 회고`,'구분':K.review,'날짜':ymd(me>pe?pe:me),'메모':'KPI 결과 / 잘한 점 / 아쉬운 점 / 다음 달 조정'});
+    const me=new Date(ps.getFullYear(), ps.getMonth()+ix+1, 0);
+    reviewRows.push({'월':`${m} 회고`,'날짜':ymd(me>pe?pe:me),_links:{'목표':goals.map((_,i)=>'g'+i)}});
   });
-  // 서버 한도(300줄)를 넘지 않게 습관 → 액션 순으로 뒤쪽 날짜부터 줄여요
-  const fixed=heads.length+kpis.length+reviews.length;
-  let over = fixed+acts.length+habits.length-300;
-  if(over>0){ const cut=Math.min(over, habits.length); habits.splice(habits.length-cut, cut); over-=cut; }
-  if(over>0) acts.splice(Math.max(0, acts.length-over));
+  // 서버 한도(300줄)를 넘지 않게 데일리 체크를 뒤쪽 날짜부터 줄여요
+  const over = goalRows.length+kpiRows.length+planRows.length+habitRows.length+checkRows.length+reviewRows.length-300;
+  if(over>0) checkRows.splice(Math.max(0, checkRows.length-over));
 
   const intro=[`나의 실행 유형: ${t.emoji} ${t.name} — ${t.desc}`, `💡 ${t.tip}`];
   if(S.rules.length) intro.push('📌 나만의 규칙: '+S.rules.join(' / '));
-  intro.push(`🎯 목표 줄의 '하위 항목'에 KPI · 액션 · 습관이 이어져 있고, 완료를 체크하면 '진행률'이 올라가요.`);
-  intro.push(`💡 데이터베이스 오른쪽 위 ⋯ → 보기 추가에서 '구분'으로 필터하면 목표 / 오늘 할 일 / 습관 트래커 보기를 따로 만들 수 있어요. 캘린더 보기로 바꾸면 날짜별 일정이 돼요.`);
-  intro.push(`액션과 습관은 ${fmtD(ymd(from))}부터 ${fmtD(ymd(to))}까지 날짜마다 만들었어요. 줄을 복제해서 이어 쓰면 돼요.`);
+  intro.push(`🔗 목표를 중심으로 KPI · 액션 플랜 · 습관 · 데일리 체크 · 월간 회고가 관계로 이어져 있어요. 목표를 열면 연결된 항목과 KPI 달성률 · 실행률이 보여요.`);
+  intro.push(`✅ 매일은 '데일리 체크'에서 완료만 체크하면 돼요. 캘린더 보기로 바꾸면 날짜별 일정이 되고, ${fmtD(ymd(from))}부터 ${fmtD(ymd(to))}까지 만들어 두었어요.`);
   intro.push(`만든 곳: ${HANDLE} · 나만의 목표 시스템 만들기`);
 
-  const db={title:'🎯 나의 목표 시스템', cols:[
-    {name:'이름',type:'title'},
-    {name:'구분',type:'select',options:Object.values(K)},
-    {name:'목표',type:'select',options:goals.map(goalName)},
-    {name:'날짜',type:'date'},
-    {name:'완료',type:'checkbox'},
-    {name:'목표치',type:'number'},{name:'실제',type:'number'},{name:'단위',type:'text'},
-    {name:'메모',type:'text'}],
-    rows:[...heads, ...kpis, ...acts, ...habits, ...reviews],
-    relation:{name:'상위 목표', back:'하위 항목', rollup:{name:'진행률', of:'완료', fn:'percent_checked'}}};
-  return {title:`나의 목표 시스템 (${periodLabel()})`, intro, dbs:[db]};
+  const dbs=[
+    {key:'goal', title:'🎯 목표', rows:goalRows, cols:[
+      {name:'목표',type:'title'},{name:'분야',type:'select',options:goals.map(({c})=>`${c.emoji} ${c.name}`)},
+      {name:'기간',type:'date'},{name:'KPI',type:'text'},{name:'상태',type:'select',options:['진행 중','완료','보류']}]},
+    {key:'kpi', title:'📊 KPI', rows:kpiRows, cols:[
+      {name:'항목',type:'title'},{name:'시점',type:'date'},{name:'목표치',type:'number'},{name:'실제',type:'number'},{name:'단위',type:'text'},{name:'달성',type:'checkbox'}]},
+    {key:'plan', title:'🏃 액션 플랜', rows:planRows, cols:[
+      {name:'액션',type:'title'},{name:'요일',type:'multi_select',options:dayLabels},{name:'주 횟수',type:'number'}]},
+    {key:'habit', title:'🌱 습관', rows:habitRows, cols:[
+      {name:'습관',type:'title'},{name:'언제',type:'text'},{name:'힘든 날 최소 버전',type:'text'}]},
+    {key:'check', title:'✅ 데일리 체크', rows:checkRows, cols:[
+      {name:'할 일',type:'title'},{name:'날짜',type:'date'},{name:'완료',type:'checkbox'},{name:'종류',type:'select',options:['🏃 액션','🌱 습관']}]},
+    {key:'review', title:'📝 월간 회고', rows:reviewRows, cols:[
+      {name:'월',type:'title'},{name:'날짜',type:'date'},{name:'KPI 결과',type:'text'},{name:'잘한 점',type:'text'},{name:'아쉬운 점',type:'text'},{name:'다음 달 조정',type:'text'}]},
+  ];
+  const links=[
+    {from:'kpi',    name:'목표',      to:'goal',  back:'📊 KPI'},
+    {from:'plan',   name:'목표',      to:'goal',  back:'🏃 액션 플랜'},
+    {from:'habit',  name:'목표',      to:'goal',  back:'🌱 습관'},
+    {from:'check',  name:'목표',      to:'goal',  back:'✅ 데일리 체크'},
+    {from:'check',  name:'액션 플랜', to:'plan',  back:'✅ 체크 기록'},
+    {from:'check',  name:'습관',      to:'habit', back:'✅ 체크 기록'},
+    {from:'review', name:'목표',      to:'goal',  back:'📝 월간 회고'},
+  ];
+  const rollups=[
+    {db:'goal',  name:'KPI 달성률', rel:'📊 KPI',        of:'달성', fn:'percent_checked'},
+    {db:'goal',  name:'실행률',     rel:'✅ 데일리 체크', of:'완료', fn:'percent_checked'},
+    {db:'plan',  name:'완료율',     rel:'✅ 체크 기록',   of:'완료', fn:'percent_checked'},
+    {db:'habit', name:'실천율',     rel:'✅ 체크 기록',   of:'완료', fn:'percent_checked'},
+  ];
+  return {title:`나의 목표 시스템 (${periodLabel()})`, intro, dbs, links, rollups};
 }
 
 const NOTION_PENDING='goal-notion-pending';
 async function createNotion(){
-  modal(`<h3>🗂 노션에 만드는 중…</h3><p class="sub" style="margin:8px 0 0">목표 · KPI · 액션 · 습관을 연결한 데이터베이스를 만들고 있어요. 30초~1분 정도 걸려요. 이 화면을 닫지 말아 주세요.</p>`);
+  modal(`<h3>🗂 노션에 만드는 중…</h3><p class="sub" style="margin:8px 0 0">목표 · KPI · 액션 플랜 · 습관 · 데일리 체크 · 회고 데이터베이스를 만들고 서로 연결하고 있어요. 30초~1분 정도 걸려요. 이 화면을 닫지 말아 주세요.</p>`);
   let out={};
   try{
     const r = await fetch('/api/notion/create', {method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin', body: JSON.stringify(buildNotionSpec())});
@@ -703,7 +731,7 @@ async function createNotion(){
     if(!r.ok) out.error = out.error || 'http_'+r.status;
   }catch(e){ out={error:'network'}; }
   if(out.url){
-    modal(`<h3>✅ 노션에 추가했어요!</h3><p class="sub" style="margin:8px 0 14px">허용한 노션 페이지 아래에 <b>나의 목표 시스템</b> 페이지를 만들었어요. 목표 줄을 열면 연결된 KPI · 액션 · 습관과 진행률이 보여요.</p>
+    modal(`<h3>✅ 노션에 추가했어요!</h3><p class="sub" style="margin:8px 0 14px">허용한 노션 페이지 아래에 <b>나의 목표 시스템</b> 페이지를 만들었어요. 목표를 열면 연결된 KPI · 액션 플랜 · 습관과 달성률이 보여요.</p>
       <a class="cta" style="display:block;text-align:center;text-decoration:none" href="${esc(out.url)}" target="_blank" rel="noopener">노션에서 열기</a>
       <button class="link" data-act="closeModal">닫기</button>`);
     return;
