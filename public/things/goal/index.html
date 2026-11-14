@@ -643,7 +643,7 @@ function buildNotionSpec(){
   const today=new Date(); today.setHours(0,0,0,0);
   const ps=parseD(S.period.start), pe=parseD(S.period.end);
   const from = ps>today ? ps : today;                                     // 오늘(또는 시작일)부터
-  const to = new Date(Math.min(pe, new Date(from.getTime()+27*864e5)));   // 최대 4주치
+  const to = new Date(Math.min(pe, new Date(from.getTime()+13*864e5)));   // 최대 2주치 (서버 시간 한도 안에 만들 수 있게)
   const days=[]; for(let d=new Date(from); d<=to; d=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1)) days.push(d);
   const dayKey = d => DAYS[(d.getDay()+6)%7][0];
   const dayLabels = DAYS.map(([,l])=>l);
@@ -678,8 +678,8 @@ function buildNotionSpec(){
     const me=new Date(ps.getFullYear(), ps.getMonth()+ix+1, 0);
     reviewRows.push({'월':`${m} 회고`,'날짜':ymd(me>pe?pe:me),_links:{'목표':goals.map((_,i)=>'g'+i)}});
   });
-  // 서버 한도(300줄)를 넘지 않게 데일리 체크를 뒤쪽 날짜부터 줄여요
-  const over = goalRows.length+kpiRows.length+planRows.length+habitRows.length+checkRows.length+reviewRows.length-300;
+  // 1분 안에 만들 수 있게 전체 100줄 이하로, 데일리 체크를 뒤쪽 날짜부터 줄여요
+  const over = goalRows.length+kpiRows.length+planRows.length+habitRows.length+checkRows.length+reviewRows.length-100;
   if(over>0) checkRows.splice(Math.max(0, checkRows.length-over));
 
   const intro=[`나의 실행 유형: ${t.emoji} ${t.name} — ${t.desc}`, `💡 ${t.tip}`];
@@ -731,7 +731,7 @@ async function createNotion(){
     if(!r.ok) out.error = out.error || 'http_'+r.status;
   }catch(e){ out={error:'network'}; }
   if(out.url){
-    modal(`<h3>✅ 노션에 추가했어요!</h3><p class="sub" style="margin:8px 0 14px">허용한 노션 페이지 아래에 <b>나의 목표 시스템</b> 페이지를 만들었어요. 목표를 열면 연결된 KPI · 액션 플랜 · 습관과 달성률이 보여요.</p>
+    modal(`<h3>✅ 노션에 추가했어요!</h3><p class="sub" style="margin:8px 0 14px">허용한 노션 페이지 아래에 <b>나의 목표 시스템</b> 페이지를 만들었어요. 목표를 열면 연결된 KPI · 액션 플랜 · 습관과 달성률이 보여요.${out.partial?'<br>시간이 부족해 데일리 체크 일부는 만들지 못했어요. 노션에서 이어서 추가해 주세요.':''}</p>
       <a class="cta" style="display:block;text-align:center;text-decoration:none" href="${esc(out.url)}" target="_blank" rel="noopener">노션에서 열기</a>
       <button class="link" data-act="closeModal">닫기</button>`);
     return;
