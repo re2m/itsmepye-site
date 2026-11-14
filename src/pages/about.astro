@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const links = [
+	{ label: "릴스 구경하기", href: "https://www.instagram.com/itsme_pye/reels/" },
+	{ label: "브런치 글 읽으러 가기", href: "https://brunch.co.kr/" },
+	{ label: "포트폴리오 확인하기", href: "/work" },
+];
+---
+<BaseLayout title="About — itsmepye" description="마케터이자 새로운 것을 끊임없이 찾는 다능인, 프예를 소개합니다." current="about">
+	<section class="about-hero">
+		<div class="profile-photo about-photo"><img src="/images/site/profile.webp" alt="프예 사진" width="1200" height="1600" /></div>
+		<h1 class="about-logo"><img src="/images/site/logo.svg" alt="Its me Pye" width="508.746" height="772.457" /></h1>
+	</section>
+	<ul class="about-links">
+		{links.map((link) => {
+			const external = link.href.startsWith("http");
+			return <li><a href={link.href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>{link.label} &gt;</a></li>;
+		})}
+	</ul>
+</BaseLayout>
+<style>
+	.about-hero { position: relative; height: 1058px; }
+	.about-photo { position: absolute; left: -100px; top: 23px; width: 717.572px; }
+	.about-logo { position: absolute; left: 734px; top: 148px; width: 488.932px; margin: 0; }
+	.about-logo img { width: 100%; height: auto; }
+	.about-links { display: flex; flex-direction: column; gap: 19px; min-height: 819px; margin: 0; padding: 0 0 0 130px; list-style: none; font-size: 30px; font-weight: 700; line-height: 44px; }
+	.about-links a { transition: opacity .2s ease; }
+	.about-links a:hover { opacity: .65; }
+
+	@media (max-width: 1340px) {
+		.about-hero { height: auto; display: flex; align-items: center; gap: 6vw; padding: 23px 0 80px; }
+		.about-photo { position: relative; left: auto; top: auto; width: 50%; margin-left: -24px; }
+		.about-logo { position: relative; left: auto; top: auto; width: 37%; }
+		.about-links { min-height: 480px; padding-left: 7%; }
+	}
+	@media (max-width: 760px) {
+		.about-hero { flex-direction: column; gap: 40px; padding: 36px 0 64px; }
+		.about-photo { width: 88%; align-self: flex-start; margin-left: -20px; }
+		.about-logo { width: 56%; align-self: flex-end; margin-top: -12%; }
+		.about-links { min-height: 0; padding: 0 0 40px; font-size: 22px; line-height: 1.6; }
+	}
+</style>

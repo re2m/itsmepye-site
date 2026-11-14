@@ -4,6 +4,16 @@
 			"source": "/notes/tip-diary",
 			"destination": "https://bienvenuea.notion.site/notes-tip-diary",
 			"permanent": false
+		},
+		{
+			"source": "/note",
+			"destination": "/notes",
+			"permanent": true
+		},
+		{
+			"source": "/contact",
+			"destination": "/about",
+			"permanent": true
 		}
 	],
 	"functions": {

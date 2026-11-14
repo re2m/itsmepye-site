@@ -1,12 +1,13 @@
 ---
-interface Props { title?: string; description?: string; current?: "things" | "note" | "work" | "contact"; }
-const { title = "프예 — 만들고, 배우고, 기록하는 공간", description = "프예가 직접 만들고, 배우고, 기록하는 공간입니다.", current } = Astro.props;
+interface Props { title?: string; description?: string; current?: "home" | "about" | "things" | "notes"; }
+const { title = "itsmepye — 작은 호기심을 쓸모 있는 것으로", description = "프예가 직접 만들고, 배우고, 기록하는 공간입니다.", current } = Astro.props;
 const nav = [
-	{ label: "things", href: "/things", key: "things" },
-	{ label: "note", href: "/note", key: "note" },
-	{ label: "work", href: "/work", key: "work" },
-	{ label: "contact", href: "/contact", key: "contact" },
+	{ label: "Home", href: "/", key: "home" },
+	{ label: "About", href: "/about", key: "about" },
+	{ label: "Things", href: "/things", key: "things" },
+	{ label: "Notes", href: "/notes", key: "notes" },
 ];
+const footerNav = nav.slice(1);
 ---
 <!doctype html>
 <html lang="ko">
@@ -17,75 +18,107 @@ const nav = [
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description} />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" />
 		<title>{title}</title>
 	</head>
 	<body>
-		<header class="site-header">
-			<a class="brand" href="/" aria-label="프예 홈">itsme.pye</a>
-			<nav aria-label="주요 메뉴">{nav.map((item) => <a href={item.href} aria-current={current === item.key ? "page" : undefined}>{item.label}</a>)}</nav>
-		</header>
-		<main><slot /></main>
-		<footer>
-			<div><a class="footer-brand" href="/">itsmepye</a><p>작은 호기심을 쓸모 있는 것으로 만듭니다.</p></div>
-			<div class="footer-links">{nav.map((item) => <a href={item.href}>{item.label}</a>)}<a href="https://www.instagram.com/itsme_pye/" rel="noreferrer">instagram ↗</a></div>
-			<p class="copyright">© 2026 PYE</p>
-		</footer>
+		<div class="site">
+			<header class="site-header">
+				<nav aria-label="주요 메뉴">
+					{nav.map((item) => <a href={item.href} aria-current={current === item.key ? "page" : undefined}>{item.label}</a>)}
+				</nav>
+			</header>
+			<main><slot /></main>
+			<footer class="site-footer">
+				<div class="footer-brand">
+					<a href="/" aria-label="itsmepye 홈"><img src="/images/site/logo-footer.svg" alt="Its me Pye" width="194.591" height="295.459" /></a>
+					<p>© 2026 itsmepye</p>
+				</div>
+				<ul class="footer-nav">
+					{footerNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+				</ul>
+				<div class="footer-contact">
+					<div><p>Instagram</p><a href="https://www.instagram.com/itsme_pye/" target="_blank" rel="noreferrer">@itsme_pye</a></div>
+					<div><p>Email</p><a href="mailto:leeyr991229@gmail.com">leeyr991229@gmail.com</a></div>
+				</div>
+			</footer>
+		</div>
 	</body>
 </html>
 <style is:global>
-	:root { --ink: #173a2d; --paper: #f4efe3; --line: #173a2d; --muted: #5e766b; --placeholder: #d7ebe2; --accent: #d8e34b; --pink: #ef704e; --blue: #a4d5cd; --orange: #ef704e; --sun: #f5c94d; --ocean: #6fb5ad; }
+	:root {
+		--bg: #000;
+		--mint: #b4fff6;
+		--lime: #edff69;
+		--lilac: #cf95ff;
+		--white: #fff;
+		--site-width: 1320px;
+		--font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+	}
 	* { box-sizing: border-box; }
-	html { background: var(--paper); scroll-behavior: smooth; }
-	body { margin: 0; color: var(--ink); background: var(--paper); font-family: Pretendard, "Apple SD Gothic Neo", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+	html { background: var(--bg); scroll-behavior: smooth; }
+	body { margin: 0; color: var(--mint); background: var(--bg); font-family: var(--font); -webkit-font-smoothing: antialiased; }
 	a { color: inherit; text-decoration: none; }
-	.site-header { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; min-height: 72px; padding: 0 max(24px, calc((100vw - 1280px) / 2)); color: var(--ink); background: var(--paper); border-bottom: 2px solid var(--ink); }
-	.brand { display: inline-flex; align-items: center; font-family: "SB Aggro Bold", Pretendard, sans-serif; font-size: 17px; font-weight: 800; letter-spacing: -.05em; }
-	nav { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); font-size: 13px; }
-	nav a { color: var(--ink); }
-	nav a:hover, nav a[aria-current="page"] { padding: 5px 9px; color: var(--ink); background: var(--accent); text-decoration: none; }
-	main { min-height: 70vh; }
-	footer { position: relative; display: grid; grid-template-columns: 1.5fr 1fr auto; gap: 32px; padding: 50px max(24px, calc((100vw - 1280px) / 2)) 30px; border-top: 2px solid var(--ink); color: var(--paper); background: var(--ink); }
-	.footer-brand { font-family: "SB Aggro Bold", Pretendard, sans-serif; font-size: clamp(36px, 6vw, 72px); font-weight: 800; letter-spacing: -.07em; }
-	footer p { margin: 10px 0 0; font-size: 13px; }
-	.footer-links { display: grid; align-content: start; gap: 8px; font-size: 13px; }
-	.copyright { align-self: end; color: var(--muted); font-size: 12px; }
-	.container { width: min(1280px, calc(100% - 48px)); margin-inline: auto; }
-	.page-hero { position: relative; min-height: 560px; padding: clamp(64px, 9vw, 112px) 0 64px; overflow: hidden; color: var(--paper); border-bottom: 0; background-color: var(--ink); background-image: linear-gradient(#173a2dcc, #173a2dcc), url('/images/temporary-placeholder.svg'); background-size: cover; background-position: center; }
-	.page-hero::after { content: "✦"; position: absolute; right: 7%; bottom: 12%; display: grid; place-items: center; width: 90px; height: 90px; color: var(--ink); border: 3px solid var(--ink); border-radius: 50%; background: var(--sun); font-size: 34px; animation: float 5s ease-in-out infinite; }
-	.page-kicker { display: inline-block; margin: 0 0 24px; padding: 9px 15px; color: var(--ink); background: var(--accent); border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-	.display-title { position: relative; z-index: 1; max-width: 980px; margin: 0; font-family: "SB Aggro Bold", Pretendard, sans-serif; font-size: clamp(66px, 12vw, 164px); font-weight: 800; line-height: .82; letter-spacing: -.1em; text-shadow: 5px 5px 0 var(--pink); }
-	.page-description { position: relative; z-index: 1; max-width: 560px; margin: 40px 0 0 auto; color: var(--paper); font-size: clamp(16px, 2vw, 22px); line-height: 1.6; letter-spacing: -.035em; }
-	.hero-orbit { position: absolute; right: 4%; bottom: 40px; width: clamp(180px, 26vw, 360px); aspect-ratio: 4 / 3; border: 1px dashed var(--line); background: repeating-linear-gradient(135deg, transparent 0 16px, #00000008 16px 17px); }
-	.hero-orbit::before { content: "placeholder"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px; }
-	.content-section { padding: 72px 0 104px; background: var(--paper); }
-	.section-heading { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 28px; padding-bottom: 14px; border-bottom: 2px solid var(--ink); }
-	.section-heading h2 { margin: 0; font-size: clamp(30px, 5vw, 64px); letter-spacing: -.065em; }
-	.section-heading span { padding-top: 12px; color: var(--muted); font-size: 13px; }
-	.item-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-	.item-card { display: flex; flex-direction: column; min-height: 320px; padding: 22px; border: 3px solid var(--ink); border-radius: 26px 8px 26px 8px; background: var(--paper); box-shadow: 8px 8px 0 var(--ink); transition: transform .2s ease, background .2s ease; }
-	.item-card:nth-child(2n) { border-radius: 8px 26px 8px 26px; }
-	.item-card:nth-child(2) { background: var(--sun); }
-	.item-card:nth-child(3) { background: var(--blue); }
-	.item-card:hover { transform: translateY(-8px) rotate(-1deg); background: var(--orange); color: var(--ink); }
-	.item-card .index { color: var(--muted); font-size: 13px; }
-	.item-card h3 { margin: auto 0 12px; font-family: "SB Aggro Bold", Pretendard, sans-serif; font-size: 29px; letter-spacing: -.06em; }
-	.item-card p { max-width: 31ch; margin: 0; color: inherit; opacity: .8; font-size: 15px; line-height: 1.65; }
-	.item-card .arrow { align-self: flex-end; margin-top: 25px; font-size: 24px; }
-	@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+	img { display: block; max-width: 100%; }
+	.site { width: min(var(--site-width), calc(100% - 48px)); margin-inline: auto; }
+
+	/* Header */
+	.site-header { display: flex; justify-content: flex-end; height: 178px; padding: 76px 25px 0; }
+	.site-header nav { display: flex; align-items: flex-start; gap: 50px; }
+	.site-header nav a { width: 118px; padding-bottom: 5px; border-bottom: 1px solid var(--mint); font-size: 19px; line-height: 20px; text-transform: uppercase; transition: opacity .2s ease; }
+	.site-header nav a:hover { opacity: .65; }
+	.site-header nav a[aria-current="page"] { font-weight: 600; }
+
+	main { min-height: 60vh; }
+
+	/* Footer */
+	.site-footer { display: grid; grid-template-columns: 573px 292px 1fr; align-items: start; min-height: 518px; padding: 56px 0 56px 87px; }
+	.footer-brand { display: flex; flex-direction: column; gap: 36px; }
+	.footer-brand img { width: 187px; height: auto; }
+	.footer-brand p { margin: 0; font-size: 15px; line-height: 20px; text-transform: uppercase; }
+	.footer-nav { display: flex; flex-direction: column; gap: 50px; margin: 32px 0 0; padding: 0 25px; list-style: none; font-size: 30px; font-weight: 600; line-height: 20px; text-transform: uppercase; }
+	.footer-contact { display: flex; flex-direction: column; gap: 50px; margin-top: 175px; }
+	.footer-contact div { display: flex; flex-direction: column; gap: 15px; }
+	.footer-contact p { margin: 0; font-size: 30px; font-weight: 600; line-height: 20px; text-transform: uppercase; }
+	.footer-contact a { font-size: 20px; line-height: 20px; text-decoration: underline; }
+	.footer-nav a:hover, .footer-contact a:hover { opacity: .65; }
+
+	/* Shared: masked profile photo */
+	.profile-photo { position: relative; aspect-ratio: 616.833 / 796; overflow: hidden; -webkit-mask: url("/images/site/profile-mask.svg") center / 100% 100% no-repeat; mask: url("/images/site/profile-mask.svg") center / 100% 100% no-repeat; }
+	.profile-photo img { position: absolute; left: 4.103%; top: -14.121%; width: 112.823%; max-width: none; height: auto; }
+
+	/* Shared: page title block (Things / Notes) */
+	.page-intro { display: flex; flex-direction: column; gap: 67px; height: 514px; padding: 123px 0 0 160px; font-weight: 700; text-transform: uppercase; }
+	.page-intro h1 { margin: 0; font-size: 100px; line-height: 60px; }
+	.page-intro p { margin: 0; font-size: 30px; line-height: 44px; }
+
 	@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+	@media (max-width: 1100px) {
+		.site-footer { grid-template-columns: 1fr 1fr; gap: 48px 24px; padding-left: 0; }
+		.footer-brand { grid-row: span 2; }
+		.footer-contact { margin-top: 0; }
+		.page-intro { padding-left: 40px; }
+	}
 	@media (max-width: 760px) {
-		.site-header { min-height: 56px; padding-inline: 16px; }
-		.brand { font-size: 13px; }
-		nav { gap: 12px; font-size: 11px; }
-		.container { width: min(100% - 32px, 620px); }
-		.page-hero { min-height: 500px; padding-top: 72px; }
-		.display-title { font-size: clamp(64px, 23vw, 106px); }
-		.page-description { margin: 46px 0 0; font-size: 16px; }
-		.hero-orbit { right: 16px; bottom: 24px; width: 180px; }
-		.content-section { padding: 64px 0 80px; }
-		.item-grid { grid-template-columns: 1fr; }
-		.item-card { min-height: 240px; }
-		footer { grid-template-columns: 1fr 1fr; padding-inline: 16px; }
-		.copyright { grid-column: 1 / -1; }
+		.site { width: calc(100% - 40px); }
+		.site-header { height: auto; padding: 28px 0 0; justify-content: stretch; }
+		.site-header nav { flex: 1; gap: 14px; }
+		.site-header nav a { flex: 1; width: auto; font-size: 14px; }
+		.site-footer { grid-template-columns: 1fr 1fr; min-height: 0; padding: 72px 0 48px; }
+		.footer-brand { gap: 24px; }
+		.footer-brand img { width: 110px; }
+		.footer-brand p { font-size: 12px; }
+		.footer-nav { gap: 28px; margin-top: 8px; padding: 0; font-size: 20px; }
+		.footer-contact { grid-column: 1 / -1; gap: 28px; }
+		.footer-contact p { font-size: 20px; }
+		.footer-contact a { font-size: 16px; }
+		.page-intro { gap: 32px; height: auto; padding: 72px 0 64px; }
+		.page-intro h1 { font-size: 56px; line-height: 1; }
+		.page-intro p { font-size: 20px; line-height: 1.5; }
 	}
 </style>
