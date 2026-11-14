@@ -124,9 +124,14 @@ export default async function handler(req, res) {
 
   try {
     // 1) 사용자가 허용한 페이지 찾기
-    const found = await notion(token, '/search', { filter: { property: 'object', value: 'page' }, page_size: 20 });
+    // 검색 결과에는 허용한 페이지의 하위 페이지·DB 줄도 섞여 나와요. 그래서 가장 위에 있는 페이지를 골라요.
+    const found = await notion(token, '/search', { filter: { property: 'object', value: 'page' }, page_size: 100 });
     const pages = (found.results || []).filter(p => !p.archived && !p.in_trash);
-    const parent = pages.find(p => p.parent && p.parent.type === 'workspace') || pages[0];
+    const ids = new Set(pages.map(p => p.id));
+    const parent = pages.find(p => p.parent && p.parent.type === 'workspace')
+      || pages.find(p => p.parent && p.parent.type === 'page_id' && !ids.has(p.parent.page_id))
+      || pages.find(p => p.parent && p.parent.type === 'page_id')
+      || pages[0];
     if (!parent) return send(res, 400, { error: 'no_page' });
 
     // 2) 담을 페이지 만들기
