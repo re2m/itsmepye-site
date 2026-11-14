@@ -3,6 +3,7 @@
 // 접근 토큰은 쿠키에서 읽고, 끝나면 바로 지워요. 서버에는 아무것도 저장하지 않아요.
 const NV = '2022-06-28';
 const LIMITS = { dbs: 8, rows: 300, cols: 20, links: 12, rollups: 8, text: 1900, intro: 20 };
+const TIME_BUDGET = 48000; // 줄 만들기를 멈출 시점(ms). 한 번에 최대 3개 요청이 끝나길 기다려도 60초 안에 들어와요.
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const clip = (s, n = LIMITS.text) => String(s ?? '').slice(0, n);
 const rt = s => [{ type: 'text', text: { content: clip(s) } }];
@@ -103,6 +104,22 @@ function validate(spec) {
   return null;
 }
 
+// 검색 결과(하위 페이지·DB 줄일 수 있어요)에서 부모를 따라 올라가, 접근할 수 있는 가장 위 페이지를 찾아요.
+// 앱은 사용자가 허용한 페이지와 그 하위만 볼 수 있으니, 더 못 올라가는 곳이 바로 허용한 페이지예요.
+async function topPage(token, start) {
+  let cur = start, best = start;
+  for (let hop = 0; hop < 12; hop++) {
+    const p = cur.parent || {};
+    const path = p.type === 'page_id' ? '/pages/' + p.page_id
+      : p.type === 'database_id' ? '/databases/' + p.database_id
+      : p.type === 'block_id' ? '/blocks/' + p.block_id : null;
+    if (!path) break;                         // workspace 등: 더 위가 없어요
+    try { cur = await notion(token, path, null, 'GET'); } catch { break; }  // 권한 밖이면 멈춰요
+    if (cur.object === 'page' && !cur.archived && !cur.in_trash) best = cur;
+  }
+  return best;
+}
+
 // 동시에 n개씩 처리해요 (노션 속도 제한: 초당 약 3회)
 async function pool(items, n, fn) {
   let i = 0;
@@ -113,6 +130,7 @@ async function pool(items, n, fn) {
 }
 
 export default async function handler(req, res) {
+  const started = Date.now();
   if (req.method !== 'POST') return send(res, 405, { error: 'method' });
   const token = parseCookies(req.headers.cookie).ntk;
   if (!token) return send(res, 401, { error: 'no_token' });
@@ -124,9 +142,14 @@ export default async function handler(req, res) {
 
   try {
     // 1) 사용자가 허용한 페이지 찾기
-    const found = await notion(token, '/search', { filter: { property: 'object', value: 'page' }, page_size: 20 });
+    // 검색 결과에는 허용한 페이지의 하위 페이지·DB 줄도 섞여 나와요. 그래서 가장 위에 있는 페이지를 골라요.
+    const found = await notion(token, '/search', { filter: { property: 'object', value: 'page' }, page_size: 100 });
     const pages = (found.results || []).filter(p => !p.archived && !p.in_trash);
-    const parent = pages.find(p => p.parent && p.parent.type === 'workspace') || pages[0];
+    const ids = new Set(pages.map(p => p.id));
+    const first = pages.find(p => p.parent && p.parent.type === 'workspace')
+      || pages.find(p => p.parent && p.parent.type === 'page_id' && !ids.has(p.parent.page_id))
+      || pages[0];
+    const parent = first && await topPage(token, first);
     if (!parent) return send(res, 400, { error: 'no_page' });
 
     // 2) 담을 페이지 만들기
@@ -175,10 +198,13 @@ export default async function handler(req, res) {
     }
 
     // 6) 줄 채우기: 노션은 나중에 만든 줄이 위에 보여서, 거꾸로 만들어 원래 순서로 보이게 해요
+    //    서버 시간 한도(60초)에 가까워지면 남은 줄은 건너뛰고, 만든 데까지 링크를 돌려줘요.
     const rowId = {};
+    let partial = false;
     for (const db of spec.dbs) {
       const rows = db.rows.slice().reverse();
       await pool(rows, rows.length > 12 ? 3 : 1, async row => {
+        if (Date.now() - started > TIME_BUDGET) { partial = true; return; }
         const props = {};
         for (const c of db.cols) { const v = propVal(c.type, row[c.name]); if (v) props[c.name] = v; }
         for (const [name, ref] of Object.entries(row._links || {})) {
@@ -190,7 +216,7 @@ export default async function handler(req, res) {
         if (row._id) rowId[row._id] = p.id;
       });
     }
-    return send(res, 200, { url: page.url });
+    return send(res, 200, partial ? { url: page.url, partial: true } : { url: page.url });
   } catch (e) {
     console.error('notion create failed', e.status, e.code, e.message);
     if (e.status === 401) return send(res, 401, { error: 'no_token' });
