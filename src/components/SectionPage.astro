@@ -4,11 +4,8 @@ export interface Item { title: string; href?: string; image?: string; imageAlt?:
 interface Props { current?: "things" | "notes"; title: string; description: string[]; items: Item[]; }
 const { current, title, description, items } = Astro.props;
 const perPage = 4;
-const pages = Array.from({ length: Math.max(1, Math.ceil(items.length / perPage)) }, (_, i) => {
-	const slice: (Item | null)[] = items.slice(i * perPage, i * perPage + perPage);
-	while (slice.length < perPage) slice.push(null);
-	return slice;
-});
+const pages = Array.from({ length: Math.ceil(items.length / perPage) }, (_, i) => items.slice(i * perPage, i * perPage + perPage));
+const paged = pages.length > 1;
 const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
 ---
 <BaseLayout title={`${title} — itsmepye`} description={description.join(" ")} current={current}>
@@ -17,26 +14,24 @@ const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
 		<p>{description.map((line, i) => <Fragment>{i > 0 && <br />}{line}</Fragment>)}</p>
 	</section>
 
-	<section class="gallery" data-gallery aria-label={`${title} 목록`}>
-		<button class="gallery-arrow" type="button" data-prev aria-label="이전" disabled>◀</button>
+	{pages.length > 0 && <section class="gallery" data-gallery aria-label={`${title} 목록`}>
+		<button class="gallery-arrow" type="button" data-prev aria-label="이전" disabled hidden={!paged}>◀</button>
 		<div class="gallery-pages">
 			{pages.map((page, pageIndex) => (
 				<ul class="gallery-grid" data-page hidden={pageIndex > 0}>
-					{page.map((item) => item ? (
+					{page.map((item) => (
 						<li>
 							<a class="card" href={item.href ?? "#"} target={isExternal(item.href) ? "_blank" : undefined} rel={isExternal(item.href) ? "noreferrer" : undefined}>
 								{item.image ? <img src={item.image} alt={item.imageAlt ?? ""} loading="lazy" /> : <img src="/images/site/card-placeholder.svg" alt="" loading="lazy" />}
 								<span class="card-title">{item.title}</span>
 							</a>
 						</li>
-					) : (
-						<li class="card card-placeholder" aria-hidden="true"><img src="/images/site/card-placeholder.svg" alt="" loading="lazy" /><span class="card-title">Coming soon</span></li>
 					))}
 				</ul>
 			))}
 		</div>
-		<button class="gallery-arrow" type="button" data-next aria-label="다음" disabled={pages.length < 2}>▶</button>
-	</section>
+		<button class="gallery-arrow" type="button" data-next aria-label="다음" hidden={!paged}>▶</button>
+	</section>}
 </BaseLayout>
 <script>
 	for (const gallery of document.querySelectorAll<HTMLElement>("[data-gallery]")) {
@@ -55,8 +50,9 @@ const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
 	}
 </script>
 <style>
-	.gallery { display: flex; align-items: center; justify-content: center; gap: 72px; min-height: 868px; margin-bottom: 127px; padding: 72px 0; }
+	.gallery { display: flex; align-items: center; justify-content: center; gap: 72px; margin-bottom: 127px; padding: 72px 0; }
 	.gallery-arrow { flex-shrink: 0; width: 36px; padding: 0; border: 0; color: var(--mint); background: none; font: 500 40px/20px var(--font); cursor: pointer; transition: opacity .2s ease; }
+	.gallery-arrow[hidden] { display: block; visibility: hidden; }
 	.gallery-arrow:disabled { opacity: .25; cursor: default; }
 	.gallery-pages { width: 1004.723px; }
 	.gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 41.586px; margin: 0; padding: 0; list-style: none; }
@@ -67,7 +63,7 @@ const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
 	.card-title { position: absolute; left: 0; right: 0; bottom: 0; display: grid; place-items: center; height: 19.65%; padding: 0 16px; color: #000; background: var(--mint); font-size: 20px; line-height: 20px; text-align: center; text-transform: uppercase; }
 
 	@media (max-width: 1240px) {
-		.gallery { gap: 24px; min-height: 0; }
+		.gallery { gap: 24px; }
 		.gallery-pages { flex: 1; width: auto; }
 		.gallery-grid { gap: 3vw; }
 	}
