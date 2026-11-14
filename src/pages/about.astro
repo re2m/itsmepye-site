@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 const links = [
 	{ label: "릴스 구경하기", href: "https://www.instagram.com/itsme_pye/" },
 	{ label: "브런치 글 읽으러 가기", href: "https://brunch.co.kr/@4af4962510ae4a8" },
-	{ label: "포트폴리오 확인하기", href: "/work" },
+	{ label: "포트폴리오 확인하기" },
 ];
 ---
 <BaseLayout title="About — itsmepye" description="마케터이자 새로운 것을 끊임없이 찾는 다능인, 프예를 소개합니다." current="about">
@@ -12,10 +12,9 @@ const links = [
 		<h1 class="about-logo"><img src="/images/site/logo.svg" alt="Its me Pye" width="508.746" height="772.457" /></h1>
 	</section>
 	<ul class="about-links">
-		{links.map((link) => {
-			const external = link.href.startsWith("http");
-			return <li><a href={link.href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>{link.label} &gt;</a></li>;
-		})}
+		{links.map((link) => link.href
+			? <li><a href={link.href} target="_blank" rel="noreferrer">{link.label} &gt;</a></li>
+			: <li><span>{link.label} &gt;</span></li>)}
 	</ul>
 </BaseLayout>
 <style>

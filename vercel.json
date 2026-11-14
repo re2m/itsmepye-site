@@ -14,6 +14,11 @@
 			"source": "/contact",
 			"destination": "/about",
 			"permanent": true
+		},
+		{
+			"source": "/work",
+			"destination": "/about",
+			"permanent": false
 		}
 	],
 	"functions": {
