@@ -1,15 +1,77 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-interface Item { title: string; description: string; href?: string; }
-interface Props { current: "things" | "note" | "work"; kicker: string; title: string; description: string; accent: string; sectionTitle: string; items: Item[]; }
-const { current, kicker, title, description, accent, sectionTitle, items } = Astro.props;
+export interface Item { title: string; href?: string; image?: string; imageAlt?: string; }
+interface Props { current?: "things" | "notes"; title: string; description: string[]; items: Item[]; }
+const { current, title, description, items } = Astro.props;
+const perPage = 4;
+const pages = Array.from({ length: Math.ceil(items.length / perPage) }, (_, i) => items.slice(i * perPage, i * perPage + perPage));
+const paged = pages.length > 1;
+const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
 ---
-<BaseLayout title={`${title} — itsmepye`} description={description} current={current}>
-	<section class="page-hero" style={`--accent:${accent}`}>
-		<div class="container"><p class="page-kicker">{kicker}</p><h1 class="display-title">{title}</h1><p class="page-description">{description}</p></div>
+<BaseLayout title={`${title} — itsmepye`} description={description.join(" ")} current={current}>
+	<section class="page-intro">
+		<h1>{title}</h1>
+		<p>{description.map((line, i) => <Fragment>{i > 0 && <br />}{line}</Fragment>)}</p>
 	</section>
-	<section class="content-section"><div class="container">
-		<div class="section-heading"><h2>{sectionTitle}</h2><span>SCROLL TO EXPLORE ↓</span></div>
-		<div class="item-grid">{items.map((item, index) => <a class="item-card" href={item.href ?? "#"}><span class="index">0{index + 1}</span><h3>{item.title}</h3><p>{item.description}</p><span class="arrow" aria-hidden="true">↗</span></a>)}</div>
-	</div></section>
+
+	{pages.length > 0 && <section class="gallery" data-gallery aria-label={`${title} 목록`}>
+		<button class="gallery-arrow" type="button" data-prev aria-label="이전" disabled hidden={!paged}>◀</button>
+		<div class="gallery-pages">
+			{pages.map((page, pageIndex) => (
+				<ul class="gallery-grid" data-page hidden={pageIndex > 0}>
+					{page.map((item) => (
+						<li>
+							<a class="card" href={item.href ?? "#"} target={isExternal(item.href) ? "_blank" : undefined} rel={isExternal(item.href) ? "noreferrer" : undefined}>
+								{item.image ? <img src={item.image} alt={item.imageAlt ?? ""} loading="lazy" /> : <img src="/images/site/card-placeholder.svg" alt="" loading="lazy" />}
+								<span class="card-title">{item.title}</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			))}
+		</div>
+		<button class="gallery-arrow" type="button" data-next aria-label="다음" hidden={!paged}>▶</button>
+	</section>}
 </BaseLayout>
+<script>
+	for (const gallery of document.querySelectorAll<HTMLElement>("[data-gallery]")) {
+		const pages = [...gallery.querySelectorAll<HTMLElement>("[data-page]")];
+		const prev = gallery.querySelector<HTMLButtonElement>("[data-prev]")!;
+		const next = gallery.querySelector<HTMLButtonElement>("[data-next]")!;
+		let index = 0;
+		const show = (i: number) => {
+			index = Math.max(0, Math.min(pages.length - 1, i));
+			pages.forEach((page, n) => (page.hidden = n !== index));
+			prev.disabled = index === 0;
+			next.disabled = index === pages.length - 1;
+		};
+		prev.addEventListener("click", () => show(index - 1));
+		next.addEventListener("click", () => show(index + 1));
+	}
+</script>
+<style>
+	.gallery { display: flex; align-items: center; justify-content: center; gap: 72px; margin-bottom: 127px; padding: 72px 0; }
+	.gallery-arrow { flex-shrink: 0; width: 36px; padding: 0; border: 0; color: var(--mint); background: none; font: 500 40px/20px var(--font); cursor: pointer; transition: opacity .2s ease; }
+	.gallery-arrow[hidden] { display: block; visibility: hidden; }
+	.gallery-arrow:disabled { opacity: .25; cursor: default; }
+	.gallery-pages { width: 1004.723px; }
+	.gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 41.586px; margin: 0; padding: 0; list-style: none; }
+	.gallery-grid[hidden] { display: none; }
+	.card { position: relative; display: block; aspect-ratio: 481.568 / 341.007; overflow: hidden; border-radius: 33.269px; background: #1a1a1a; }
+	.card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .4s ease; }
+	a.card:hover img { transform: scale(1.04); }
+	.card-title { position: absolute; left: 0; right: 0; bottom: 0; display: grid; place-items: center; height: 19.65%; padding: 0 16px; color: #000; background: var(--mint); font-size: 20px; line-height: 20px; text-align: center; text-transform: uppercase; }
+
+	@media (max-width: 1240px) {
+		.gallery { gap: 24px; }
+		.gallery-pages { flex: 1; width: auto; }
+		.gallery-grid { gap: 3vw; }
+	}
+	@media (max-width: 760px) {
+		.gallery { gap: 8px; margin-bottom: 0; padding: 0 0 48px; }
+		.gallery-arrow { width: 24px; font-size: 24px; }
+		.gallery-grid { grid-template-columns: 1fr; gap: 20px; }
+		.card { border-radius: 24px; }
+		.card-title { font-size: 16px; }
+	}
+</style>

@@ -1,0 +1,7 @@
+---
+import SectionPage, { type Item } from "../components/SectionPage.astro";
+const items: Item[] = [
+	{ title: "나만의 다이어리 만드는 방법", href: "/notes/tip-diary", image: "/images/tip-diary-preview-9x16.png", imageAlt: "나만의 다이어리 만드는 방법 미리보기" },
+];
+---
+<SectionPage current="notes" title="Notes" description={["누구나 호기심을", "쓸모있는 것으로 만들 수 있는 도구"]} items={items} />

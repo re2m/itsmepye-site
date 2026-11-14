@@ -1,62 +1,77 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-const sections = [
-	{ number: "01", label: "THINGS", title: "직접 만든 서비스", description: "작은 불편을 발견하고 직접 만든 웹서비스와 실험을 소개합니다.", href: "/things", accent: "mint" },
-	{ number: "02", label: "NOTE", title: "정보와 가이드북", description: "직접 경험하고 배운 것을 누구나 활용할 수 있는 정보로 정리합니다.", href: "/note", accent: "yellow" },
-	{ number: "03", label: "WORK", title: "프리랜서 포트폴리오", description: "브랜드와 서비스의 성장을 위해 기획하고 실행한 작업을 소개합니다.", href: "/work", accent: "lavender" },
-];
 ---
-<BaseLayout>
-	<section class="home-hero">
-		<div class="container">
-			<p class="eyebrow"><span></span> PYE'S CREATIVE PLAYGROUND</p>
-			<h1>THINK<br /><em>MAKE</em><br />THINGS.</h1>
-			<div class="hero-bottom"><p>작은 호기심을<br />쓸모 있는 것으로.</p><p>프예가 직접 만들고, 배우고, 기록하는 공간입니다.<br />누군가에게 도움이 되는 형태로 나눕니다.</p></div>
-		</div>
-	</section>
-	<section class="about container">
-		<p class="section-number">00 — ABOUT</p>
-		<h2>관찰하고, 만들고,<br />배운 것을 나눕니다.</h2>
-		<div><p>마케터이자, 새로운 것을 끊임없이 찾는 다능인 프예입니다. 생활 속 작은 문제를 서비스로 만들고, 시행착오에서 얻은 정보를 기록하며, 나의 기준대로 살아가는 방법을 공유합니다.</p><div class="about-image image-placeholder"><img src="/images/temporary-placeholder.svg" alt="About 이미지 준비 중" /></div></div>
-	</section>
-	<section class="section-grid container" aria-label="사이트 영역">
-		{sections.map((section) => <a class={`section-card ${section.accent}`} href={section.href}><div class="card-top"><span>{section.number}</span><span>↗</span></div><p class="card-label">{section.label}</p><h2>{section.title}</h2><p>{section.description}</p></a>)}
-	</section>
+<BaseLayout current="home">
+	<div class="home">
+		<section class="hero">
+			<div class="profile-photo hero-photo"><img src="/images/site/profile.webp" alt="프예 사진" width="1200" height="1600" /></div>
+			<h1 class="hero-logo"><img src="/images/site/logo.svg" alt="Its me Pye" width="508.746" height="772.457" /></h1>
+		</section>
+
+		<section class="intro">
+			<p class="intro-title"><span>THINK-MAKE-THINGS</span></p>
+			<p class="intro-copy">작은 호기심을<br />쓸모 있는 것으로 만듭니다.</p>
+		</section>
+
+		<nav class="shapes" aria-label="둘러보기">
+			<a class="shape shape-rect" href="/about"><span>Hi, I’m..</span></a>
+			<a class="shape shape-circle" href="/things"><img src="/images/site/circle.svg" alt="" width="363.473" height="355" /><span>I made..</span></a>
+			<a class="shape shape-triangle" href="/notes"><img src="/images/site/triangle.svg" alt="" width="537.58" height="295.464" /><span>I shared..</span></a>
+		</nav>
+	</div>
 </BaseLayout>
 <style>
-	.home-hero { position: relative; min-height: calc(100svh - 72px); overflow: hidden; color: var(--paper); border-bottom: 0; background-color: var(--ink); background-image: linear-gradient(#173a2dcc, #173a2dcc), url('/images/temporary-placeholder.svg'); background-size: cover; background-position: center; }
-	.home-hero .container { position: relative; z-index: 2; padding-top: clamp(70px, 10vw, 125px); padding-bottom: 50px; }
-	.eyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 35px; padding: 9px 15px; color: var(--ink); background: var(--sun); border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: .08em; }
-	.eyebrow span { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
-	h1 { position: relative; z-index: 1; margin: 0; font-family: "SB Aggro Bold", Pretendard, sans-serif; font-size: clamp(72px, 15vw, 190px); font-weight: 800; line-height: .72; letter-spacing: -.1em; text-shadow: 7px 7px 0 var(--pink); }
-	h1 em { display: inline-block; padding: 0 .08em .04em 0; color: var(--ink); font-style: normal; font-weight: 800; background: var(--accent); text-shadow: none; }
-	.hero-bottom { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-top: 70px; padding-top: 20px; border-top: 2px solid var(--paper); }
-	.hero-bottom p { margin: 0; color: var(--paper); font-size: 15px; line-height: 1.6; }
-	.hero-bottom p:first-child { color: var(--ink); padding: 12px 16px; background: var(--ocean); font-size: 18px; font-weight: 700; letter-spacing: -.04em; }
-	.image-placeholder { border: 1px dashed var(--line); background: var(--placeholder); overflow: hidden; }
-	.image-placeholder img { display: block; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
-	.about { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 35px; margin-top: 24px; padding: 70px 35px; border: 3px solid var(--ink); border-radius: 38px 10px 38px 10px; background: var(--accent); box-shadow: 12px 12px 0 var(--ink); }
-	.section-number { color: var(--muted); font-size: 13px; letter-spacing: .08em; }
-	.about h2 { margin: 0; font-family: "SB Aggro Bold", Pretendard, sans-serif; font-size: clamp(38px, 6vw, 78px); line-height: 1.05; letter-spacing: -.075em; }
-	.about > div p { margin: 8px 0 0; color: var(--ink); font-size: 15px; line-height: 1.8; }
-	.about-image { margin-top: 26px; aspect-ratio: 4 / 3; border: 3px solid var(--ink); border-radius: 22px 6px 22px 6px; }
-	.section-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-block: 90px 120px; }
-	.section-card { display: flex; flex-direction: column; min-height: 340px; padding: 24px; border: 3px solid var(--ink); border-radius: 28px 8px 28px 8px; background: var(--paper); box-shadow: 8px 8px 0 var(--ink); transition: transform .2s ease, background .2s ease; }
-	.section-card:nth-child(2) { border-radius: 8px 28px 8px 28px; }
-	.section-card:nth-child(2) { background: var(--sun); }
-	.section-card:nth-child(3) { background: var(--ocean); }
-	.section-card:hover { transform: translateY(-8px) rotate(1deg); background: var(--orange); color: var(--ink); }
-	.mint, .yellow, .lavender { background: var(--placeholder); }
-	.card-top { display: flex; justify-content: space-between; font-size: 12px; }
-	.card-label { margin: auto 0 12px; color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .08em; }
-	.section-card h2 { margin: 0; font-family: "SB Aggro Bold", Pretendard, sans-serif; font-size: 30px; letter-spacing: -.06em; }
-	.section-card > p:last-child { max-width: 31ch; margin: 15px 0 0; color: var(--muted); font-size: 15px; line-height: 1.65; }
+	.home { display: flex; flex-direction: column; gap: 136px; padding: 50px 0 150px; }
+
+	.hero { display: flex; align-items: center; gap: 90px; }
+	.hero-photo { width: 616.833px; flex-shrink: 0; }
+	.hero-logo { width: 488.932px; margin: 0; }
+	.hero-logo img { width: 100%; height: auto; }
+
+	.intro { height: 369px; padding: 78px 0 0 103px; }
+	.intro-title { margin: 0; font-size: 67.05px; line-height: 67.05px; color: #000; }
+	.intro-title span { display: inline-block; background: var(--mint); }
+	.intro-copy { margin: 22px 0 0; color: var(--white); font-size: 50.473px; font-weight: 500; line-height: 59.65px; }
+
+	.shapes { position: relative; height: 689px; }
+	.shape { position: absolute; display: grid; place-items: center; color: #000; font-family: Inter, var(--font); font-size: 35px; line-height: 44px; transition: transform .3s ease; }
+	.shape > * { grid-area: 1 / 1; }
+	.shape span { position: relative; }
+	.shape-rect { left: 165px; top: 34px; width: 458.195px; height: 242.612px; background: var(--mint); transform: rotate(4.46deg); }
+	.shape-rect:hover { transform: rotate(-2deg) scale(1.03); }
+	.shape-circle { left: 734px; top: 122px; width: 363.473px; }
+	.shape-circle img { width: 100%; height: auto; }
+	.shape-circle:hover { transform: scale(1.06); }
+	.shape-triangle { left: 370px; top: 401px; width: 524px; }
+	.shape-triangle img { width: 102.6%; max-width: none; height: auto; margin: -0.85% 0 0 -1.21%; }
+	.shape-triangle span { position: absolute; top: 62.85%; left: 50%; transform: translateX(-50%); line-height: 24px; white-space: nowrap; }
+	.shape-triangle:hover { transform: translateY(-10px); }
+
+	@media (max-width: 1340px) {
+		.hero { gap: 6vw; }
+		.hero-photo { width: 46%; }
+		.hero-logo { width: 37%; }
+		.intro { height: auto; padding: 40px 0 0 7%; }
+		.intro-title { font-size: clamp(32px, 5vw, 67.05px); line-height: 1; }
+		.intro-copy { font-size: clamp(26px, 3.8vw, 50.473px); line-height: 1.18; }
+		.shapes { height: auto; aspect-ratio: 1320 / 689; }
+		.shape { font-size: clamp(18px, 2.6vw, 35px); }
+		.shape-rect { left: 12.5%; top: 4.9%; width: 34.7%; height: 35.2%; }
+		.shape-circle { left: 55.6%; top: 17.7%; width: 27.5%; }
+		.shape-triangle { left: 28%; top: 58.2%; width: 39.7%; }
+	}
 	@media (max-width: 760px) {
-		.home-hero { min-height: 700px; }
-		h1 { font-size: clamp(66px, 24vw, 104px); }
-		.hero-bottom { align-items: start; flex-direction: column; margin-top: 180px; }
-		.about { grid-template-columns: 1fr; margin-top: 16px; padding: 52px 24px; }
-		.section-grid { grid-template-columns: 1fr; padding-block: 64px 80px; }
-		.section-card { min-height: 270px; }
+		.home { gap: 72px; padding: 36px 0 0; }
+		.hero { flex-direction: column; gap: 40px; }
+		.hero-photo { width: 74%; align-self: flex-start; }
+		.hero-logo { width: 56%; align-self: flex-end; margin-top: -12%; }
+		.intro { padding: 0; }
+		.intro-title { font-size: 7.4vw; white-space: nowrap; }
+		.intro-copy { margin-top: 14px; font-size: 7vw; }
+		.shapes { display: flex; flex-direction: column; align-items: center; gap: 36px; aspect-ratio: auto; }
+		.shape { position: relative; inset: auto; font-size: 22px; }
+		.shape-rect { width: 78%; height: auto; aspect-ratio: 458 / 243; align-self: flex-start; }
+		.shape-circle { width: 62%; align-self: flex-end; }
+		.shape-triangle { width: 86%; }
 	}
 </style>
