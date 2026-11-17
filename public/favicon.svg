@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <rect width="128" height="128" rx="28" fill="#000"/>
-  <!-- "P" from the handwritten Its me Pye logo (Vector 18 + 19), thickened for small sizes -->
-  <g transform="translate(64 64) scale(0.34) translate(-69 -633)" fill="none" stroke="#B4FFF6" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M16.3659 504.347C16.3659 505.151 16.3659 566.162 16.9286 660.345C17.4913 693.932 18.6167 698.672 19.1965 711.528C19.7763 724.383 19.7763 745.21 17.3422 762.549"/>
-    <path d="M9.90674 504.265C34.1894 504.486 89.5613 515.08 98.3184 525.046C119.293 548.917 127.995 589.067 119.453 616.49C111.85 640.901 78.5762 643.242 39.6602 647.726C30.9814 648.494 27.2608 648.494 18.2918 641.272"/>
-  </g>
-</svg>
