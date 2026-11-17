@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-export interface Item { title: string; description?: string; href?: string; image?: string; imageAlt?: string; }
+export interface Item { title: string; href?: string; image?: string; imageAlt?: string; }
 interface Props { current?: "things" | "notes"; title: string; description: string[]; items: Item[]; }
 const { current, title, description, items } = Astro.props;
 const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
@@ -17,10 +17,7 @@ const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
 				<li>
 					<a class="card" href={item.href ?? "#"} target={isExternal(item.href) ? "_blank" : undefined} rel={isExternal(item.href) ? "noreferrer" : undefined}>
 						<span class="card-image"><img src={item.image ?? "/images/site/card-placeholder.svg"} alt={item.imageAlt ?? ""} loading="lazy" /></span>
-						<span class="card-body">
-							<span class="card-title">{item.title}</span>
-							{item.description && <span class="card-desc">{item.description}</span>}
-						</span>
+						<span class="card-title">{item.title}</span>
 					</a>
 				</li>
 			))}
@@ -35,14 +32,12 @@ const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
 
 	.card { display: flex; flex-direction: column; height: 100%; padding: 12px; color: #111; background: #fff; border-radius: 16px; transition: transform .25s ease, box-shadow .25s ease; }
 	.card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(180, 255, 246, .18); }
-	.card-image { position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 10px; background: #f1f1f1; }
-	.card-grid li:nth-child(5n + 1) .card-image, .card-grid li:nth-child(5n + 2) .card-image { aspect-ratio: 16 / 9; }
+	/* Thumbnails: 3:2 (recommended 1200x800) for every card size */
+	.card-image { position: relative; display: block; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 10px; background: #f1f1f1; }
 	.card-image::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .07); pointer-events: none; }
 	.card-image img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .4s ease; }
 	.card:hover .card-image img { transform: scale(1.04); }
-	.card-body { display: flex; flex-direction: column; gap: 8px; padding: 18px 6px 10px; }
-	.card-title { font-size: 20px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; }
-	.card-desc { color: #6b6b6b; font-size: 15px; line-height: 1.55; }
+	.card-title { padding: 16px 6px 6px; font-size: 20px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; }
 
 	@media (max-width: 1100px) {
 		.card-grid { padding: 0 40px; margin-bottom: 120px; }
@@ -50,7 +45,6 @@ const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
 	@media (max-width: 760px) {
 		.card-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 48px; padding: 0; }
 		.card-grid li, .card-grid li:nth-child(5n + 1), .card-grid li:nth-child(5n + 2) { grid-column: auto; }
-		.card-title { font-size: 18px; }
-		.card-desc { font-size: 14px; }
+		.card-title { padding-top: 14px; font-size: 18px; }
 	}
 </style>
