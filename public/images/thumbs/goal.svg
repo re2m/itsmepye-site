@@ -1,9 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <filter id="cut" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="2" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="16"/>
+    </filter>
+  </defs>
   <rect width="1200" height="800" fill="#F28C28"/>
-  <g transform="translate(600 400)">
-    <circle r="230" fill="#FFF8EF"/>
-    <circle r="168" fill="#F28C28"/>
-    <circle r="106" fill="#FFF8EF"/>
-    <circle r="46" fill="#2B2118"/>
+  <!-- A figure planting a flag; the flag carries a target cut out as negative space -->
+  <g transform="translate(560 470)" filter="url(#cut)">
+    <g fill="none" stroke="#2B2118" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0 -120 L4 10" stroke-width="100"/>
+      <path d="M0 -95 L-80 -55 L-145 -88" stroke-width="54"/>
+      <path d="M8 -100 L70 -150 L96 -205" stroke-width="54"/>
+      <path d="M-6 10 L-62 85 L-128 132" stroke-width="58"/>
+      <path d="M10 10 L58 82 L52 160" stroke-width="58"/>
+      <path d="M104 -300 L104 60" stroke-width="22"/>
+    </g>
+    <circle cx="-4" cy="-182" r="48" fill="#2B2118"/>
+    <path d="M100 -306 L244 -262 L100 -214 Z" fill="#2B2118" stroke="#2B2118" stroke-width="10" stroke-linejoin="round"/>
+    <circle cx="150" cy="-261" r="26" fill="#F28C28"/>
+    <circle cx="150" cy="-261" r="11" fill="#2B2118"/>
+    <ellipse cx="200" cy="160" rx="26" ry="22" fill="#2B2118"/>
   </g>
 </svg>
