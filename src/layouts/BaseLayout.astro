@@ -39,7 +39,7 @@ const footerNav = nav.slice(1);
 			<footer class="site-footer">
 				<div class="footer-brand">
 					<a href="/" aria-label="itsmepye 홈"><img src="/images/site/logo-footer.svg" alt="Its me Pye" width="194.591" height="295.459" /></a>
-					<p>© 2026 itsmepye</p>
+					<div class="footer-meta"><p>© 2026 itsmepye</p><a href="/privacy">개인정보처리방침</a></div>
 				</div>
 				<ul class="footer-nav">
 					{footerNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
@@ -82,6 +82,9 @@ const footerNav = nav.slice(1);
 	.footer-brand { display: flex; flex-direction: column; gap: 36px; }
 	.footer-brand img { width: 187px; height: auto; }
 	.footer-brand p { margin: 0; font-size: 15px; line-height: 20px; text-transform: uppercase; }
+	.footer-meta { display: flex; flex-direction: column; gap: 8px; }
+	.footer-meta a { font-size: 14px; line-height: 20px; text-decoration: underline; text-underline-offset: 3px; }
+	.footer-meta a:hover { opacity: .65; }
 	.footer-nav { display: flex; flex-direction: column; gap: 50px; margin: 126px 0 0; padding: 0 25px; list-style: none; font-size: 30px; font-weight: 600; line-height: 20px; text-transform: uppercase; }
 	.footer-contact { display: flex; flex-direction: column; gap: 50px; margin-top: 128px; }
 	.footer-contact div { display: flex; flex-direction: column; gap: 15px; }
