@@ -2,10 +2,10 @@
 interface Props { title?: string; description?: string; current?: "home" | "about" | "things" | "notes"; }
 const { title = "itsmepye — 작은 호기심을 쓸모 있는 것으로", description = "프예가 직접 만들고, 배우고, 기록하는 공간입니다.", current } = Astro.props;
 const nav = [
-	{ label: "Home", href: "/", key: "home" },
-	{ label: "About", href: "/about", key: "about" },
-	{ label: "Things", href: "/things", key: "things" },
-	{ label: "Notes", href: "/notes", key: "notes" },
+	{ label: "Home", href: "/", key: "home", width: 117.703 },
+	{ label: "About", href: "/about", key: "about", width: 117.703 },
+	{ label: "Things", href: "/things", key: "things", width: 102.813, size: 18 },
+	{ label: "Notes", href: "/notes", key: "notes", width: 106.609 },
 ];
 const footerNav = nav.slice(1);
 ---
@@ -29,7 +29,7 @@ const footerNav = nav.slice(1);
 		<div class="site">
 			<header class="site-header">
 				<nav aria-label="주요 메뉴">
-					{nav.map((item) => <a href={item.href} aria-current={current === item.key ? "page" : undefined}>{item.label}</a>)}
+					{nav.map((item) => <a href={item.href} aria-current={current === item.key ? "page" : undefined} style={`--w:${item.width}px${item.size ? `;--fs:${item.size}px` : ""}`}>{item.label}</a>)}
 				</nav>
 			</header>
 			<main><slot /></main>
@@ -69,9 +69,8 @@ const footerNav = nav.slice(1);
 	/* Header */
 	.site-header { display: flex; justify-content: flex-end; height: 178px; padding: 76px 25px 0; }
 	.site-header nav { display: flex; align-items: flex-start; gap: 50px; }
-	.site-header nav a { width: 118px; padding-bottom: 5px; border-bottom: 1px solid var(--mint); font-size: 19px; line-height: 20px; text-transform: uppercase; transition: opacity .2s ease; }
+	.site-header nav a { width: var(--w, 118px); padding-bottom: 5px; border-bottom: 1px solid var(--mint); font-size: var(--fs, 19px); line-height: 20px; text-transform: uppercase; transition: opacity .2s ease; }
 	.site-header nav a:hover { opacity: .65; }
-	.site-header nav a[aria-current="page"] { font-weight: 600; }
 
 	main { min-height: 60vh; }
 
