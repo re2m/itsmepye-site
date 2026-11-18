@@ -53,6 +53,13 @@ const { title, description, icon, accent, accentInk, body } = Astro.props;
 	.note-body :global(mark) { padding: 0 3px; color: var(--accent-ink); background: var(--accent); border-radius: 3px; }
 	.note-body :global(.c-gray) { color: #9a9a9a; }
 	.note-body :global(.c-blue) { color: #7cc4ff; }
+	.note-body :global(.c-green) { color: #8fe3a8; }
+	.note-body :global(figcaption) { margin-top: 8px; color: #9a9a9a; font-size: 14px; }
+	.note-body :global(.table-wrap) { margin: 8px 0 18px; overflow-x: auto; }
+	.note-body :global(table) { width: 100%; border-collapse: collapse; font-size: 15px; }
+	.note-body :global(th), .note-body :global(td) { padding: 10px 12px; border-bottom: 1px solid #2a2a2a; text-align: left; vertical-align: top; }
+	.note-body :global(th) { color: var(--mint); font-weight: 600; white-space: nowrap; }
+	.note-body :global(u) { text-underline-offset: 3px; }
 	.note-body :global(code) { padding: 2px 6px; color: var(--mint); background: #1b1b1b; border-radius: 4px; font-size: .9em; }
 	.note-body :global(pre) { margin: 0 0 16px; padding: 16px 18px; overflow-x: auto; background: #141414; border: 1px solid #2a2a2a; border-radius: 10px; }
 	.note-body :global(pre code) { padding: 0; color: #e8e8e8; background: none; font-size: 15px; line-height: 1.6; white-space: pre-wrap; }
