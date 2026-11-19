@@ -1,7 +1,5 @@
 ---
-import SectionPage, { type Item } from "../components/SectionPage.astro";
-const items: Item[] = [
-	{ title: "나만의 목표 시스템 만들기", href: "/things/goal/", image: "/images/thumbs/goal.svg", imageAlt: "" },
-];
+import SectionPage from "../components/SectionPage.astro";
+import { categories, things } from "../data/content";
 ---
-<SectionPage current="things" title="Things" description={["작은 불편을 발견하고", "해결하는 실험실"]} items={items} />
+<SectionPage current="things" kicker="Category" title={categories.things.title} description={[...categories.things.tagline]} items={things} />

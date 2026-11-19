@@ -1,77 +1,210 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { categories, things, notes } from "../data/content";
+
+const cards = [
+	{ ...categories.things, count: things.length, cta: "Things 보기" },
+	{ ...categories.notes, count: notes.length, cta: "Notes 보기" },
+];
+// Recent updates: the newest item of each category first, then the rest of the notes.
+const recent = [
+	...things.map((e) => ({ ...e, kind: "things" as const })),
+	...notes.map((e) => ({ ...e, kind: "notes" as const })),
+];
+const steps = [
+	{ title: "작은 불편에서 시작해요", text: "생활 속에서 직접 겪은 불편을 관찰하고, 해결할 방법을 찾는 데서 모든 것이 시작돼요." },
+	{ title: "직접 만들어 봐요", text: "개발·디자인 비전공자지만 AI와 도구를 활용해 실제로 작동하는 서비스로 만들어요.", link: { href: "/things", label: "Things" } },
+	{ title: "과정을 기록해요", text: "만들면서 알게 된 방법과 시행착오를 누구나 따라 할 수 있는 가이드로 정리해요.", link: { href: "/notes", label: "Notes" } },
+	{ title: "무료로 나눠요", text: "만든 것과 알게 된 것은 이곳과 인스타그램에서 무료로 공유해요." },
+];
+const faqs = [
+	{ q: "Things와 Notes는 무엇이 다른가요?", a: "Things는 직접 만든 서비스와 도구, Notes는 만들면서 알게 된 방법을 정리한 가이드예요. 둘 다 무료로 이용할 수 있어요." },
+	{ q: "목표 시스템은 어떻게 쓰나요?", a: "질문에 답하면 3분 만에 목표, KPI, 액션플랜, 습관이 연결된 나만의 시스템이 완성돼요. 결과는 노션에 바로 추가하거나 이미지로 저장할 수 있어요." },
+	{ q: "새 소식은 어디서 받아볼 수 있나요?", a: "새 서비스와 가이드는 인스타그램 @itsme_pye에서 가장 먼저 알려드려요." },
+	{ q: "협업이나 문의는 어디로 하나요?", a: "이메일 leeyr991229@gmail.com 또는 인스타그램 DM으로 연락 주세요." },
+];
 ---
 <BaseLayout current="home">
-	<div class="home">
-		<section class="hero">
-			<div class="profile-photo hero-photo"><img src="/images/site/profile.webp" alt="프예 사진" width="1200" height="1600" /></div>
-			<h1 class="hero-logo"><img src="/images/site/logo.svg" alt="Its me Pye" width="508.746" height="772.457" /></h1>
-		</section>
+	<section class="hero">
+		<div class="hero-text">
+			<span class="hero-kicker">THINK · MAKE · THINGS</span>
+			<h1>작은 호기심을<br />쓸모 있는 것으로</h1>
+			<p>마케터이자 다능인 프예가 직접 만든 서비스와, 해보며 알게 된 방법을 누구나 따라 할 수 있게 나눕니다.</p>
+			<div class="hero-actions"><a class="btn" href="#categories">둘러보기</a><a class="btn ghost" href="/about">프예 소개</a></div>
+		</div>
+		<div class="hero-photo"><div class="profile-photo"><img src="/images/site/profile.webp" alt="프예 사진" width="1200" height="1600" /></div></div>
+	</section>
 
-		<section class="intro">
-			<p class="intro-title"><span>THINK-MAKE-THINGS</span></p>
-			<p class="intro-copy">작은 호기심을<br />쓸모 있는 것으로 만듭니다.</p>
-		</section>
+	<section class="block" id="categories">
+		<h2 class="sec-title"><small>CATEGORIES</small>무엇을 찾고 있나요?</h2>
+		<div class="duo">
+			{cards.map((c) => (
+				<a class="duo-card" href={c.href}>
+					<div class="duo-img"><img src={c.image} alt="" loading="lazy" /></div>
+					<h3>{c.title} <span class="count">{c.count}</span></h3>
+					<p>{c.tagline.join(" ")}<br />{c.blurb}</p>
+					<span class="btn">{c.cta}</span>
+				</a>
+			))}
+		</div>
+	</section>
 
-		<nav class="shapes" aria-label="둘러보기">
-			<a class="shape shape-rect" href="/about"><span>Hi, I’m..</span></a>
-			<a class="shape shape-circle" href="/things"><img src="/images/site/circle.svg" alt="" width="363.473" height="355" /><span>I made..</span></a>
-			<a class="shape shape-triangle" href="/notes"><img src="/images/site/triangle.svg" alt="" width="537.58" height="295.464" /><span>I shared..</span></a>
-		</nav>
-	</div>
+	<section class="block">
+		<h2 class="sec-title"><small>HOW I MAKE</small>프예는 이렇게 만들어요</h2>
+		<div class="how">
+			<ol>
+				{steps.map((s, i) => (
+					<li class={i === 0 ? "on" : undefined}>
+						<span class="num">{String(i + 1).padStart(2, "0")}</span>
+						<h3>{s.title}</h3>
+						<p>{s.text}{s.link && <> <a href={s.link.href}>→ {s.link.label}</a></>}</p>
+					</li>
+				))}
+			</ol>
+			<div class="how-art"><img src="/images/site/logo-dark.svg" alt="" width="509" height="772" loading="lazy" /></div>
+		</div>
+	</section>
+
+	<section class="block">
+		<h2 class="sec-title"><small>RECENT</small>최근 업데이트</h2>
+		<div class="rail-wrap">
+			<button class="rail-arrow prev" type="button" aria-label="이전">←</button>
+			<div class="rail">
+				{recent.map((r) => (
+					<a class="rail-card" href={r.href}>
+						<span class={`tag ${r.kind}`}>{r.kind === "things" ? "Things" : "Notes"}</span>
+						<p class="rail-summary">{r.summary}</p>
+						<div class="rail-src"><img src={r.image} alt="" loading="lazy" /><div>{r.title}<span>{r.label}</span></div></div>
+					</a>
+				))}
+			</div>
+			<button class="rail-arrow next" type="button" aria-label="다음">→</button>
+		</div>
+	</section>
+
+	<section class="block" id="about">
+		<h2 class="sec-title"><small>ABOUT</small>프예를 소개해요</h2>
+		<div class="feature">
+			<div class="feature-pic"><img src="/images/site/profile.webp" alt="프예 사진" width="1200" height="1600" loading="lazy" /></div>
+			<div class="feature-txt">
+				<h3>프예 · Pye</h3>
+				<h4>마케터 · 다능인 · 메이커</h4>
+				<hr />
+				<p>생활 속 작은 문제를 서비스로 만들고, 시행착오에서 얻은 정보를 기록하며, 나의 기준대로 살아가는 방법을 공유합니다.</p>
+				<p>하고 싶은 일로 수익화하는 과정을 숨기지 않고 보여드릴게요.</p>
+				<div class="feature-links"><a href="/about">더 알아보기</a><a href="https://www.instagram.com/itsme_pye/" target="_blank" rel="noreferrer">릴스 구경하기 ↗</a></div>
+			</div>
+		</div>
+	</section>
+
+	<section class="block">
+		<h2 class="sec-title"><small>FAQ</small>자주 묻는 질문</h2>
+		<div class="faq">
+			{faqs.map((f, i) => (
+				<details open={i === 0}><summary><b>{String(i + 1).padStart(2, "0")}</b>{f.q}</summary><p>{f.a}</p></details>
+			))}
+		</div>
+	</section>
 </BaseLayout>
+<script>
+	const rail = document.querySelector<HTMLElement>(".rail");
+	document.querySelector(".rail-arrow.prev")?.addEventListener("click", () => rail?.scrollBy({ left: -500, behavior: "smooth" }));
+	document.querySelector(".rail-arrow.next")?.addEventListener("click", () => rail?.scrollBy({ left: 500, behavior: "smooth" }));
+	const steps = document.querySelectorAll<HTMLElement>(".how li");
+	steps.forEach((li) => li.addEventListener("mouseenter", () => steps.forEach((x) => x.classList.toggle("on", x === li))));
+</script>
 <style>
-	.home { display: flex; flex-direction: column; gap: 136px; padding: 50px 0 150px; }
+	.block { padding-top: 120px; }
 
-	.hero { display: flex; align-items: center; gap: 90px; }
-	.hero-photo { width: 616.833px; flex-shrink: 0; }
-	.hero-logo { width: 488.932px; margin: 0; }
-	.hero-logo img { width: 100%; height: auto; }
+	/* Hero: one big rounded card */
+	.hero { display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; min-height: 640px; overflow: hidden; background: var(--mint); border-radius: 28px; }
+	.hero-text { padding: 72px 0 72px 72px; }
+	.hero-kicker { display: inline-block; padding: 8px 14px; background: #fff; border-radius: 999px; font-size: 14px; font-weight: 600; letter-spacing: .04em; }
+	.hero h1 { margin: 26px 0 18px; font-size: clamp(40px, 5vw, 68px); font-weight: 700; line-height: 1.08; letter-spacing: -.03em; }
+	.hero p { max-width: 440px; margin: 0 0 34px; color: #3c4a48; font-size: 19px; line-height: 1.65; }
+	.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+	.hero-actions .ghost { border-color: #fff; }
+	.hero-photo { position: relative; align-self: stretch; min-height: 640px; }
+	.hero-photo .profile-photo { position: absolute; right: 40px; bottom: -40px; width: 480px; }
 
-	.intro { height: 369px; padding: 78px 0 0 103px; }
-	.intro-title { margin: 0; font-size: 67.05px; line-height: 67.05px; color: #000; }
-	.intro-title span { display: inline-block; background: var(--mint); }
-	.intro-copy { margin: 22px 0 0; color: var(--white); font-size: 50.473px; font-weight: 500; line-height: 59.65px; }
+	/* Category cards */
+	.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: min(1100px, 100%); margin-inline: auto; }
+	.duo-card { text-align: center; }
+	.duo-img { aspect-ratio: 5 / 4; overflow: hidden; border-radius: 16px; }
+	.duo-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+	.duo-card:hover .duo-img img { transform: scale(1.04); }
+	.duo-card h3 { margin: 26px 0 8px; font-size: 26px; font-weight: 600; }
+	.duo-card p { margin: 0 0 24px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+	.count { display: inline-grid; place-items: center; min-width: 30px; height: 26px; margin-left: 6px; padding: 0 8px; vertical-align: 4px; color: var(--accent-dark); background: var(--mint); border-radius: 999px; font-size: 14px; font-weight: 600; }
 
-	.shapes { position: relative; height: 689px; }
-	.shape { position: absolute; display: grid; place-items: center; color: #000; font-family: Inter, var(--font); font-size: 35px; line-height: 44px; transition: transform .3s ease; }
-	.shape > * { grid-area: 1 / 1; }
-	.shape span { position: relative; }
-	.shape-rect { left: 165px; top: 34px; width: 458.195px; height: 242.612px; background: var(--mint); transform: rotate(4.46deg); }
-	.shape-rect:hover { transform: rotate(-2deg) scale(1.03); }
-	.shape-circle { left: 734px; top: 122px; width: 363.473px; }
-	.shape-circle img { width: 100%; height: auto; }
-	.shape-circle:hover { transform: scale(1.06); }
-	.shape-triangle { left: 370px; top: 401px; width: 524px; }
-	.shape-triangle img { width: 102.6%; max-width: none; height: auto; margin: -0.85% 0 0 -1.21%; }
-	.shape-triangle span { position: absolute; top: 62.85%; left: 50%; transform: translateX(-50%); line-height: 24px; white-space: nowrap; }
-	.shape-triangle:hover { transform: translateY(-10px); }
+	/* How I make: numbered list + art */
+	.how { display: grid; grid-template-columns: 1fr 1.25fr; gap: 72px; align-items: center; width: min(1140px, 100%); margin-inline: auto; }
+	.how ol { margin: 0; padding: 0; list-style: none; }
+	.how li { padding: 22px 22px 24px; border-radius: 12px; transition: background .2s; }
+	.how li.on { background: var(--soft); }
+	.num { display: inline-grid; place-items: center; min-width: 36px; height: 28px; padding: 0 8px; color: #fff; background: var(--accent); border-radius: 999px; font-size: 13px; font-weight: 600; }
+	.how h3 { margin: 16px 0 10px; font-size: 24px; font-weight: 600; }
+	.how li p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
+	.how li a { color: var(--accent-dark); font-weight: 600; }
+	.how-art { display: grid; place-items: center; aspect-ratio: 1 / 1.1; background: var(--mint); border-radius: 28px; }
+	.how-art img { width: auto; height: 82%; }
 
-	@media (max-width: 1340px) {
-		.hero { gap: 6vw; }
-		.hero-photo { width: 46%; }
-		.hero-logo { width: 37%; }
-		.intro { height: auto; padding: 40px 0 0 7%; }
-		.intro-title { font-size: clamp(32px, 5vw, 67.05px); line-height: 1; }
-		.intro-copy { font-size: clamp(26px, 3.8vw, 50.473px); line-height: 1.18; }
-		.shapes { height: auto; aspect-ratio: 1320 / 689; }
-		.shape { font-size: clamp(18px, 2.6vw, 35px); }
-		.shape-rect { left: 12.5%; top: 4.9%; width: 34.7%; height: 35.2%; }
-		.shape-circle { left: 55.6%; top: 17.7%; width: 27.5%; }
-		.shape-triangle { left: 28%; top: 58.2%; width: 39.7%; }
-	}
-	@media (max-width: 760px) {
-		.home { gap: 72px; padding: 36px 0 0; }
-		.hero { flex-direction: column; gap: 40px; }
-		.hero-photo { width: 74%; align-self: flex-start; }
-		.hero-logo { width: 56%; align-self: flex-end; margin-top: -12%; }
-		.intro { padding: 0; }
-		.intro-title { font-size: 7.4vw; white-space: nowrap; }
-		.intro-copy { margin-top: 14px; font-size: 7vw; }
-		.shapes { display: flex; flex-direction: column; align-items: center; gap: 36px; aspect-ratio: auto; }
-		.shape { position: relative; inset: auto; font-size: 22px; }
-		.shape-rect { width: 78%; height: auto; aspect-ratio: 458 / 243; align-self: flex-start; }
-		.shape-circle { width: 62%; align-self: flex-end; }
-		.shape-triangle { width: 86%; }
+	/* Recent updates rail */
+	.rail-wrap { position: relative; }
+	.rail { display: grid; grid-auto-flow: column; grid-auto-columns: min(480px, 82%); gap: 28px; padding: 0 64px 8px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+	.rail::-webkit-scrollbar { display: none; }
+	.rail-card { display: flex; flex-direction: column; justify-content: center; min-height: 360px; padding: 48px 56px; background: var(--soft); border-radius: 18px; scroll-snap-align: start; transition: background .2s; }
+	.rail-card:hover { background: #ECEDEF; }
+	.tag { align-self: flex-start; margin-bottom: 18px; padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+	.tag.things { color: #fff; background: var(--ink); }
+	.tag.notes { color: var(--accent-dark); background: var(--mint); }
+	.rail-summary { margin: 0 0 28px; font-size: 19px; line-height: 1.6; }
+	.rail-src { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; line-height: 1.4; }
+	.rail-src img { flex-shrink: 0; width: 54px; height: 36px; object-fit: cover; border-radius: 6px; }
+	.rail-src span { display: block; color: var(--muted); font-weight: 500; }
+	.rail-arrow { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 42px; height: 42px; translate: 0 -50%; color: var(--muted); background: #fff; border: 1px solid var(--line); border-radius: 50%; cursor: pointer; font: 600 18px var(--font); }
+	.rail-arrow.prev { left: 8px; }
+	.rail-arrow.next { right: 8px; }
+
+	/* About feature card */
+	.feature { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end; padding: 64px 64px 0; overflow: hidden; color: #fff; background: var(--accent); border-radius: 40px; }
+	.feature-pic { height: 520px; overflow: hidden; background: var(--accent-dark); border-radius: 20px 20px 0 0; }
+	.feature-pic img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+	.feature-txt { align-self: center; padding-bottom: 64px; }
+	.feature h3 { margin: 0; font-size: 48px; font-weight: 700; letter-spacing: -.02em; }
+	.feature h4 { margin: 8px 0 22px; font-size: 22px; font-weight: 600; opacity: .9; }
+	.feature hr { margin: 0 0 24px; border: 0; border-top: 1px solid rgba(255, 255, 255, .5); }
+	.feature p { margin: 0 0 14px; font-size: 16px; line-height: 1.8; }
+	.feature-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+	.feature-links a { padding: 10px 18px; color: var(--ink); background: #fff; border-radius: 999px; font-size: 14px; font-weight: 600; }
+
+	/* FAQ */
+	.faq { width: min(780px, 100%); margin-inline: auto; }
+	.faq details { border-bottom: 1px solid var(--line); }
+	.faq summary { display: flex; gap: 20px; align-items: baseline; padding: 26px 0; cursor: pointer; list-style: none; font-size: 18px; font-weight: 500; }
+	.faq summary::-webkit-details-marker { display: none; }
+	.faq summary b { color: var(--muted); font-size: 16px; font-weight: 500; }
+	.faq summary::after { content: "+"; margin-left: auto; color: var(--muted); font-size: 22px; transition: rotate .2s; }
+	.faq details[open] summary::after { rotate: 45deg; }
+	.faq details p { margin: 0 0 26px 40px; color: var(--muted); font-size: 15px; line-height: 1.75; }
+
+	@media (max-width: 900px) {
+		.block { padding-top: 88px; }
+		.hero { grid-template-columns: 1fr; min-height: 0; }
+		.hero-text { padding: 48px 28px 0; }
+		.hero p { font-size: 16px; }
+		.hero-photo { min-height: 420px; }
+		.hero-photo .profile-photo { right: 50%; bottom: -30px; width: 320px; translate: 50% 0; }
+		.duo, .how, .feature { grid-template-columns: 1fr; }
+		.how { gap: 32px; }
+		.how-art { aspect-ratio: 16 / 10; }
+		.rail { padding: 0 2px 8px; }
+		.rail-arrow { display: none; }
+		.rail-card { min-height: 0; padding: 36px 30px; }
+		.feature { gap: 28px; padding: 40px 28px 0; border-radius: 28px; }
+		.feature-txt { order: -1; padding-bottom: 0; }
+		.feature h3 { font-size: 34px; }
+		.feature-pic { height: 380px; }
+		.faq details p { margin-left: 0; }
 	}
 </style>

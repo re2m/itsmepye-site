@@ -8,34 +8,48 @@ const links = [
 ---
 <BaseLayout title="About — itsmepye" description="마케터이자 새로운 것을 끊임없이 찾는 다능인, 프예를 소개합니다." current="about">
 	<section class="about-hero">
-		<div class="profile-photo about-photo"><img src="/images/site/profile.webp" alt="프예 사진" width="1200" height="1600" /></div>
-		<h1 class="about-logo"><img src="/images/site/logo.svg" alt="Its me Pye" width="508.746" height="772.457" /></h1>
+		<div class="about-text">
+			<p class="about-kicker">ABOUT</p>
+			<h1>안녕하세요,<br />프예입니다</h1>
+			<p class="about-lead">마케터이자 새로운 것을 끊임없이 찾는 다능인. 생활 속 작은 문제를 서비스로 만들고, 시행착오에서 얻은 정보를 기록하며, 나의 기준대로 살아가는 방법을 공유합니다.</p>
+			<ul class="about-links">
+				{links.map((link) => <li><a href={link.href} target="_blank" rel="noreferrer">{link.label} ↗</a></li>)}
+			</ul>
+		</div>
+		<div class="about-photo"><div class="profile-photo"><img src="/images/site/profile.webp" alt="프예 사진" width="1200" height="1600" /></div></div>
 	</section>
-	<ul class="about-links">
-		{links.map((link) => link.href
-			? <li><a href={link.href} target="_blank" rel="noreferrer">{link.label} &gt;</a></li>
-			: <li><span>{link.label} &gt;</span></li>)}
-	</ul>
+
+	<section class="about-cards">
+		<a class="about-card" href="/things"><span class="num">01</span><h2>Things</h2><p>작은 불편을 발견하고 해결하는 실험실. 직접 만든 서비스와 도구를 모았어요.</p><span class="more">Things 보기 →</span></a>
+		<a class="about-card" href="/notes"><span class="num">02</span><h2>Notes</h2><p>누구나 호기심을 쓸모 있는 것으로 만들 수 있도록, 직접 해보고 정리한 가이드예요.</p><span class="more">Notes 보기 →</span></a>
+	</section>
 </BaseLayout>
 <style>
-	.about-hero { position: relative; height: 1058px; }
-	.about-photo { position: absolute; left: -100px; top: 23px; width: 717.572px; }
-	.about-logo { position: absolute; left: 734px; top: 148px; width: 488.932px; margin: 0; }
-	.about-logo img { width: 100%; height: auto; }
-	.about-links { display: flex; flex-direction: column; gap: 19px; min-height: 819px; margin: 0; padding: 0 0 0 130px; list-style: none; font-size: 30px; font-weight: 700; line-height: 44px; }
-	.about-links a { transition: opacity .2s ease; }
-	.about-links a:hover { opacity: .65; }
+	.about-hero { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; min-height: 600px; overflow: hidden; color: #fff; background: var(--accent); border-radius: 40px; }
+	.about-text { padding: 72px 0 72px 72px; }
+	.about-kicker { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: .08em; opacity: .85; }
+	.about-hero h1 { margin: 14px 0 22px; font-size: clamp(40px, 5vw, 64px); font-weight: 700; line-height: 1.1; letter-spacing: -.03em; }
+	.about-lead { max-width: 480px; margin: 0 0 32px; font-size: 18px; line-height: 1.75; }
+	.about-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+	.about-links a { display: inline-block; padding: 12px 20px; color: var(--ink); background: #fff; border-radius: 999px; font-size: 15px; font-weight: 600; transition: opacity .2s; }
+	.about-links a:hover { opacity: .85; }
+	.about-photo { position: relative; align-self: stretch; min-height: 600px; }
+	.about-photo .profile-photo { position: absolute; right: 48px; bottom: -40px; width: 440px; }
 
-	@media (max-width: 1340px) {
-		.about-hero { height: auto; display: flex; align-items: center; gap: 6vw; padding: 23px 0 80px; }
-		.about-photo { position: relative; left: auto; top: auto; width: 50%; margin-left: -24px; }
-		.about-logo { position: relative; left: auto; top: auto; width: 37%; }
-		.about-links { min-height: 480px; padding-left: 7%; }
-	}
-	@media (max-width: 760px) {
-		.about-hero { flex-direction: column; gap: 40px; padding: 36px 0 64px; }
-		.about-photo { width: 88%; align-self: flex-start; margin-left: -20px; }
-		.about-logo { width: 56%; align-self: flex-end; margin-top: -12%; }
-		.about-links { min-height: 0; padding: 0 0 40px; font-size: 22px; line-height: 1.6; }
+	.about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: min(1100px, 100%); margin: 96px auto 0; }
+	.about-card { display: block; padding: 36px 36px 32px; background: var(--soft); border-radius: 20px; transition: background .2s; }
+	.about-card:hover { background: #ECEDEF; }
+	.num { display: inline-grid; place-items: center; min-width: 36px; height: 28px; padding: 0 8px; color: #fff; background: var(--accent); border-radius: 999px; font-size: 13px; font-weight: 600; }
+	.about-card h2 { margin: 16px 0 10px; font-size: 28px; font-weight: 600; }
+	.about-card p { margin: 0 0 22px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+	.more { color: var(--accent-dark); font-size: 15px; font-weight: 600; }
+
+	@media (max-width: 900px) {
+		.about-hero { grid-template-columns: 1fr; min-height: 0; border-radius: 28px; }
+		.about-text { padding: 44px 28px 0; }
+		.about-lead { font-size: 16px; }
+		.about-photo { min-height: 400px; }
+		.about-photo .profile-photo { right: 50%; bottom: -30px; width: 300px; translate: 50% 0; }
+		.about-cards { grid-template-columns: 1fr; margin-top: 64px; }
 	}
 </style>
