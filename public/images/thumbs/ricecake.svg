@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs><filter id="cut" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="2" seed="17"/><feDisplacementMap in="SourceGraphic" scale="16"/></filter></defs>
+  <rect width="1200" height="800" fill="#120C38"/>
+  <!-- A figure lifting a giant songpyeon; the pinched seam is cut out as negative space -->
+  <g transform="translate(600 446) scale(0.92)" filter="url(#cut)">
+    <g fill="none" stroke="#F6EFE2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0 -40 L4 90" stroke-width="100"/>
+      <path d="M-18 -20 L-100 -100 L-120 -170" stroke-width="54"/>
+      <path d="M18 -20 L100 -100 L120 -170" stroke-width="54"/>
+      <path d="M-6 90 L-60 165 L-110 205" stroke-width="58"/>
+      <path d="M14 90 L60 162 L56 235" stroke-width="58"/>
+    </g>
+    <circle cx="0" cy="-100" r="48" fill="#F6EFE2"/>
+    <path d="M-200 -190 Q-150 -350 0 -350 Q150 -350 200 -190 Q0 -150 -200 -190 Z" fill="#F6EFE2"/>
+    <path d="M-150 -232 Q-100 -318 0 -318 Q100 -318 150 -232" fill="none" stroke="#120C38" stroke-width="12" stroke-linecap="round" stroke-dasharray="2 26"/>
+    <ellipse cx="210" cy="215" rx="26" ry="22" fill="#F6EFE2"/>
+  </g>
+</svg>
