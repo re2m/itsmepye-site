@@ -54,14 +54,13 @@ const faqs = [
 		<div class="how">
 			<ol>
 				{steps.map((s, i) => (
-					<li class={i === 0 ? "on" : undefined}>
+					<li>
 						<span class="num">{String(i + 1).padStart(2, "0")}</span>
 						<h3>{s.title}</h3>
 						<p>{s.text}{s.link && <> <a href={s.link.href}>→ {s.link.label}</a></>}</p>
 					</li>
 				))}
 			</ol>
-			<div class="how-art"><img src="/images/site/logo-dark.svg" alt="" width="509" height="772" loading="lazy" /></div>
 		</div>
 	</section>
 
@@ -110,8 +109,6 @@ const faqs = [
 	const rail = document.querySelector<HTMLElement>(".rail");
 	document.querySelector(".rail-arrow.prev")?.addEventListener("click", () => rail?.scrollBy({ left: -500, behavior: "smooth" }));
 	document.querySelector(".rail-arrow.next")?.addEventListener("click", () => rail?.scrollBy({ left: 500, behavior: "smooth" }));
-	const steps = document.querySelectorAll<HTMLElement>(".how li");
-	steps.forEach((li) => li.addEventListener("mouseenter", () => steps.forEach((x) => x.classList.toggle("on", x === li))));
 </script>
 <style>
 	.block { padding-top: 120px; }
@@ -138,16 +135,13 @@ const faqs = [
 	.count { display: inline-grid; place-items: center; min-width: 30px; height: 26px; margin-left: 6px; padding: 0 8px; vertical-align: 4px; color: var(--accent-dark); background: var(--mint); border-radius: 999px; font-size: 14px; font-weight: 600; }
 
 	/* How I make: numbered list + art */
-	.how { display: grid; grid-template-columns: 1fr 1.25fr; gap: 72px; align-items: center; width: min(1140px, 100%); margin-inline: auto; }
-	.how ol { margin: 0; padding: 0; list-style: none; }
-	.how li { padding: 22px 22px 24px; border-radius: 12px; transition: background .2s; }
-	.how li.on { background: var(--soft); }
+	.how { width: min(1100px, 100%); margin-inline: auto; }
+	.how ol { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 0; padding: 0; list-style: none; }
+	.how li { padding: 32px 32px 34px; background: var(--soft); border-radius: 16px; }
 	.num { display: inline-grid; place-items: center; min-width: 36px; height: 28px; padding: 0 8px; color: #fff; background: var(--accent); border-radius: 999px; font-size: 13px; font-weight: 600; }
 	.how h3 { margin: 16px 0 10px; font-size: 24px; font-weight: 600; }
 	.how li p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
 	.how li a { color: var(--accent-dark); font-weight: 600; }
-	.how-art { display: grid; place-items: center; aspect-ratio: 1 / 1.1; background: var(--mint); border-radius: 28px; }
-	.how-art img { width: auto; height: 82%; }
 
 	/* Recent updates rail */
 	.rail-wrap { position: relative; }
@@ -195,9 +189,9 @@ const faqs = [
 		.hero p { font-size: 16px; }
 		.hero-photo { min-height: 420px; }
 		.hero-photo .profile-photo { right: 50%; bottom: -30px; width: 320px; translate: 50% 0; }
-		.duo, .how, .feature { grid-template-columns: 1fr; }
-		.how { gap: 32px; }
-		.how-art { aspect-ratio: 16 / 10; }
+		.duo, .feature, .how ol { grid-template-columns: 1fr; }
+		.how ol { gap: 14px; }
+		.how li { padding: 26px 24px 28px; }
 		.rail { padding: 0 2px 8px; }
 		.rail-arrow { display: none; }
 		.rail-card { min-height: 0; padding: 36px 30px; }
