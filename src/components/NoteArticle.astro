@@ -9,10 +9,12 @@ interface Props {
 	/** Readable text color on top of the accent color. */
 	accentInk: string;
 	body: string;
+	/** Share preview image (1200x630 PNG under /public/images/og). */
+	ogImage?: string;
 }
-const { title, description, icon, accent, accentInk, body } = Astro.props;
+const { title, description, icon, accent, accentInk, body, ogImage } = Astro.props;
 ---
-<BaseLayout title={`${title} — itsmepye`} description={description} current="notes">
+<BaseLayout title={`${title} — itsmepye`} description={description} current="notes" image={ogImage} type="article">
 	<article class="note" style={`--accent:${accent};--accent-ink:${accentInk}`}>
 		<header class="note-head">
 			<a class="note-back" href="/notes">← Notes</a>
