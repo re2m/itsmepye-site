@@ -312,11 +312,11 @@ input {
 }
 
 .screen[data-s="6"] {
-  --steamer-scene: url("../assets/steamer/ready.png");
+  --steamer-scene: url("../assets/steamer/ready.webp");
 }
 
 .screen[data-s="7"] {
-  --steamer-scene: url("../assets/steamer/loading.png");
+  --steamer-scene: url("../assets/steamer/loading.webp");
 }
 
 .screen[data-s="6"]::before,
