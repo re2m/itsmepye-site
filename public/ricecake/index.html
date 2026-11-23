@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<base href="/ricecake/">
+<link rel="preload" as="image" href="/ricecake/src/assets/figma/figma-kit.png" fetchpriority="high">
+<link rel="preload" as="image" href="/ricecake/src/assets/figma/figma-moon.png" fetchpriority="high">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8925992207022674" crossorigin="anonymous"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>1분 안에 수제 송편 만들기</title>
+<meta name="description" content="직접 만든 송편과 함께 마음을 전해보세요!">
+<link rel="canonical" href="https://www.itsmepye.site/ricecake/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="한입 송편">
+<meta property="og:url" content="https://www.itsmepye.site/ricecake/">
+<meta property="og:title" content="1분 안에 수제 송편 만들기">
+<meta property="og:description" content="직접 만든 송편과 함께 마음을 전해보세요!">
+<meta property="og:image" content="https://www.itsmepye.site/ricecake/src/assets/og/default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="한입 송편 만들기">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="1분 안에 수제 송편 만들기">
+<meta name="twitter:description" content="직접 만든 송편과 함께 마음을 전해보세요!">
+<meta name="twitter:image" content="https://www.itsmepye.site/ricecake/src/assets/og/default.png">
+<link rel="icon" type="image/x-icon" href="/ricecake/favicon.ico">
+<link rel="stylesheet" href="/ricecake/src/styles/base.css">
+<style>
+:root{--ink:#332c27;
+--muted:#746c65;
+--paper:#f8f4ed;
+--cream:#fffdf8;
+--line:#e7ded1;
+--red:#bd5e51;
+--shadow:0 18px 42px rgba(76,54,38,.13)}*{box-sizing:border-box}body{margin:0;
+min-width:320px;
+background:#e9e4dc;
+color:var(--ink);
+font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
+word-break:keep-all;
+overflow-wrap:break-word}button,textarea{font:inherit}button{border:0;
+cursor:pointer}.app{min-height:100dvh;
+display:grid;
+place-items:center;
+padding:18px}.phone{position:relative;
+width:min(390px,100%);
+min-height:min(844px,calc(100dvh - 36px));
+overflow:hidden;
+background:var(--paper);
+box-shadow:0 20px 70px rgba(64,46,33,.2)}.screen{display:none;
+min-height:min(844px,calc(100dvh - 36px));
+padding:42px 20px calc(106px + env(safe-area-inset-bottom));
+flex-direction:column;
+animation:enter .26s ease both}.screen.on{display:flex}.receiver{text-align:center;
+background:#fbf7f0}.eyebrow{margin:0 0 10px;
+color:var(--red);
+font-size:13px;
+font-weight:700;
+letter-spacing:.04em}h1,h2{margin:0;
+letter-spacing:-.06em;
+line-height:1.16}h1{font-size:34px}h2{font-size:28px}.lead{margin:14px 0 0;
+color:var(--muted);
+font-size:15px;
+line-height:1.55}.progress{display:flex;
+gap:5px;
+margin:0 0 26px}.progress i{width:22px;
+height:3px;
+border-radius:10px;
+background:#dfd6ca}.progress .on{background:var(--red)}.bottom{position:absolute;
+right:20px;
+bottom:max(24px,calc(18px + env(safe-area-inset-bottom)));
+left:20px;
+display:grid;
+gap:9px}.primary,.secondary{min-height:52px;
+border-radius:16px;
+padding:0 17px;
+font-size:16px;
+font-weight:700;
+transition:.18s}.primary{color:#fff;
+background:var(--red);
+box-shadow:0 8px 16px rgba(189,94,81,.22)}.secondary{color:var(--ink);
+background:var(--cream);
+border:1px solid var(--line)}button:active{transform:scale(.98)}button:disabled{opacity:.36;
+box-shadow:none;
+cursor:not-allowed}.start{justify-content:center;
+padding-top:40px;
+text-align:center}.kit{width:266px;
+height:275px;
+margin:36px auto 12px;
+background:transparent}.kit img{width:100%;
+height:100%;
+object-fit:contain;
+filter:drop-shadow(0 16px 18px rgba(73,49,34,.15));
+transition:.3s}.kit.open img{transform:scale(1.3)}.note{color:var(--muted);
+font-size:13px}.note:before{content:"";
+display:inline-block;
+width:7px;
+height:7px;
+border-radius:50%;
+margin-right:7px;
+background:var(--red)}
+.grid{display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:26px}.dough{position:relative;
+min-height:155px;
+padding:12px;
+overflow:hidden;
+border:1px solid var(--line);
+border-radius:18px;
+text-align:left;
+background:var(--cream)}.dough.selected{border:2px solid var(--red);
+padding:11px}.dough img{width:100%;
+height:84px;
+object-fit:contain}.dough strong{display:block;
+margin-top:4px;
+font-size:15px}.dough span{display:block;
+margin-top:3px;
+color:var(--muted);
+font-size:13px}.tick{position:absolute;
+top:11px;
+right:11px;
+width:22px;
+height:22px;
+border-radius:50%;
+background:var(--red);
+color:#fff;
+display:none;
+place-items:center;
+font-size:13px}.selected .tick{display:grid}.status{min-height:22px;
+margin:14px 0 0;
+color:var(--muted);
+font-size:14px}.stage{position:relative;
+display:grid;
+place-items:center;
+flex:1;
+min-height:300px;
+margin-top:12px}.bowl{width:280px;
+height:285px;
+position:relative;
+display:grid;
+place-items:center;
+touch-action:none}.bowl>img{position:absolute;
+width:100%;
+object-fit:contain}.mix-dough{width:154px!important;
+height:116px;
+opacity:.08;
+transition:.2s}.swipe{position:absolute;
+top:14px;
+right:7px;
+padding:8px 10px;
+border-radius:12px;
+background:rgba(255,253,248,.85);
+color:var(--muted);
+font-size:13px}.mix-status{min-height:24px;
+margin-top:-12px;
+text-align:center;
+color:var(--red);
+font-size:14px;
+font-weight:700}.surface{position:relative;
+width:100%;
+height:300px;
+margin-top:18px;
+border-radius:24px;
+background:#f0e7da;
+overflow:hidden;
+display:grid;
+place-items:center;
+touch-action:none}.surface:after{content:"";
+position:absolute;
+inset:12px;
+border:1px dashed rgba(124,102,79,.18);
+border-radius:18px}.asset{width:270px;
+height:190px;
+object-fit:contain;
+position:relative;
+z-index:1;
+transition:.24s}.tap{text-align:center;
+min-height:22px;
+margin:14px 0 0;
+color:var(--muted);
+font-size:14px}.tap b{color:var(--red)}.sesame{position:absolute;
+z-index:2;
+width:125px;
+height:100px;
+object-fit:contain;
+opacity:0;
+transform:scale(.55);
+transition:.25s}.sesame.show{opacity:1;
+transform:scale(1)}.spoon{position:absolute;
+z-index:3;
+right:32px;
+bottom:32px;
+width:70px;
+height:22px;
+border-radius:20px;
+background:#b6a28e;
+transform:rotate(-35deg)}.spoon:before{content:"";
+position:absolute;
+width:30px;
+height:30px;
+right:-5px;
+top:-4px;
+border-radius:50%;
+background:#d7c5b4}.form{position:relative;
+height:340px;
+margin-top:12px;
+border-radius:24px;
+background:#f0e7da;
+overflow:hidden;
+touch-action:none}.form img{position:absolute;
+object-fit:contain;
+transition:.25s}.flat{width:310px;
+height:220px;
+left:40px;
+top:52px}.formed{width:190px;
+height:155px;
+left:100px;
+top:96px;
+opacity:0;
+transform:scale(.75)}.form.done .flat{opacity:0;
+transform:scale(.9)}.form.done .formed{opacity:1;
+transform:scale(1)}.callout{position:absolute;
+z-index:3;
+left:50%;
+bottom:18px;
+transform:translateX(-50%);
+width:max-content;
+padding:8px 12px;
+border-radius:99px;
+background:var(--cream);
+color:var(--muted);
+font-size:13px;
+box-shadow:0 5px 12px rgba(62,43,30,.1)}
+.steam-stage{position:relative;
+display:grid;
+place-items:center;
+flex:1;
+min-height:315px}.burner{position:absolute;
+width:290px;
+height:194px;
+top:66px;
+object-fit:contain}.steamer{position:relative;
+z-index:2;
+width:305px;
+height:220px;
+object-fit:contain}.steam{position:absolute;
+z-index:3;
+top:18px;
+width:13px;
+height:70px;
+border-radius:50%;
+border-left:3px solid rgba(255,255,255,.65);
+opacity:0}.a{left:122px}.b{left:192px;
+top:5px}.c{left:250px;
+top:26px}.cooking .steam{opacity:1;
+animation:steam 1.3s infinite ease-out}.cooking .b{animation-delay:.3s}.cooking .c{animation-delay:.5s}.steam-note{text-align:center;
+color:var(--muted);
+font-size:14px}.loader{width:168px;
+height:168px;
+position:relative;
+margin:44px auto 24px;
+display:grid;
+place-items:center;
+border-radius:50%;
+background:conic-gradient(var(--red) calc(var(--p)*1%),#e8dfd4 0)}.loader:before{content:"";
+position:absolute;
+inset:9px;
+border-radius:50%;
+background:var(--paper)}.loader b{position:relative;
+font-size:32px}.loading-art{width:215px;
+height:170px;
+object-fit:contain;
+margin:auto}.hint{text-align:center;
+color:var(--muted);
+font-size:14px;
+line-height:1.5}.package{position:relative;
+display:grid;
+place-items:center;
+flex:1;
+min-height:300px}.container{width:320px;
+height:270px;
+object-fit:contain}.cakes{position:absolute;
+width:160px;
+height:88px;
+display:flex;
+flex-wrap:wrap;
+align-content:center;
+justify-content:center;
+transform:translateY(3px)}.cakes img{width:70px;
+height:47px;
+object-fit:contain}.bojas{display:flex;
+gap:10px;
+overflow:auto;
+margin-top:26px;
+padding:3px 1px 8px;
+scrollbar-width:none}.boja{flex:0 0 126px;
+min-height:150px;
+padding:8px;
+border-radius:18px;
+border:1px solid var(--line);
+background:var(--cream)}.boja.selected{border:2px solid var(--red);
+padding:7px}.boja img{width:100%;
+height:96px;
+object-fit:contain}.boja span{display:block;
+margin-top:4px;
+font-size:14px;
+font-weight:700}.final{display:grid;
+place-items:center;
+flex:1;
+min-height:330px}.final img,.gift-wrap img{width:290px;
+height:260px;
+object-fit:contain;
+filter:drop-shadow(0 18px 20px rgba(66,44,31,.14))}.card{position:relative;
+margin:28px auto 0;
+width:275px;
+height:250px;
+background:url("src/assets/media/media-04.png") center/contain no-repeat}.card textarea{position:absolute;
+inset:72px 33px 54px;
+width:calc(100% - 66px);
+height:calc(100% - 126px);
+resize:none;
+padding:0;
+border:0;
+outline:0;
+background:transparent;
+color:#57483d;
+font-size:16px;
+line-height:1.55}.counter{text-align:center;
+color:var(--muted);
+font-size:13px}.sheet{position:absolute;
+z-index:15;
+inset:0;
+display:none;
+align-items:flex-end;
+background:rgba(42,31,23,.35)}.sheet.open{display:flex}.panel{width:100%;
+padding:15px 20px calc(26px + env(safe-area-inset-bottom));
+border-radius:28px 28px 0 0;
+background:var(--cream);
+box-shadow:0 -12px 30px rgba(51,39,27,.12);
+animation:sheet .24s ease both}.handle{width:38px;
+height:4px;
+margin:0 auto 18px;
+border-radius:99px;
+background:#d6cdc1}.panel h3{margin:0;
+font-size:21px}.panel p{margin:8px 0 18px;
+color:var(--muted);
+font-size:14px}.actions{display:grid;
+gap:9px}.gift-wrap{width:298px;
+height:270px;
+margin:40px auto 26px}.gift-wrap.opening{animation:unwrap .55s ease both}.gift-view{position:relative;
+width:305px;
+height:310px;
+display:grid;
+place-items:center;
+touch-action:none}.gift-view .container{width:300px;
+height:255px}.gift-view .card{margin:0;
+width:258px;
+height:235px}.gift-view .card textarea{pointer-events:none;
+font-size:15px}.gift-view.card-mode .food,.gift-view:not(.card-mode) .card-view{display:none}.swipe-tip{margin-top:10px;
+color:var(--muted);
+font-size:13px}.receiver .bottom{position:static;
+margin-top:auto;
+padding-top:18px}.toast{position:absolute;
+z-index:30;
+left:50%;
+bottom:96px;
+transform:translate(-50%,12px);
+padding:11px 15px;
+border-radius:99px;
+background:var(--ink);
+color:#fff;
+font-size:13px;
+opacity:0;
+transition:.2s;
+white-space:nowrap}.toast.show{opacity:1;
+transform:translate(-50%,0)}@keyframes enter{from{opacity:0;
+transform:translateY(12px)}to{opacity:1;
+transform:none}}@keyframes sheet{from{transform:translateY(100%)}to{transform:none}}@keyframes steam{50%{transform:translateY(-12px);
+opacity:.15}}@keyframes unwrap{60%{transform:scale(1.08) rotate(2deg);
+opacity:.55}100%{transform:scale(.6) rotate(-9deg);
+opacity:0}}@media(max-width:560px){.app{padding:0}.phone,.screen{width:100%;
+min-height:100dvh}.phone{box-shadow:none}.screen{padding-top:max(30px,env(safe-area-inset-top))}}
+</style>
+<link rel="stylesheet" href="/ricecake/src/styles/figma-exact.css">
+<link rel="stylesheet" href="/ricecake/src/styles/interaction-fixes.css">
+</head>
+<body>
+<div class="app">
+<div class="phone">
+<main>
+<section class="screen start on" data-s="0">
+<p class="eyebrow">사이버 송편 만들기</p>
+<h1>손끝으로 빚어<br>마음을 전해요</h1>
+<p class="lead">반죽부터 보자기까지, 나만의 한입을 만들어 보세요.</p>
+<button class="kit" id="kit" aria-label="송편 키트 열기">
+<img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-16.png" alt="송편 만들기 키트">
+</button>
+<p class="note">약 2분이면 선물이 완성돼요</p>
+<div class="bottom">
+<button class="primary" id="start">송편 빚기 시작</button>
+</div>
+</section>
+<section class="screen" data-s="1">
+<div class="progress">
+<i class="on">
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+</div>
+<p class="eyebrow">01 · 재료 고르기</p>
+<h2>어떤 반죽으로<br>빚어볼까요?</h2>
+<p class="lead">마음에 드는 반죽을 2개 이상, 4개까지 골라주세요.</p>
+<div class="grid">
+<button class="dough" data-n="김포 금쌀" data-a="src/assets/media/media-10.png">
+<i class="tick">✓</i>
+<img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-18.png" alt="">
+<strong>김포 금쌀</strong>
+<span>담백한 기본</span>
+</button>
+<button class="dough" data-n="홍천 단호박" data-a="src/assets/media/media-12.png">
+<i class="tick">✓</i>
+<img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-20.png" alt="">
+<strong>홍천 단호박</strong>
+<span>따뜻한 노랑</span>
+</button>
+<button class="dough" data-n="거문도 해풍쑥" data-a="src/assets/media/media-09.png">
+<i class="tick">✓</i>
+<img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-17.png" alt="">
+<strong>거문도 해풍쑥</strong>
+<span>은은한 초록</span>
+</button>
+<button class="dough" data-n="해남 자색고구마" data-a="src/assets/media/media-11.png">
+<i class="tick">✓</i>
+<img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-19.png" alt="">
+<strong>해남 자색고구마</strong>
+<span>부드러운 보라</span>
+</button>
+</div>
+<p class="status" id="selectStatus">0개 선택했어요. 2개 이상 골라주세요.</p>
+<div class="bottom">
+<button class="primary" id="selectNext" disabled>이 재료로 반죽 만들기</button>
+</div>
+</section>
+<section class="screen" data-s="2">
+<div class="progress">
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+</div>
+<p class="eyebrow">02 · 반죽 만들기</p>
+<h2>따뜻한 물을 섞어<br>반죽을 만들어요</h2>
+<p class="lead">그릇 위에서 위아래로 문질러 반죽을 완성해요.</p>
+<div class="stage">
+<div class="bowl" id="mix">
+<img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-22.png" alt="투명한 반죽 그릇">
+<img class="mix-dough" id="mixDough" alt="반죽">
+</div>
+<span class="swipe">위아래로 스와이프</span>
+<div class="direction-guide vertical" aria-hidden="true"><img src="src/assets/icons/chevron-up.svg" alt=""><img src="src/assets/icons/chevron-down.svg" alt=""></div>
+</div>
+<p class="mix-status" id="mixStatus">
+<b id="mixPct">0</b>% 섞였어요</p>
+</section>
+<section class="screen" data-s="3">
+<div class="progress">
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i>
+</i>
+<i>
+</i>
+</div>
+<p class="eyebrow">03 · 반죽 펴기</p>
+<h2>동그랗게 빚은 반죽을<br>납작하게 펴볼까요?</h2>
+<p class="lead">반죽을 5번 눌러 가운데를 오목하게 만들어요.</p>
+<p class="spread-pct" id="spreadPct">0%</p>
+<div class="surface" id="spreadStage">
+<img class="asset" id="spreadDough" alt="반죽">
+</div>
+<p class="tap" id="spreadStatus">
+<b>0 / 5</b>번 눌렀어요</p>
+</section>
+<section class="screen" data-s="4">
+<div class="progress">
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i>
+</i>
+<i>
+</i>
+</div>
+<p class="eyebrow">04 · 깨소 넣기</p>
+<h2>가운데에 깨소를<br>한 스푼 올려요</h2>
+<p class="lead">반죽의 가운데를 눌러 깨소를 담아주세요.</p>
+<div class="surface" id="sesameStage">
+<img class="asset" id="sesameDough" alt="펼쳐진 반죽">
+<img loading="lazy" decoding="async" fetchpriority="low" class="sesame" id="sesame" src="src/assets/media/media-03.png" alt="깨소">
+<i class="spoon">
+</i>
+</div>
+<p class="tap" id="sesameStatus">가운데를 한 번 눌러주세요.</p>
+</section>
+<section class="screen" data-s="5">
+<div class="progress">
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i>
+</i>
+</div>
+<p class="eyebrow">05 · 송편 모양 고르기</p>
+<h2>내 스타일대로<br>모양을 만들어주세요</h2>
+<div class="shape-picker" id="shapePicker">
+<button type="button" class="shape-option" data-shape-index="3" aria-pressed="false"><img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-05.png" alt=""><span>기본 모양</span></button>
+<button type="button" class="shape-option" data-shape-index="0" aria-pressed="false"><img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-07.png" alt=""><span>토끼 모양</span></button>
+<button type="button" class="shape-option" data-shape-index="2" aria-pressed="false"><img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-08.png" alt=""><span>하트 모양</span></button>
+<button type="button" class="shape-option" data-shape-index="1" aria-pressed="false"><img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-06.png" alt=""><span>꽃 모양</span></button>
+</div>
+<p class="shape-selection-note" id="shapeSelectionNote">▲ 원하는 송편 모양 2개를 선택해주세요!</p>
+<div class="bottom">
+<button class="primary" id="formNext" disabled>송편 찌기</button>
+</div>
+</section>
+<section class="screen" data-s="6">
+<div class="progress">
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i class="on">
+</i>
+<i class="on">
+</i>
+</div>
+<p class="eyebrow">06 · 송편 찌기</p>
+<h2>찜기에 송편을 넣고<br>김을 올려요</h2>
+<p class="lead">찜기를 누르면 가스불을 켜고 쪄줄게요.</p>
+<div class="steam-stage" id="steam">
+<img loading="lazy" decoding="async" fetchpriority="low" class="burner" id="burner" src="src/assets/media/media-01.png" alt="꺼진 가스 버너">
+<img loading="lazy" decoding="async" fetchpriority="low" class="steamer" src="src/assets/media/media-21.png" alt="송편 찜기">
+<div class="cakes steam-cakes" id="steamCakes"></div>
+<img class="steam-guide-arrow" src="src/assets/icons/chevron-up.svg" alt="">
+<i class="steam a">
+</i>
+<i class="steam b">
+</i>
+<i class="steam c">
+</i>
+</div>
+<p class="steam-note" id="steamStatus">찜기를 눌러 불을 켜주세요.</p>
+<div class="bottom">
+<button class="primary" id="steamButton">송편 찌기</button>
+</div>
+</section>
+<section class="screen" data-s="7">
+<p class="eyebrow">송편을 찌고 있어요</p>
+<h2>잠시만 기다리면<br>따끈하게 완성돼요</h2>
+<div class="loader" id="loader" style="--p:0">
+<b id="loaderText" aria-live="polite">0%</b>
+</div>
+<img loading="lazy" decoding="async" fetchpriority="low" class="loading-burner" src="src/assets/media/media-02.png" alt="불이 켜진 가스 버너">
+<img loading="lazy" decoding="async" fetchpriority="low" class="loading-art" src="src/assets/media/media-21.png" alt="김이 나는 찜기">
+<div class="cakes steam-cakes loading-cakes" id="loadingCakes"></div>
+<p class="hint">김이 오르는 동안 선물할 마음을 준비해보세요.</p>
+</section>
+<section class="screen" data-s="8">
+<p class="eyebrow">07 · 포장 시작</p>
+<h2>동그란 용기에<br>송편을 담았어요</h2>
+<p class="lead">완성한 모양 그대로 차곡차곡 담아둘게요.</p>
+<div class="package">
+<img loading="lazy" decoding="async" fetchpriority="low" class="container" src="src/assets/media/media-32.png" alt="송편이 가득 담긴 포장 용기">
+<div class="cakes" id="packageCakes">
+</div>
+</div>
+<p class="package-capture-note">▲ 송편 이미지만 필요하다면 여기서 캡처 타임!</p>
+<div class="bottom">
+<button class="primary" id="packageNext">송편 포장하기</button>
+</div>
+</section>
+<section class="screen" data-s="9">
+<p class="eyebrow">08 · 보자기 고르기</p>
+<h2>어떤 보자기로<br>마음을 감쌀까요?</h2>
+<p class="lead">가로로 넘겨 보고 마음에 드는 보자기를 골라주세요.</p>
+<div class="bojas">
+<button class="boja" data-b="src/assets/media/media-31.png">
+<img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-31.png" alt="분홍 보자기">
+<span>분홍 보자기</span>
+</button>
+<button class="boja" data-b="src/assets/media/media-30.png">
+<img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-30.png" alt="푸른 보자기">
+<span>푸른 보자기</span>
+</button>
+<button class="boja" data-b="src/assets/media/media-29.png">
+<img loading="lazy" decoding="async" fetchpriority="low" src="src/assets/media/media-29.png" alt="갈색 보자기">
+<span>갈색 보자기</span>
+</button>
+</div>
+<div class="final">
+<img loading="lazy" decoding="async" fetchpriority="low" id="bojaPreview" src="src/assets/media/media-30.png" alt="선택한 보자기">
+</div>
+<div class="swipe-guides"><button type="button" class="swipe-arrow" id="bojaPrev" aria-label="이전 보자기"><img src="src/assets/icons/chevron-left.svg" alt=""></button><span>옆으로 넘겨서 보자기를 선택해주세요!</span><button type="button" class="swipe-arrow" id="bojaNextArrow" aria-label="다음 보자기"><img src="src/assets/icons/chevron-right.svg" alt=""></button></div>
+<div class="bottom">
+<button class="primary" id="bojaNext">메세지 카드 작성하기</button>
+</div>
+</section>
+<section class="screen" data-s="10">
+<p class="eyebrow">09 · 메시지 카드</p>
+<h2>보자기 안에<br>마음을 남겨주세요</h2>
+<p class="lead">받는 사람에게 전하고 싶은 말을 적어보세요.</p>
+<div class="card">
+<textarea id="message" maxlength="60" placeholder="마음을 전한 문구를 작성해보세요.&#10;최대 60자까지 작성 가능합니다.">
+</textarea>
+</div>
+<p class="counter">
+<span id="count">0</span> / 60</p>
+<div class="bottom">
+<button class="primary" id="messageNext">메세지 남기기</button>
+</div>
+</section>
+<section class="screen" data-s="11">
+<p class="eyebrow">완성</p>
+<h1>수제 송편이<br>완성됐어요</h1>
+<p class="lead">선물 링크를 보내면 받는 사람이 보자기를 풀어볼 수 있어요.</p>
+<div class="final">
+<img loading="lazy" decoding="async" fetchpriority="low" id="completeBoja" src="src/assets/media/media-30.png" alt="완성된 송편 선물">
+</div>
+<div class="bottom">
+<button class="primary" id="share">수제 송편 선물하기</button>
+<button class="secondary" id="preview">받는 사람 화면 미리보기</button>
+</div>
+</section>
+<section class="screen receiver" data-s="12">
+<p class="eyebrow">송편 선물이 도착했어요</p>
+<h1>보자기를<br>풀어볼까요?</h1>
+<p class="lead">정성껏 빚은 송편과 메시지 카드가 들어 있어요.</p>
+<div class="gift-wrap" id="giftWrap">
+<img loading="lazy" decoding="async" fetchpriority="low" id="giftBoja" src="src/assets/media/media-30.png" alt="송편 보자기">
+</div>
+<div class="bottom">
+<button class="primary" id="unwrap">보자기 풀기</button>
+</div>
+</section>
+<section class="screen receiver" data-s="13">
+<p class="eyebrow">마음이 도착했어요</p>
+<h1>한입 송편을<br>열어보세요</h1>
+<div class="stage">
+<div class="gift-view" id="giftView">
+<div class="food">
+<img loading="lazy" decoding="async" fetchpriority="low" class="container" src="src/assets/media/media-23.png" alt="송편 두 개가 담긴 투명 포장 용기">
+<div class="cakes">
+</div>
+</div>
+<div class="card-view">
+<div class="card">
+<textarea id="giftText" readonly>
+</textarea>
+</div>
+</div>
+</div>
+<p class="swipe-tip" id="giftSwipeText">좌우로 밀어 송편과 메시지 카드를 확인하세요.</p>
+</div>
+<div class="bottom">
+<button class="primary" id="boast">송편 자랑하기</button>
+<button class="secondary" id="restart">나도 송편 만들러가기</button>
+</div>
+</section>
+</main>
+<div class="sheet" id="sheet">
+<div class="panel">
+<div class="handle">
+</div>
+<h3>송편 선물을 전해요</h3>
+<p>링크를 전달하면 보자기를 풀고 카드까지 볼 수 있어요.</p>
+<div class="actions">
+<button class="primary" id="copy">선물 링크 복사하기</button>
+<button class="secondary" id="sheetPreview">받는 사람 화면 보기</button>
+<button class="secondary" id="close">닫기</button>
+</div>
+</div>
+</div>
+<div class="toast" id="toast">선물 링크를 복사했어요</div>
+</div>
+</div>
+<script>
+// 인앱 브라우저의 접히는 툴바 높이를 반영해 화면 하단이 가려지지 않게 한다.
+(()=>{const root=document.documentElement,viewport=window.visualViewport;const update=()=>{const height=viewport?.height||window.innerHeight;if(height>0){root.style.setProperty('--app-visible-height',`${Math.round(height)}px`);root.classList.toggle('compact-viewport',height<=760);root.classList.toggle('tiny-viewport',height<=620)}};update();viewport?.addEventListener('resize',update,{passive:true});viewport?.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update,{passive:true});window.addEventListener('orientationchange',()=>setTimeout(update,150),{passive:true})})();
+const $=id=>document.getElementById(id),screens=[...document.querySelectorAll('.screen')],S={d:[],active:null,mix:0,spread:0,b:'src/assets/media/media-30.png',bIndex:1,made:false,shapeChoice:3,shapeChoices:[],shapePoints:null,shapeClip:'polygon(50% 0%, 82% 15%, 100% 47%, 84% 82%, 50% 100%, 16% 82%, 0 47%, 18% 15%)'};
+const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+const shapeOptions=[
+{key:'rabbit',label:'토끼 모양',asset:'src/assets/media/media-07.png',points:()=>[{x:.27,y:.2},{x:.24,y:.15},{x:.23,y:.09},{x:.25,y:.05},{x:.29,y:.03},{x:.33,y:.05},{x:.37,y:.1},{x:.42,y:.19},{x:.47,y:.23},{x:.52,y:.23},{x:.57,y:.18},{x:.62,y:.1},{x:.66,y:.06},{x:.7,y:.05},{x:.74,y:.08},{x:.75,y:.13},{x:.73,y:.2},{x:.69,y:.28},{x:.78,y:.3},{x:.88,y:.37},{x:.94,y:.47},{x:.96,y:.57},{x:.93,y:.68},{x:.86,y:.78},{x:.74,y:.85},{x:.62,y:.9},{x:.5,y:.92},{x:.38,y:.9},{x:.26,y:.86},{x:.15,y:.79},{x:.08,y:.69},{x:.05,y:.58},{x:.07,y:.48},{x:.13,y:.39},{x:.21,y:.32},{x:.29,y:.28}]},
+{key:'flower',label:'꽃 모양',asset:'src/assets/media/media-06.png',points:()=>Array.from({length:72},(_,i)=>{const a=i/72*Math.PI*2,r=.34+.13*Math.cos(6*a);return{x:.5+Math.cos(a)*r,y:.5+Math.sin(a)*r*.88}})},
+{key:'heart',label:'하트 모양',asset:'src/assets/media/media-08.png',points:()=>Array.from({length:72},(_,i)=>{const t=i/72*Math.PI*2,x=16*Math.sin(t)**3,y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);return{x:.5+x/40,y:.5-y/40}})},
+{key:'classic',label:'기본 모양',asset:'src/assets/media/media-05.png',points:()=>Array.from({length:56},(_,i)=>{const a=i/56*Math.PI*2;return{x:.5+Math.cos(a)*.4,y:.5+Math.sin(a)*.36}})}
+];
+let current=0,loadTimer=null,loadFinishTimer=null,receiverPreview=false;
+function show(n){if(n!==7){if(loadTimer){clearInterval(loadTimer);loadTimer=null}if(loadFinishTimer){clearTimeout(loadFinishTimer);loadFinishTimer=null}}current=n;
+screens.forEach(x=>x.classList.toggle('on',+x.dataset.s===n));
+scrollTo({top:0,behavior:'instant'});
+if(n===5)updateShapeSelectionUI();
+if(n===7)load()}const doughTextures={'김포 금쌀':'src/assets/media/media-10.png','홍천 단호박':'src/assets/media/media-12.png','거문도 해풍쑥':'src/assets/media/media-09.png','해남 자색고구마':'src/assets/media/media-11.png'},flatDoughs={'김포 금쌀':'src/assets/media/media-25.png','홍천 단호박':'src/assets/media/media-27.png','거문도 해풍쑥':'src/assets/media/media-24.png','해남 자색고구마':'src/assets/media/media-26.png'};function selectedDough(){return S.active||S.d[0]||{n:'김포 금쌀',a:doughTextures['김포 금쌀']}}function flat(){return flatDoughs[selectedDough().n]||flatDoughs['김포 금쌀']}function dough(){return selectedDough().a}
+function songpyeonColor(name){return ({'김포 금쌀':'#f3e5ce','홍천 단호박':'#f2bb4b','거문도 해풍쑥':'#88a66e','해남 자색고구마':'#a98ab8'})[name]||'#f3e5ce'}
+function mixColor(hex,target,amount){const a=hex.match(/[\da-f]{2}/gi).map(v=>parseInt(v,16)),b=target.match(/[\da-f]{2}/gi).map(v=>parseInt(v,16));return `#${a.map((v,i)=>Math.round(v+(b[i]-v)*amount).toString(16).padStart(2,'0')).join('')}`}
+const songpyeonCache=new Map(),doughTextureCache=new Map(),songpyeonShapeCache=new Map(),songpyeonShadeCache=new Map();
+function doughTexture(name){if(doughTextureCache.has(name))return doughTextureCache.get(name);const image=new Image();doughTextureCache.set(name,image);
+image.onload=()=>{songpyeonCache.clear();apply()};image.src=doughTextures[name]||doughTextures['김포 금쌀'];return image}
+function songpyeonShape(key){if(songpyeonShapeCache.has(key))return songpyeonShapeCache.get(key);const option=shapeOptions.find(x=>x.key===key),image=new Image();songpyeonShapeCache.set(key,image);
+image.onload=()=>{songpyeonCache.clear();apply()};image.src=option.asset;return image}
+function songpyeonShade(key,image){if(songpyeonShadeCache.has(key))return songpyeonShadeCache.get(key);const canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;const ctx=canvas.getContext('2d',{willReadFrequently:true});ctx.drawImage(image,0,0);
+const pixels=ctx.getImageData(0,0,canvas.width,canvas.height);for(let i=0;i<pixels.data.length;i+=4){const gray=Math.round(pixels.data[i]*.3+pixels.data[i+1]*.59+pixels.data[i+2]*.11);pixels.data[i]=pixels.data[i+1]=pixels.data[i+2]=gray}ctx.putImageData(pixels,0,0);songpyeonShadeCache.set(key,canvas);return canvas}
+function renderSongpyeon(name,shapeIndex=S.shapeChoice){const option=shapeOptions[shapeIndex],cacheKey=`${name}:${option.key}`;if(songpyeonCache.has(cacheKey))return songpyeonCache.get(cacheKey);
+const canvas=document.createElement('canvas');canvas.width=640;canvas.height=560;const ctx=canvas.getContext('2d'),shape=songpyeonShape(option.key),texture=doughTexture(name);
+if(!shape.complete||!shape.naturalWidth||!texture.complete||!texture.naturalWidth)return option.asset;
+const scale=Math.min(560/shape.naturalWidth,470/shape.naturalHeight),w=shape.naturalWidth*scale,h=shape.naturalHeight*scale,x=(640-w)/2,y=(560-h)/2-8,mask=document.createElement('canvas');mask.width=640;mask.height=560;mask.getContext('2d').drawImage(shape,x,y,w,h);
+const side=document.createElement('canvas');side.width=640;side.height=560;const sideCtx=side.getContext('2d');sideCtx.drawImage(mask,0,14);sideCtx.globalCompositeOperation='source-in';sideCtx.fillStyle=mixColor(songpyeonColor(name),'#30221c',.48);sideCtx.fillRect(0,0,640,560);
+ctx.save();ctx.shadowColor='rgba(0,0,0,.28)';ctx.shadowBlur=16;ctx.shadowOffsetY=8;ctx.drawImage(side,0,0);ctx.restore();ctx.drawImage(side,0,0);
+const fit=Math.max(640/texture.naturalWidth,560/texture.naturalHeight),tw=texture.naturalWidth*fit,th=texture.naturalHeight*fit;ctx.drawImage(texture,(640-tw)/2,(560-th)/2,tw,th);ctx.globalCompositeOperation='destination-in';ctx.drawImage(mask,0,0);
+const shade=songpyeonShade(option.key,shape);ctx.globalCompositeOperation='multiply';ctx.globalAlpha=.32;ctx.drawImage(shade,x,y,w,h);ctx.globalCompositeOperation='screen';ctx.globalAlpha=.25;ctx.drawImage(shade,x,y,w,h);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+const gloss=ctx.createRadialGradient(230,150,8,280,205,260);gloss.addColorStop(0,'rgba(255,255,255,.2)');gloss.addColorStop(.5,'rgba(255,255,255,.06)');gloss.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=gloss;ctx.fillRect(0,0,640,560);
+const image=canvas.toDataURL('image/png');songpyeonCache.set(cacheKey,image);if(songpyeonCache.size>16)songpyeonCache.delete(songpyeonCache.keys().next().value);return image}
+function cakePileLayout(id,count){
+if(id==='packageCakes'&&count===2)return[
+{x:31,y:50,size:150,angle:-8,z:10},
+{x:69,y:50,size:150,angle:8,z:11}
+];
+if(id==='giftCakes'&&count===2)return[
+{x:31,y:52,size:116,angle:-7,z:10},
+{x:69,y:52,size:116,angle:7,z:11}
+];
+const steamRows=[
+{y:18,x:[18,31,44,56,69,82],size:58},
+{y:42,x:[12,27,42,57,72,87],size:62},
+{y:67,x:[18,31,44,56,69,82],size:66},
+{y:85,x:[12,27,42,57,72,87],size:70}
+];
+const packageRows=[
+{y:15,x:[16,34,55,76,88],size:56},
+{y:32,x:[10,28,45,64,83],size:65},
+{y:50,x:[16,35,52,70,88],size:73},
+{y:68,x:[10,27,47,66,83],size:78},
+{y:84,x:[19,39,59,80],size:82}
+];
+const rows=id==='packageCakes'?packageRows:steamRows;
+const xJitter=[-3.8,2.1,-1.6,4.2,-2.5,1.1,-4.3],yJitter=[2.7,-3.5,1.4,-2.2,3.8,-1.1,2.1];
+const angles=[-18,9,-7,14,-12,5,19],sizes=[-7,3,-2,7,-4,5,0];
+return rows.flatMap((row,depth)=>row.x.map((x,index)=>{
+const piece=depth*7+index,side=depth%2?-1:1;return{x:x+xJitter[(index+depth)%xJitter.length]*side,
+y:row.y+yJitter[(index*2+depth)%yJitter.length],size:row.size+sizes[(index+depth)%sizes.length],
+angle:angles[(index*2+depth)%angles.length]+(depth%2?4:-3),z:depth*10+((index*5+depth)%7)};
+})).slice(0,count)
+}
+function selectedShapeIndexes(){return S.shapeChoices.length?S.shapeChoices:[S.shapeChoice]}
+function shapeClip(index){const points=shapeOptions[index].points();return `polygon(${points.map(p=>`${(p.x*100).toFixed(1)}% ${(p.y*100).toFixed(1)}%`).join(', ')})`}
+function apply(){const colorChoices=S.d.length?S.d:[selectedDough()];['mixDough','spreadDough'].forEach(id=>$(id).src=dough());const activeShape=selectedShapeIndexes()[0],formed=$('formed');if(formed){formed.src=S.shapePoints?renderSongpyeon(selectedDough().n,activeShape):dough();if(S.shapePoints)formed.style.clipPath='none';else formed.style.removeProperty('clip-path')}
+document.querySelectorAll('.shape-option').forEach((button,index)=>{const shapeIndex=Number(button.dataset.shapeIndex),choice=colorChoices[index%colorChoices.length],image=button.querySelector('img');image.src=renderSongpyeon(choice.n,shapeIndex);image.alt=`${choice.n} ${shapeOptions[shapeIndex].label}`});
+['sesameDough','formFlat'].forEach(id=>{const image=$(id);if(image)image.src=flat()});
+document.querySelectorAll('.cakes').forEach(c=>{const choices=colorChoices;
+const giftView=!!c.closest('.gift-view'),packageStart=c.id==='packageCakes',pairSet=giftView||packageStart;
+const count=pairSet?2:c.id==='steamCakes'||c.id==='loadingCakes'?24:S.d.length;
+const pieces=Array.from({length:count},(_,i)=>choices[i%choices.length]);
+const pile=giftView||['packageCakes','steamCakes','loadingCakes'].includes(c.id)?cakePileLayout(giftView?'giftCakes':c.id,count):null,shapeIndexes=selectedShapeIndexes();
+c.innerHTML=pieces.map((x,i)=>{const p=pile?.[i],shapeIndex=shapeIndexes[i%shapeIndexes.length],pose=p?`--cake-x:${p.x}%;--cake-y:${p.y}%;--cake-width:${p.size}px;--cake-height:${Math.round(p.size*.88)}px;--cake-angle:${p.angle}deg;--cake-depth:${p.z};`:'';return `<img loading="lazy" decoding="async" fetchpriority="low" src="${S.shapePoints?renderSongpyeon(x.n,shapeIndex):x.a}" alt="${x.n} ${shapeOptions[shapeIndex].label} 송편" style="--piece:${i};${pose}--songpyeon-clip:${shapeClip(shapeIndex)};${S.shapePoints?'clip-path:none;':''}">`}).join('')})}function boja(){['bojaPreview','completeBoja','giftBoja'].forEach(id=>$(id).src=S.b)}function msg(){return $('message').value.trim()||'따뜻한 마음을 담아 보냅니다.'}function toast(t){$('toast').textContent=t;
+$('toast').classList.add('show');
+setTimeout(()=>$('toast').classList.remove('show'),2200)}function receiver(fromPreview=false){receiverPreview=fromPreview;
+document.querySelector('.screen[data-s="13"]').classList.toggle('preview-origin',fromPreview);
+$('giftText').value=msg();
+boja();
+apply();
+show(12)}function open(){$('kit').classList.add('open');
+setTimeout(()=>show(1),280)}$('kit').onclick=open;
+$('start').onclick=open;
+function resetFromStep(step){
+if(step<=0)$('kit').classList.remove('open');
+if(step<=1){S.d=[];S.active=null;
+document.querySelectorAll('.dough').forEach(button=>button.classList.remove('selected'));
+$('selectStatus').textContent='0개 선택했어요. 2개 이상 골라주세요.';
+$('selectNext').disabled=true}
+if(step<=2){S.mix=0;
+$('mixPct').textContent='0';
+$('mixDough').style.opacity='';
+$('mixDough').style.removeProperty('--mix-y');
+$('mixDough').style.removeProperty('--mix-scale');
+$('mixDough').classList.remove('mixing')}
+if(step<=3){S.spread=0;
+$('spreadPct').textContent='0%';
+$('spreadStatus').innerHTML='<b>0 / 5</b>번 눌렀어요';
+$('spreadDough').style.removeProperty('transform')}
+if(step<=4){$('sesame').classList.remove('show');$('sesameStatus').textContent='가운데를 한 번 눌러주세요.'}
+if(step<=5){S.shapeChoice=3;S.shapeChoices=[];S.shapePoints=null;
+S.shapeClip='polygon(50% 0%, 82% 15%, 100% 47%, 84% 82%, 50% 100%, 16% 82%, 0 47%, 18% 15%)'}
+if(step<=6){$('steam').classList.remove('cooking');$('burner').src='src/assets/media/media-01.png';
+$('steamButton').disabled=false;$('steamStatus').textContent='찜기를 눌러 불을 켜주세요.'}
+if(step<=7){if(loadTimer){clearInterval(loadTimer);loadTimer=null}if(loadFinishTimer){clearTimeout(loadFinishTimer);loadFinishTimer=null}setLoadingProgress(0)}
+if(step<=9){S.bIndex=1;S.b=wrapChoices[1];
+document.querySelectorAll('.boja').forEach((button,index)=>button.classList.toggle('selected',index===S.bIndex));
+boja();updateWrapArrowState()}
+if(step<=10){$('message').value='';$('count').textContent='0'}
+if(step<=12){$('giftWrap').classList.remove('opening');setGiftView('food')}
+$('sheet').classList.remove('open');
+if(step<=5)updateShapeSelectionUI();else apply()
+}
+screens.filter(x=>Number(x.dataset.s)>0).forEach(screen=>{const back=document.createElement('button');
+back.type='button';back.className='back-button';back.setAttribute('aria-label','이전 화면');
+back.innerHTML='<img src="src/assets/icons/chevron-left.svg" alt="">';
+back.onclick=()=>{if(Number(screen.dataset.s)===13&&receiverPreview){receiverPreview=false;screen.classList.remove('preview-origin');show(11);return}const previous=Math.max(0,Number(screen.dataset.s)-1);resetFromStep(previous);show(previous)};
+screen.append(back)});
+document.querySelectorAll('img').forEach(img=>img.draggable=false);
+document.addEventListener('dragstart',event=>{if(event.target instanceof HTMLImageElement)event.preventDefault()});
+document.querySelectorAll('.dough').forEach(b=>b.onclick=()=>{let i=S.d.findIndex(x=>x.n===b.dataset.n);
+if(i>-1){const [removed]=S.d.splice(i,1);
+if(S.active?.n===removed.n)S.active=S.d[0]||null;
+b.classList.remove('selected')}else if(S.d.length<4){const picked={n:b.dataset.n,a:b.dataset.a};
+S.d.push(picked);
+if(!S.active)S.active=picked;
+b.classList.add('selected')}let c=S.d.length;
+$('selectStatus').textContent=c<2?`${c}개 선택했어요. 2개 이상 골라주세요.`:`${c}개를 골랐어요. ${S.d.map(x=>x.n).join(' · ')}`;
+$('selectNext').disabled=c<2;
+apply()});
+$('selectNext').onclick=()=>show(2);
+let mixStartY;
+let lastMixAt=0;
+function mix(){if(S.mix>=100)return;
+S.mix+=20;
+$('mixPct').textContent=S.mix;
+$('mixDough').style.opacity=.08+S.mix/108;
+$('mixDough').style.setProperty('--mix-y',`${8-S.mix/18}px`);
+$('mixDough').style.setProperty('--mix-scale',.88+S.mix/840);
+$('mixDough').classList.remove('mixing');
+void $('mixDough').offsetWidth;
+$('mixDough').classList.add('mixing');
+if(S.mix===100)show(3)}
+function registerMix(delta){const now=performance.now();
+if(current!==2||Math.abs(delta)<18||now-lastMixAt<240)return;
+lastMixAt=now;
+mix()}
+const mixScreen=document.querySelector('.screen[data-s="2"]');
+mixScreen.onpointerdown=e=>{if(e.target.closest('.back-button'))return;
+mixStartY=e.clientY;
+mixScreen.setPointerCapture(e.pointerId)};
+mixScreen.onpointerup=e=>{if(mixStartY!==undefined)registerMix(e.clientY-mixStartY);
+mixStartY=undefined};
+mixScreen.addEventListener('wheel',e=>{if(current===2){e.preventDefault();
+registerMix(e.deltaY)}},{passive:false});
+function pressDough(){if(S.spread===5)return;
+S.spread++;
+$('spreadStatus').innerHTML=`<b>${S.spread} / 5</b>번 눌렀어요`;
+$('spreadPct').textContent=`${S.spread*20}%`;
+$('spreadDough').style.transform=`scale(${1+S.spread*.06})`;
+const spreadStage=$('spreadStage');
+spreadStage.classList.remove('pressing');
+void spreadStage.offsetWidth;
+spreadStage.classList.add('pressing');
+setTimeout(()=>spreadStage.classList.remove('pressing'),280);
+if(S.spread===5){$('spreadDough').src=flat();
+$('spreadStatus').innerHTML='<b>납작하게 잘 펴졌어요.</b>';
+setTimeout(()=>show(4),280)}}
+$('spreadStage').onclick=pressDough;
+$('sesameStage').onclick=()=>{if($('sesame').classList.contains('show'))return;
+$('sesame').classList.add('show');
+$('sesameStatus').textContent='깨소를 담았어요. 잠시 후 감싸볼게요.';
+setTimeout(()=>show(5),1000)};
+function updateShapeSelectionUI(){const count=S.shapeChoices.length;$('shapeSelectionNote').textContent=count===2?'▲ 원하는 송편 모양 2개를 골랐어요!':`▲ 원하는 송편 모양 2개를 선택해주세요! (${count}/2)`;
+document.querySelectorAll('.shape-option').forEach(button=>{const index=Number(button.dataset.shapeIndex),selected=S.shapeChoices.includes(index);button.classList.toggle('selected',selected);button.setAttribute('aria-pressed',String(selected));button.disabled=!selected&&count===2});
+if(count){S.shapeChoice=S.shapeChoices[0];const points=shapeOptions[S.shapeChoice].points();S.shapePoints=points;S.shapeClip=shapeClip(S.shapeChoice)}
+else S.shapePoints=null;
+$('formNext').disabled=count!==2;apply()}
+function toggleSongpyeonShape(index){const normalized=(index+shapeOptions.length)%shapeOptions.length,selected=S.shapeChoices.indexOf(normalized);if(selected>-1)S.shapeChoices.splice(selected,1);else if(S.shapeChoices.length<2)S.shapeChoices.push(normalized);updateShapeSelectionUI()}
+function selectSongpyeonShape(index){S.shapeChoices=[(index+shapeOptions.length)%shapeOptions.length];updateShapeSelectionUI()}
+document.querySelectorAll('.shape-option').forEach(option=>option.onclick=()=>toggleSongpyeonShape(Number(option.dataset.shapeIndex)));
+updateShapeSelectionUI();
+$('formNext').onclick=()=>show(6);
+function startSteam(){if($('steamButton').disabled)return;
+$('steam').classList.add('cooking');
+$('burner').src='src/assets/media/media-02.png';
+$('steamButton').disabled=true;
+$('steamStatus').textContent='김이 오르고 있어요.';
+show(7)}$('steamButton').onclick=startSteam;
+$('steam').onclick=startSteam;
+function setLoadingProgress(p){const text=$('loaderText');
+$('loader').style.setProperty('--p',p);
+text.textContent=p+'%';
+if(!p)return;
+text.classList.remove('count-pop');void text.offsetWidth;text.classList.add('count-pop')}
+function load(){if(loadTimer)clearInterval(loadTimer);if(loadFinishTimer)clearTimeout(loadFinishTimer);let p=0;
+setLoadingProgress(0);
+loadTimer=setInterval(()=>{p+=20;setLoadingProgress(p);
+if(p===100){clearInterval(loadTimer);loadTimer=null;
+loadFinishTimer=setTimeout(()=>{loadFinishTimer=null;show(8)},500)}},500)}$('packageNext').onclick=()=>show(9);
+const wrapChoices=['src/assets/media/media-31.png','src/assets/media/media-30.png','src/assets/media/media-29.png'];
+let wrapStartX=null;
+function updateWrapArrowState(){$('bojaPrev').disabled=S.bIndex===0;$('bojaNextArrow').disabled=S.bIndex===wrapChoices.length-1}
+function stepWrap(direction){S.bIndex=clamp(S.bIndex+direction,0,wrapChoices.length-1);S.b=wrapChoices[S.bIndex];boja();updateWrapArrowState();$('bojaPreview').classList.remove('swiped');void $('bojaPreview').offsetWidth;$('bojaPreview').classList.add('swiped')}
+$('bojaPreview').onpointerdown=e=>{wrapStartX=e.clientX;$('bojaPreview').setPointerCapture(e.pointerId)};
+$('bojaPreview').onpointerup=e=>{if(wrapStartX===null)return;
+const delta=e.clientX-wrapStartX;wrapStartX=null;
+if(Math.abs(delta)<32)return;
+stepWrap(delta<0?1:-1)};
+$('bojaPrev').onclick=()=>stepWrap(-1);$('bojaNextArrow').onclick=()=>stepWrap(1);
+updateWrapArrowState();
+document.querySelectorAll('.boja').forEach((b,i)=>b.classList.toggle('selected',i===S.bIndex));
+boja();
+$('bojaNext').onclick=()=>show(10);
+$('message').oninput=e=>$('count').textContent=e.target.value.length;
+$('messageNext').onclick=()=>{boja();
+show(11)};
+function giftLink(){const payload={d:(S.d.length?S.d:[selectedDough()]).map(x=>x.n),active:selectedDough().n,b:S.b,shapes:selectedShapeIndexes(),m:msg()};
+const bytes=new TextEncoder().encode(JSON.stringify(payload));let binary='';bytes.forEach(byte=>binary+=String.fromCharCode(byte));
+const token=btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');return `${location.origin}/ricecake/gift/#gift=${token}`}
+function restoreGiftLink(){if(!location.hash.startsWith('#gift='))return false;
+try{const token=location.hash.slice(6).replace(/-/g,'+').replace(/_/g,'/'),binary=atob(token+'='.repeat((4-token.length%4)%4));
+const bytes=Uint8Array.from(binary,char=>char.charCodeAt(0)),payload=JSON.parse(new TextDecoder().decode(bytes));
+const available=[...document.querySelectorAll('.dough')].map(button=>({n:button.dataset.n,a:button.dataset.a}));
+const selected=Array.isArray(payload.d)?payload.d.map(name=>available.find(item=>item.n===name)).filter(Boolean).slice(0,4):[];
+S.d=selected.length?selected:[available[0]||{n:'김포 금쌀',a:'src/assets/media/media-10.png'}];
+S.active=available.find(item=>item.n===payload.active)||S.d[0];
+const wraps=['src/assets/media/media-31.png','src/assets/media/media-30.png','src/assets/media/media-29.png'];
+S.b=wraps.includes(payload.b)?payload.b:wraps[1];S.bIndex=wraps.indexOf(S.b);
+const sharedShapes=Array.isArray(payload.shapes)?payload.shapes.filter(index=>Number.isInteger(index)&&index>=0&&index<shapeOptions.length).slice(0,2):[];
+S.shapeChoices=sharedShapes.length?sharedShapes:(Number.isInteger(payload.shape)?[clamp(payload.shape,0,shapeOptions.length-1)]:[3,0]);S.shapeChoice=S.shapeChoices[0];
+$('message').value=typeof payload.m==='string'?payload.m.slice(0,60):'';$('count').textContent=$('message').value.length;
+return true}catch{return false}}
+async function shareGift(){const link=giftLink();
+if(!navigator.share){$('sheet').classList.add('open');
+return}try{await navigator.share({title:'한입 송편 선물',text:msg(),url:link});
+toast('선물을 공유했어요')}catch(error){if(error?.name!=='AbortError')$('sheet').classList.add('open')}}
+function loadCaptureAsset(src){return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=src})}
+function drawCaptureText(ctx,text,x,y,maxWidth,lineHeight,maxLines){const lines=[];let line='';for(const letter of text.replace(/\r/g,'')){if(letter==='\n'){lines.push(line);line='';continue}const next=line+letter;if(ctx.measureText(next).width>maxWidth&&line){lines.push(line);line=letter}else line=next}if(line)lines.push(line);const visible=lines.slice(0,maxLines);if(lines.length>maxLines){let last=visible[maxLines-1];while(ctx.measureText(last+'…').width>maxWidth&&last)last=last.slice(0,-1);visible[maxLines-1]=last+'…'}visible.forEach((line,index)=>ctx.fillText(line,x,y+index*lineHeight))}
+async function createBoastImage(){
+const canvas=document.createElement('canvas');canvas.width=390;canvas.height=844;
+const ctx=canvas.getContext('2d');ctx.fillStyle='#120c38';ctx.fillRect(0,0,390,844);
+const [moon,cloudTop,cloud,card,container]=await Promise.all(['src/assets/figma/figma-moon.png','src/assets/figma/figma-cloud-top.svg','src/assets/figma/figma-cloud.svg','src/assets/media/media-04.png','src/assets/media/media-23.png'].map(loadCaptureAsset));
+ctx.globalAlpha=.2;ctx.drawImage(moon,184,0,245,245);ctx.globalAlpha=1;
+ctx.drawImage(cloudTop,51,30,81,53);ctx.drawImage(cloud,297,336,104,68);ctx.drawImage(cloud,-25,195,104,68);
+ctx.fillStyle='#fff';ctx.font='600 30px Tossface, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif';ctx.textAlign='center';ctx.fillText('💌 송편 선물',195,112);ctx.fillText('마음을 전해요!',195,157);
+const containerX=30,containerY=228,containerWidth=330,containerHeight=200;
+ctx.drawImage(container,containerX,containerY,containerWidth,containerHeight);
+const cakes=[...document.querySelectorAll('#giftView .cakes img')],loadedCakes=await Promise.all(cakes.map(cake=>cake.complete&&cake.naturalWidth?Promise.resolve(cake):loadCaptureAsset(cake.currentSrc||cake.src))),layout=cakePileLayout('giftCakes',loadedCakes.length);
+loadedCakes.forEach((cake,index)=>{const piece=layout[index];if(!piece)return;const x=containerX+piece.x/100*containerWidth,y=containerY+piece.y/100*containerHeight,w=piece.size,h=Math.round(piece.size*.88);ctx.save();ctx.translate(x,y);ctx.rotate(piece.angle*Math.PI/180);ctx.drawImage(cake,-w/2,-h/2,w,h);ctx.restore()});
+ctx.save();ctx.translate(195,470);ctx.rotate(7*Math.PI/180);ctx.drawImage(card,-150,-100,300,200);ctx.fillStyle='#332c27';ctx.font='400 15px Tossface, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif';ctx.textAlign='center';drawCaptureText(ctx,msg(),0,-35,230,19,4);ctx.restore();
+return canvas}
+function downloadBoastImage(blob){const url=URL.createObjectURL(blob),anchor=document.createElement('a');anchor.href=url;anchor.download='한입-송편-자랑.png';document.body.append(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+async function shareBoastImage(){try{const canvas=await createBoastImage(),blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw new Error('image creation failed');const file=new File([blob],'한입-송편-자랑.png',{type:'image/png'}),data={files:[file],title:'한입 송편',text:msg()};if(navigator.share&&(!navigator.canShare||navigator.canShare(data)))await navigator.share(data);else downloadBoastImage(blob);toast('이미지를 준비했어요')}catch(error){if(error?.name!=='AbortError')toast('이미지를 저장하지 못했어요.')}}
+$('share').onclick=shareGift;
+ $('close').onclick=()=>$('sheet').classList.remove('open');
+$('sheetPreview').onclick=()=>{$('sheet').classList.remove('open');
+receiver(true)};
+$('preview').onclick=()=>receiver(true);
+$('copy').onclick=async()=>{let link=giftLink();
+try{await navigator.clipboard.writeText(link);
+toast('선물 링크를 복사했어요')}catch{toast(link)}};
+$('giftWrap').onclick=()=>$('unwrap').click();
+$('unwrap').onclick=()=>{$('giftWrap').classList.add('opening');
+setTimeout(()=>{$('giftText').value=msg();setGiftView('food');
+show(13)},550)};
+let gx=null;
+function setGiftView(mode){const cardMode=mode==='card';
+$('giftView').classList.toggle('card-mode',cardMode);
+$('giftView').closest('.screen').classList.toggle('card-mode',cardMode);
+$('giftSwipeText').textContent=cardMode?'좌우로 밀어 송편을 다시 확인하세요.':'좌우로 밀어 메시지 카드를 확인하세요.'}
+$('giftView').onpointerdown=e=>{gx=e.clientX;$('giftView').setPointerCapture(e.pointerId)};
+$('giftView').onpointerup=e=>{if(gx!==null&&Math.abs(gx-e.clientX)>40)setGiftView(e.clientX<gx?'card':'food');
+gx=null};
+$('giftView').onpointercancel=()=>{gx=null};
+setGiftView('food');
+$('boast').onclick=shareBoastImage;
+$('restart').onclick=()=>{location.hash='';
+show(0)};
+if(restoreGiftLink()){updateShapeSelectionUI();receiver()}
+else if(location.hash==='#gift')receiver();
+
+</script>
+</body>
+</html>

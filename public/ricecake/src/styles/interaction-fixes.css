@@ -1,0 +1,1372 @@
+/* Interaction refinements layered after the pixel-exact Figma styles. */
+.dough.selected {
+  padding: 0;
+  border: 0;
+}
+
+.dough.selected img {
+  transform: none;
+}
+
+/* The bowl is an anchored container; only the dough receives motion. */
+#mix,
+#mix > img:first-child {
+  transform: none !important;
+  animation: none !important;
+}
+
+#mixDough {
+  transform: translateY(var(--mix-y, 8px)) scale(var(--mix-scale, 0.88));
+  transform-origin: center;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+#mixDough.mixing {
+  animation: mix-dough-motion 360ms ease-out;
+}
+
+/* A vertical gesture anywhere on the mixing screen belongs to the dough. */
+.screen[data-s="2"] {
+  touch-action: none;
+}
+
+@keyframes mix-dough-motion {
+  0% { transform: translateY(calc(var(--mix-y, 8px) + 12px)) scale(var(--mix-scale, 0.88)); }
+  45% { transform: translateY(calc(var(--mix-y, 8px) - 8px)) scale(calc(var(--mix-scale, 0.88) + 0.03)); }
+  100% { transform: translateY(var(--mix-y, 8px)) scale(var(--mix-scale, 0.88)); }
+}
+
+#spreadStage {
+  cursor: pointer;
+}
+
+#spreadDough {
+  transition: transform 180ms ease;
+}
+
+#spreadStage:active #spreadDough {
+  transform: scale(0.94) !important;
+}
+
+#spreadStage.pressing #spreadDough {
+  animation: dough-press 280ms ease-out;
+}
+
+@keyframes dough-press {
+  0% { transform: scale(1); filter: brightness(1); }
+  42% { transform: scale(0.88); filter: brightness(0.9); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* The direct-tap screen no longer has a duplicate CTA. */
+.screen[data-s="3"] .bottom {
+  display: none;
+}
+
+.form-sesame {
+  position: absolute;
+  z-index: 2;
+  top: 58px;
+  left: 101px;
+  width: 112px;
+  height: 76px;
+  object-fit: contain;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.form.done .form-sesame {
+  opacity: 0;
+  transform: scale(0.7);
+}
+
+/* Image assets are part of the scene, never individually draggable. */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+* {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+textarea,
+input {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.back-button {
+  position: absolute;
+  z-index: 20;
+  top: 35px;
+  left: 20px;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  padding: 7px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.back-button img {
+  width: 30px;
+  height: 30px;
+  filter: brightness(0) invert(1);
+}
+
+.screen:not(.start) h1::before,
+.screen:not(.start) h2::before {
+  display: none;
+}
+
+.direction-guide {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.direction-guide img,
+.swipe-guides img,
+.swipe-tip img,
+.steam-guide-arrow {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+  -webkit-user-drag: none;
+}
+
+.direction-guide.vertical {
+  top: 287px;
+  left: 180px;
+  flex-direction: column;
+  gap: 220px;
+}
+
+.direction-guide.vertical img {
+  width: 30px;
+  height: 30px;
+  padding: 4px;
+  border-radius: 50%;
+  background: #fff;
+  filter: none;
+}
+
+.steam-guide-arrow {
+  position: absolute;
+  z-index: 5;
+  top: 290px;
+  left: 180px;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  border-radius: 50%;
+  background: #fff;
+  filter: none;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.swipe-guides {
+  position: absolute;
+  z-index: 5;
+  top: 387px;
+  left: 0;
+  display: flex;
+  width: 100%;
+  height: 248px;
+  align-items: flex-start;
+  justify-content: space-between;
+  color: #fff;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.swipe-guides img,
+.swipe-tip img {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  padding: 7px;
+  border-radius: 50%;
+  background: #fff;
+  filter: none;
+}
+
+.swipe-arrow {
+  position: relative;
+  z-index: 6;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.swipe-arrow img {
+  width: 34px;
+  height: 34px;
+  padding: 7px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 140ms ease;
+}
+
+.swipe-arrow:active img { transform: scale(.9); }
+.swipe-arrow:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.swipe-arrow:disabled { cursor: default; opacity: .45; }
+
+.swipe-guides span {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.steam-cakes {
+  z-index: 4;
+  top: 278px;
+  left: 78px;
+  display: block;
+  width: 234px;
+  height: 154px;
+  overflow: hidden;
+  clip-path: none;
+  transform: translateY(0);
+}
+
+.steam-cakes img {
+  position: absolute;
+  z-index: var(--cake-depth, 1);
+  top: var(--cake-y, 50%);
+  left: var(--cake-x, 50%);
+  width: var(--cake-width, 56px);
+  height: var(--cake-height, 48px);
+  object-fit: contain;
+  transform: translate(-50%, -50%) rotate(var(--cake-angle, 0deg));
+  clip-path: var(--songpyeon-clip, polygon(50% 0%, 82% 15%, 100% 47%, 84% 82%, 50% 100%, 16% 82%, 0 47%, 18% 15%));
+}
+
+.spread-pct {
+  top: 233px;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  color: #fff;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 30px;
+  text-align: center;
+}
+
+/* Align the gesture scenes to the supplied 390×844 screen references. */
+.screen[data-s="2"] .bowl {
+  top: 323px;
+  left: 26px;
+  width: 339px;
+  height: 226px;
+}
+
+.screen[data-s="2"] .mix-dough {
+  top: 48px;
+  left: 92px;
+}
+
+.screen[data-s="2"] .swipe {
+  top: 610px;
+}
+
+.screen[data-s="2"] #mixPct {
+  color: var(--color-warning, #fe9800);
+}
+
+.screen[data-s="6"] .steam-cakes {
+  top: 278px;
+}
+
+/* The steamer is a fixed scene from the supplied screen designs. */
+.screen[data-s="6"],
+.screen[data-s="7"] {
+  background-image: var(--steamer-scene) !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100% !important;
+}
+
+.screen[data-s="6"] {
+  --steamer-scene: url("../assets/steamer/ready.png");
+}
+
+.screen[data-s="7"] {
+  --steamer-scene: url("../assets/steamer/loading.png");
+}
+
+.screen[data-s="6"]::before,
+.screen[data-s="7"]::before {
+  display: none;
+}
+
+.screen[data-s="6"] > *:not(.steam-stage),
+.screen[data-s="7"] > * {
+  visibility: hidden;
+}
+
+.screen[data-s="6"] .steam-stage {
+  position: absolute;
+  z-index: 5;
+  top: 252px;
+  left: 75px;
+  width: 240px;
+  height: 312px;
+  visibility: visible;
+  opacity: 0;
+}
+
+.screen[data-s="7"] .loading-burner {
+  position: absolute;
+  z-index: 1;
+  top: 402px;
+  left: 67px;
+  width: 256px;
+  height: 170px;
+  object-fit: contain;
+}
+
+.screen[data-s="7"] .loading-art {
+  z-index: 2;
+  top: 271px;
+  left: 46px;
+  width: 297px;
+  height: 198px;
+  opacity: 1;
+  background: none;
+}
+
+.screen[data-s="7"] .loading-cakes {
+  top: 278px;
+}
+
+.screen[data-s="7"] .loader b {
+  color: var(--color-warning, #fe9800);
+}
+
+.screen[data-s="7"] .loader {
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  visibility: visible;
+}
+
+.screen[data-s="7"] .loader b.count-pop {
+  animation: loader-count-pop 360ms cubic-bezier(.2, .85, .25, 1) both;
+}
+
+@keyframes loader-count-pop {
+  0% { opacity: .25; transform: translateY(8px) scale(.82); }
+  65% { opacity: 1; transform: translateY(-2px) scale(1.08); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.screen[data-s="11"] .final > img {
+  top: 294px;
+  left: 25px;
+  width: 339px;
+  height: 226px;
+}
+
+.screen[data-s="8"] .package .container {
+  display: none;
+}
+
+.screen[data-s="8"] #packageCakes {
+  z-index: 4;
+  top: 300px;
+  left: 0;
+  display: block;
+  width: 390px;
+  height: 170px;
+  overflow: visible;
+  clip-path: none;
+  transform: none;
+}
+
+.screen[data-s="8"] #packageCakes img {
+  position: absolute;
+  z-index: var(--cake-depth, 1);
+  top: var(--cake-y, 50%);
+  left: var(--cake-x, 50%);
+  width: var(--cake-width, 62px);
+  height: var(--cake-height, 56px);
+  object-fit: contain;
+  transform: translate(-50%, -50%) rotate(var(--cake-angle, 0deg));
+}
+
+/* Match the packaging-complete reference while preserving the dynamic pile. */
+.screen[data-s="8"] h2 {
+  top: 142px;
+}
+
+.screen[data-s="8"] .back-button {
+  display: grid;
+}
+
+.package-capture-note {
+  position: absolute;
+  top: 612px;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  color: #fff;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+}
+
+#formFlat {
+  clip-path: var(--songpyeon-clip, polygon(50% 0%, 82% 15%, 100% 47%, 84% 82%, 50% 100%, 16% 82%, 0 47%, 18% 15%));
+}
+
+.form.pressed .flat {
+  filter: brightness(0.9);
+  transform: scale(0.96);
+}
+
+#bojaPreview {
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+/* Invisible Figma choice tiles sit over the preview for layout only. */
+.screen[data-s="9"] .bojas {
+  pointer-events: none;
+}
+
+#bojaPreview:active {
+  cursor: grabbing;
+}
+
+#bojaPreview.swiped {
+  animation: wrap-swipe 240ms ease-out;
+}
+
+@keyframes wrap-swipe {
+  45% { transform: translateX(-8px) scale(0.98); }
+  100% { transform: translateX(0) scale(1); }
+}
+
+.start .note::after {
+  content: "봉지를 클릭하면 만들기가 시작됩니다!";
+}
+
+.status::after {
+  content: "최소 2개를 선택해주세요!";
+}
+
+.screen[data-s="3"] .tap::after {
+  content: "반죽을 클릭해주세요!";
+}
+
+.screen[data-s="4"] .tap::after {
+  content: "반죽 중앙을 클릭해주세요!";
+}
+
+.screen[data-s="1"] .dough {
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, .72);
+  border-radius: 18px;
+}
+
+.screen[data-s="1"] .dough img {
+  width: 100%;
+}
+
+.screen[data-s="1"] .dough.selected {
+  border-color: #fff;
+}
+
+.screen[data-s="10"] .card textarea {
+  font-size: 15px;
+  text-align: center;
+}
+
+.screen[data-s="13"] .swipe-tip {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 500px;
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.screen[data-s="13"] .swipe-tip::after {
+  content: none;
+}
+
+/* Keep reference-art scenes proportional instead of stretching them to a viewport. */
+.screen[data-s="6"],
+.screen[data-s="7"] {
+  background-position: top center !important;
+  background-size: 100% auto !important;
+}
+
+/* The shared gift changes with the gesture itself; no secondary arrow controls. */
+.screen[data-s="13"] .gift-view .food,
+.screen[data-s="13"] .gift-view .card-view {
+  position: absolute;
+  inset: 0;
+  display: grid !important;
+  place-items: center;
+  transition: opacity 260ms ease, transform 260ms ease;
+  will-change: opacity, transform;
+}
+
+.screen[data-s="13"] .gift-view .food {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.screen[data-s="13"] .gift-view .card-view {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(44px);
+}
+
+.screen[data-s="13"] .gift-view.card-mode .food {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-44px);
+}
+
+.screen[data-s="13"] .gift-view.card-mode .card-view {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.screen[data-s="13"] .swipe-tip {
+  top: 532px;
+  height: auto;
+  min-height: 44px;
+  padding: 0 24px;
+  color: #fff;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
+  opacity: .72;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen[data-s="13"] .gift-view .food,
+  .screen[data-s="13"] .gift-view .card-view {
+    transition-duration: 1ms;
+  }
+}
+
+/* Preserve the core illustration and action area on short mobile viewports. */
+@media (max-height: 760px) {
+  .screen[data-s="1"] .grid {
+    top: 220px;
+    left: 64px;
+    transform: scale(.84);
+    transform-origin: top center;
+  }
+
+  .screen[data-s="1"] .status {
+    top: 514px;
+  }
+
+  .screen[data-s="1"] .bottom,
+  .screen[data-s="5"] .bottom {
+    top: clamp(568px, 85dvh, 646px);
+  }
+
+  .screen[data-s="5"] .shape-picker {
+    top: 224px;
+    left: 57px;
+    transform: scale(.84);
+    transform-origin: top center;
+  }
+
+  .screen[data-s="5"] .shape-selection-note {
+    top: 516px;
+  }
+
+  .screen[data-s="8"] .bottom,
+  .screen[data-s="9"] .bottom,
+  .screen[data-s="10"] .bottom {
+    top: clamp(514px, 77dvh, 646px);
+  }
+
+  .screen[data-s="9"] .final,
+  .screen[data-s="10"] .card {
+    top: 252px;
+  }
+
+  .screen[data-s="11"] .final {
+    top: 252px;
+  }
+
+  .screen[data-s="11"] .bottom,
+  .screen[data-s="13"] .bottom {
+    top: clamp(500px, 69dvh, 580px);
+  }
+
+  .screen[data-s="13"] .gift-view {
+    top: 258px;
+  }
+
+  .screen[data-s="13"] .swipe-tip {
+    top: 468px;
+  }
+}
+
+.screen[data-s="11"] .primary,
+.screen[data-s="12"] .primary,
+.screen[data-s="13"] .primary {
+  background-color: #fff1d8;
+}
+
+.primary,
+.secondary {
+  font-size: 15px;
+}
+
+.screen[data-s="5"] .shape-picker {
+  top: 265px;
+  left: 29px;
+  width: 332px;
+  height: 300px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.shape-viewport {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: grab;
+  touch-action: pan-y;
+  outline-offset: -4px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.shape-viewport:active { cursor: grabbing; }
+.shape-viewport:focus-visible { outline: 2px solid #7a4d32; }
+
+#shapePreview {
+  position: absolute;
+  top: 22px;
+  left: 41px;
+  width: 250px;
+  height: 220px;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.shape-picker.shape-changing #shapePreview {
+  animation: shape-choice-in 320ms ease both;
+}
+
+@keyframes shape-choice-in {
+  from { opacity: .45; transform: scale(.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.shape-nav {
+  position: absolute;
+  z-index: 3;
+  top: 113px;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(18, 12, 56, .08);
+  cursor: pointer;
+}
+
+.shape-prev { left: 5px; }
+.shape-next { right: 5px; }
+.shape-nav img { width: 22px; height: 22px; pointer-events: none; }
+
+.shape-name {
+  position: absolute;
+  z-index: 3;
+  top: 236px;
+  right: 0;
+  left: 0;
+  color: #120c38;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.shape-pagination {
+  position: absolute;
+  z-index: 3;
+  bottom: 4px;
+  left: 78px;
+  display: flex;
+  width: 176px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.shape-dot {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.shape-dot::before {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(18, 12, 56, .28);
+  content: "";
+  transition: width 160ms ease, background-color 160ms ease;
+}
+
+.shape-dot.selected::before {
+  width: 22px;
+  background: #120c38;
+}
+
+.shape-swipe-guide {
+  position: absolute;
+  top: 584px;
+  left: 0;
+  display: flex;
+  width: 390px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 15px;
+  opacity: .4;
+  pointer-events: none;
+}
+
+.shape-swipe-guide img { width: 18px; height: 18px; }
+
+.screen[data-s="13"] .swipe-tip img {
+  pointer-events: none;
+}
+
+.screen[data-s="13"] .swipe-tip .swipe-arrow {
+  position: absolute;
+  top: 382px;
+}
+
+.screen[data-s="13"] .swipe-tip .swipe-arrow:first-child {
+  left: 12px;
+}
+
+.screen[data-s="13"] .swipe-tip .swipe-arrow:last-child {
+  right: 12px;
+}
+
+.screen[data-s="13"] .swipe-tip span {
+  position: absolute;
+  top: 610px;
+  right: 0;
+  left: 0;
+  text-align: center;
+  opacity: 0.7;
+}
+
+.screen[data-s="13"] .gift-view .food {
+  position: absolute;
+  inset: 0;
+}
+
+.screen[data-s="13"] .gift-view {
+  top: 310px;
+  left: 30px;
+  width: 330px;
+  height: 200px;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.screen[data-s="13"] h1 {
+  top: 142px;
+}
+
+.screen[data-s="13"] .swipe-tip .swipe-arrow[hidden] {
+  display: none;
+}
+
+.screen[data-s="13"] .bottom {
+  top: 580px;
+}
+
+.screen[data-s="13"] .gift-view .food > .container {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.screen[data-s="13"] .gift-view .food > .cakes {
+  z-index: 4;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 330px;
+  height: 200px;
+  overflow: visible;
+  clip-path: none;
+  transform: none;
+}
+
+/* Keep the message card on the same horizontal center line as the food tray. */
+.screen[data-s="13"] .gift-view .card {
+  transform: translate(-9px, 4px);
+}
+
+.screen[data-s="13"] .gift-view .food > .cakes img {
+  position: absolute;
+  z-index: var(--cake-depth, 1);
+  top: var(--cake-y, 50%);
+  left: var(--cake-x, 50%);
+  width: var(--cake-width, 62px);
+  height: var(--cake-height, 56px);
+  object-fit: contain;
+  transform: translate(-50%, -50%) rotate(var(--cake-angle, 0deg));
+}
+
+.screen[data-s="13"] #boast {
+  background-color: #fff1d8;
+}
+
+/* Updated shared-link entry: open the selected gift directly. */
+.screen[data-s="12"] h1 {
+  top: 47px;
+}
+
+.screen[data-s="12"] .back-button,
+.screen[data-s="12"] .bottom {
+  display: none;
+}
+
+/* Shared-link recipients have no in-app history; preview users can return to completion. */
+.screen[data-s="13"] .back-button {
+  display: none;
+}
+
+.screen[data-s="13"].preview-origin .back-button {
+  display: grid;
+}
+
+.screen[data-s="12"] .gift-wrap {
+  top: 310px;
+  left: 25px;
+  width: 339px;
+  height: 226px;
+  cursor: pointer;
+}
+
+.screen[data-s="12"] .gift-wrap::after {
+  position: absolute;
+  top: 300px;
+  left: -25px;
+  width: 390px;
+  color: #fff;
+  content: "▲ 선물함을 클릭해보세요!";
+  font-size: 15px;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* Updated two-choice songpyeon shape selection. */
+.screen[data-s="5"] .shape-picker {
+  top: 251px;
+  left: 40px;
+  display: grid;
+  width: 310px;
+  height: 328px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 14px;
+  overflow: visible;
+  background: transparent;
+}
+
+.shape-option {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  align-content: center;
+  gap: 7px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, .92);
+  border-radius: 20px;
+  color: #fff;
+  background: transparent;
+  cursor: pointer;
+}
+
+.shape-option img {
+  width: 108px;
+  height: 102px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.shape-option span {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 22px;
+  pointer-events: none;
+}
+
+.shape-option.selected {
+  border-color: #fff1d8;
+  background: rgba(255, 241, 216, .15);
+}
+
+.shape-option.selected::after {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #120c38;
+  background: #fff1d8;
+  content: "✓";
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 24px;
+  place-items: center;
+}
+
+.shape-option:disabled:not(.selected) {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+.shape-selection-note {
+  position: absolute;
+  top: 612px;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.dough strong {
+  font-size: 15px;
+}
+
+.status::after,
+.screen[data-s="3"] .tap::after,
+.screen[data-s="4"] .tap::after,
+.steam-note::after,
+.hint::after,
+.callout::after,
+.screen[data-s="2"] .swipe::after {
+  font-size: 15px;
+  line-height: 18px;
+}
+
+.screen[data-s="0"] .primary,
+.screen[data-s="1"] .primary,
+.screen[data-s="3"] .primary,
+.screen[data-s="5"] .primary,
+.screen[data-s="6"] .primary,
+.screen[data-s="8"] .primary,
+.screen[data-s="9"] .primary,
+.screen[data-s="10"] .primary,
+.screen[data-s="11"] .primary,
+.screen[data-s="12"] .primary,
+.screen[data-s="13"] .primary {
+  color: #120c38;
+  background-color: #fff;
+}
+
+#formed,
+.cakes img {
+  clip-path: var(--songpyeon-clip, polygon(50% 0%, 82% 15%, 100% 47%, 84% 82%, 50% 100%, 16% 82%, 0 47%, 18% 15%));
+}
+
+.swipe-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff;
+  font-size: 13px;
+  opacity: 0.4;
+}
+
+.screen[data-s="13"] .swipe-tip::after {
+  content: none;
+}
+
+/* Compact browser viewports keep each selection step above the browser chrome. */
+@media (max-height: 760px) {
+  .screen[data-s="1"] h2,
+  .screen[data-s="5"] h2 {
+    top: 102px;
+  }
+
+  .screen[data-s="1"] .grid {
+    top: 194px;
+  }
+
+  .screen[data-s="1"] .status {
+    top: 486px;
+  }
+
+  .screen[data-s="5"] .shape-picker {
+    top: 188px;
+  }
+
+  .screen[data-s="5"] .shape-selection-note {
+    top: 486px;
+  }
+
+  .screen[data-s="1"] .bottom,
+  .screen[data-s="5"] .bottom {
+    top: clamp(510px, 81dvh, 550px);
+  }
+}
+
+/* 390×844 reference alignment: keep the content rhythm consistent across steps. */
+@media (min-height: 761px) {
+  h1,
+  h2,
+  .screen[data-s="8"] h2,
+  .screen[data-s="12"] h1,
+  .screen[data-s="13"] h1 { top: 90px; }
+
+  .back-button { top: 40px; }
+  .start .kit { top: 203px; }
+  .start .note { top: 566px; }
+  .bottom { top: 598px; }
+
+  .screen[data-s="1"] .grid,
+  .screen[data-s="5"] .shape-picker { top: 203px; }
+
+  .screen[data-s="1"] .status,
+  .screen[data-s="5"] .shape-selection-note,
+  .screen[data-s="3"] .tap,
+  .screen[data-s="4"] .tap,
+  .screen[data-s="2"] .swipe,
+  .screen[data-s="6"] .steam-note,
+  .screen[data-s="7"] .hint,
+  .package-capture-note { top: 562px; }
+
+  .screen[data-s="2"] .bowl { top: 297px; }
+  .screen[data-s="2"] .mix-status { top: 185px; }
+  .direction-guide.vertical { top: 250px; gap: 230px; }
+
+  .screen[data-s="3"] .surface,
+  .screen[data-s="4"] .surface { top: 261px; }
+
+  .screen[data-s="8"] #packageCakes { top: 280px; }
+
+  .screen[data-s="9"] .final > img,
+  .screen[data-s="10"] .card,
+  .screen[data-s="11"] .final > img { top: 250px; }
+
+  .screen[data-s="9"] .swipe-guides { top: 333px; }
+
+  .screen[data-s="11"] .bottom,
+  .screen[data-s="13"] .bottom { top: 532px; }
+
+  .screen[data-s="12"] .gift-wrap { top: 246px; }
+  .screen[data-s="12"] .gift-wrap::after { top: 312px; }
+
+  .screen[data-s="13"] .gift-view { top: 255px; }
+  .screen[data-s="13"] .gift-view .card { transform: translate(-9px, 245px); }
+  .screen[data-s="13"] .swipe-tip { visibility: hidden; }
+
+  .screen[data-s="13"] .gift-view::after {
+    position: absolute;
+    z-index: 8;
+    top: 85px;
+    right: -11px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #fff url("../assets/icons/chevron-right.svg") center/18px 18px no-repeat;
+    content: "";
+  }
+
+  .screen[data-s="13"] .gift-view.card-mode::after {
+    top: 330px;
+    right: auto;
+    left: -12px;
+    background-image: url("../assets/icons/chevron-left.svg");
+  }
+
+  .screen[data-s="13"].card-mode .bottom { top: 720px; }
+}
+
+/* Keep the ingredient choices centered at every supported viewport width. */
+.screen[data-s="1"] .grid {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (max-height: 760px) {
+  .screen[data-s="1"] .grid {
+    left: 50%;
+    transform: translateX(-50%) scale(.84);
+  }
+}
+
+/* In-app browsers (notably KakaoTalk) report a changing visual viewport as
+   their browser chrome expands and collapses. Keep the action area in view. */
+@media (max-height: 760px) {
+  .phone,
+  .screen {
+    min-height: var(--app-visible-height, 100dvh);
+  }
+
+  .screen h1,
+  .screen h2 {
+    top: clamp(58px, 12vh, 84px);
+  }
+
+  .screen:not(.start) .bottom {
+    top: auto !important;
+    bottom: max(18px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .screen[data-s="1"] .grid {
+    top: clamp(132px, 29vh, 194px);
+  }
+
+  .screen[data-s="1"] .status,
+  .screen[data-s="5"] .shape-selection-note {
+    top: clamp(408px, 72vh, 486px);
+  }
+
+  .screen[data-s="5"] .shape-picker {
+    top: clamp(136px, 28vh, 188px);
+  }
+
+  .screen[data-s="2"] .bowl {
+    top: clamp(232px, 39vh, 297px);
+  }
+
+  .screen[data-s="2"] .mix-status {
+    top: clamp(150px, 27vh, 185px);
+  }
+
+  .screen[data-s="3"] .surface,
+  .screen[data-s="4"] .surface {
+    top: clamp(218px, 36vh, 261px);
+  }
+
+  .screen[data-s="3"] .callout {
+    top: clamp(250px, 42vh, 301px);
+  }
+
+  .screen[data-s="3"] .tap,
+  .screen[data-s="4"] .tap,
+  .screen[data-s="2"] .swipe,
+  .screen[data-s="6"] .steam-note,
+  .screen[data-s="7"] .hint,
+  .screen[data-s="9"] .swipe-guides,
+  .screen[data-s="10"] .package-capture-note,
+  .screen[data-s="13"] .swipe-tip {
+    top: clamp(420px, 75vh, 562px);
+  }
+
+  .screen[data-s="6"] .steamer,
+  .screen[data-s="7"] .loading-art {
+    top: clamp(218px, 39vh, 271px);
+  }
+
+  .screen[data-s="7"] .loading-art {
+    height: clamp(220px, 42vh, 301px);
+  }
+
+  .screen[data-s="8"] #packageCakes,
+  .screen[data-s="9"] .final,
+  .screen[data-s="10"] .card,
+  .screen[data-s="11"] .final,
+  .screen[data-s="13"] .gift-view {
+    top: clamp(205px, 38vh, 280px);
+  }
+
+  .screen[data-s="13"] .gift-view.card-mode .card {
+    transform: translate(-9px, 0);
+  }
+}
+
+@media (max-height: 620px) {
+  .screen[data-s="1"] .grid {
+    top: 126px;
+    transform: translateX(-50%) scale(.72);
+  }
+
+  .screen[data-s="1"] .status,
+  .screen[data-s="5"] .shape-selection-note {
+    top: 398px;
+  }
+
+  .screen[data-s="5"] .shape-picker {
+    top: 126px;
+    transform: scale(.72);
+  }
+
+  .screen[data-s="2"] .bowl,
+  .screen[data-s="3"] .surface,
+  .screen[data-s="4"] .surface,
+  .screen[data-s="6"] .steamer,
+  .screen[data-s="7"] .loading-art {
+    top: 190px;
+  }
+
+  .screen[data-s="7"] .loading-art {
+    height: 210px;
+  }
+
+  .screen[data-s="3"] .callout {
+    top: 214px;
+  }
+
+  .screen[data-s="3"] .tap,
+  .screen[data-s="4"] .tap,
+  .screen[data-s="2"] .swipe,
+  .screen[data-s="6"] .steam-note,
+  .screen[data-s="7"] .hint,
+  .screen[data-s="13"] .swipe-tip {
+    top: 410px;
+  }
+
+  .screen[data-s="8"] #packageCakes,
+  .screen[data-s="9"] .final,
+  .screen[data-s="10"] .card,
+  .screen[data-s="11"] .final,
+  .screen[data-s="13"] .gift-view {
+    top: 190px;
+  }
+
+  .screen[data-s="10"] .card {
+    width: min(348px, calc(100vw - 48px));
+    height: auto;
+    aspect-ratio: 348 / 232;
+  }
+
+  .screen[data-s="13"] .gift-view.card-mode .card {
+    transform: translate(-9px, 0);
+  }
+}
+
+/* Use visualViewport-driven classes too: KakaoTalk may overlay its chrome
+   without changing the CSS layout viewport or triggering height media queries. */
+html.compact-viewport .phone,
+html.compact-viewport .screen {
+  min-height: var(--app-visible-height, 100dvh);
+}
+
+html.compact-viewport .screen h1,
+html.compact-viewport .screen h2 {
+  top: clamp(58px, 12vh, 84px);
+}
+
+html.compact-viewport .screen:not(.start) .bottom {
+  top: auto !important;
+  bottom: max(18px, env(safe-area-inset-bottom)) !important;
+}
+
+html.compact-viewport .screen[data-s="1"] .grid { top: clamp(132px, 29vh, 194px); }
+html.compact-viewport .screen[data-s="1"] .status,
+html.compact-viewport .screen[data-s="5"] .shape-selection-note { top: clamp(408px, 72vh, 486px); }
+html.compact-viewport .screen[data-s="5"] .shape-picker { top: clamp(136px, 28vh, 188px); }
+html.compact-viewport .screen[data-s="2"] .bowl { top: clamp(232px, 39vh, 297px); }
+html.compact-viewport .screen[data-s="2"] .mix-status { top: clamp(150px, 27vh, 185px); }
+html.compact-viewport .screen[data-s="3"] .surface,
+html.compact-viewport .screen[data-s="4"] .surface { top: clamp(218px, 36vh, 261px); }
+html.compact-viewport .screen[data-s="3"] .callout { top: clamp(250px, 42vh, 301px); }
+html.compact-viewport .screen[data-s="3"] .tap,
+html.compact-viewport .screen[data-s="4"] .tap,
+html.compact-viewport .screen[data-s="2"] .swipe,
+html.compact-viewport .screen[data-s="6"] .steam-note,
+html.compact-viewport .screen[data-s="7"] .hint,
+html.compact-viewport .screen[data-s="9"] .swipe-guides,
+html.compact-viewport .screen[data-s="10"] .package-capture-note,
+html.compact-viewport .screen[data-s="13"] .swipe-tip { top: clamp(420px, 75vh, 562px); }
+html.compact-viewport .screen[data-s="6"] .steamer,
+html.compact-viewport .screen[data-s="7"] .loading-art { top: clamp(218px, 39vh, 271px); }
+html.compact-viewport .screen[data-s="7"] .loading-art { height: clamp(220px, 42vh, 301px); }
+html.compact-viewport .screen[data-s="8"] #packageCakes,
+html.compact-viewport .screen[data-s="9"] .final,
+html.compact-viewport .screen[data-s="10"] .card,
+html.compact-viewport .screen[data-s="11"] .final,
+html.compact-viewport .screen[data-s="13"] .gift-view { top: clamp(205px, 38vh, 280px); }
+html.compact-viewport .screen[data-s="13"] .gift-view.card-mode .card { transform: translate(-9px, 0); }
+
+html.tiny-viewport .screen[data-s="1"] .grid { top: 126px; transform: translateX(-50%) scale(.72); }
+html.tiny-viewport .screen[data-s="1"] .status,
+html.tiny-viewport .screen[data-s="5"] .shape-selection-note { top: 398px; }
+html.tiny-viewport .screen[data-s="5"] .shape-picker { top: 126px; transform: scale(.72); }
+html.tiny-viewport .screen[data-s="2"] .bowl,
+html.tiny-viewport .screen[data-s="3"] .surface,
+html.tiny-viewport .screen[data-s="4"] .surface,
+html.tiny-viewport .screen[data-s="6"] .steamer,
+html.tiny-viewport .screen[data-s="7"] .loading-art { top: 190px; }
+html.tiny-viewport .screen[data-s="7"] .loading-art { height: 210px; }
+html.tiny-viewport .screen[data-s="3"] .callout { top: 214px; }
+html.tiny-viewport .screen[data-s="3"] .tap,
+html.tiny-viewport .screen[data-s="4"] .tap,
+html.tiny-viewport .screen[data-s="2"] .swipe,
+html.tiny-viewport .screen[data-s="6"] .steam-note,
+html.tiny-viewport .screen[data-s="7"] .hint,
+html.tiny-viewport .screen[data-s="13"] .swipe-tip { top: 410px; }
+html.tiny-viewport .screen[data-s="8"] #packageCakes,
+html.tiny-viewport .screen[data-s="9"] .final,
+html.tiny-viewport .screen[data-s="10"] .card,
+html.tiny-viewport .screen[data-s="11"] .final,
+html.tiny-viewport .screen[data-s="13"] .gift-view { top: 190px; }
+html.tiny-viewport .screen[data-s="10"] .card { width: min(348px, calc(100vw - 48px)); height: auto; aspect-ratio: 348 / 232; }
+html.tiny-viewport .screen[data-s="13"] .gift-view.card-mode .card { transform: translate(-9px, 0); }
