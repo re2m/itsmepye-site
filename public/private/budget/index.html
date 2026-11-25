@@ -9,7 +9,7 @@
 <style>
 :root{
   --bg:#FFF8EF; --card:#fff; --ink:#2B2118; --sub:#7A6A5C; --line:#EFE2D2;
-  --accent:#F28C28; --accent-ink:#B85A00; --accent-soft:#FFE9D1; --warn:#C2410C; --ok:#2F7A4B; --ok-soft:#E3F2E8;
+  --accent:#F28C28; --accent-ink:#B85A00; --accent-soft:#FFE9D1; --warn:#C2410C; --ok:#2F7A4B; --ok-soft:#E3F2E8; --save:#2F5F9E; --save-soft:#E4ECF7;
   --font: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif;
 }
 *{box-sizing:border-box}
@@ -55,6 +55,7 @@ input,select{font-family:inherit}
 .seg.big button{flex:1;padding:10px;font-size:15px}
 .seg.big button.on[data-t=expense]{color:var(--accent-ink)}
 .seg.big button.on[data-t=income]{color:var(--ok)}
+.seg.big button.on[data-t=saving]{color:var(--save)}
 
 .cats .ci{display:flex;align-items:center;gap:10px;padding:8px 0;border:0;background:none;width:100%;text-align:left;color:var(--ink);border-radius:10px}
 .cats .ci.on{background:var(--accent-soft)}
@@ -81,10 +82,22 @@ input,select{font-family:inherit}
 .item .t span{font-size:12px;color:var(--sub)}
 .item .a{font-weight:800;font-size:15px;white-space:nowrap}
 .item .a.in{color:var(--ok)}
+.item .a.sv{color:var(--save)}
+.svc{color:var(--save)!important}
+.bar.sav i{background:var(--save)}
+.save-card{background:var(--save-soft);border-color:#CFDCEE}
+.save-card .lbl{color:var(--save)}
+.save-card .total{font-size:26px;margin:4px 0 2px;color:var(--save)}
+.save-card .tag{font-size:11px;font-weight:700;color:var(--save);background:#fff;border-radius:99px;padding:3px 8px}
+.save-card .row{margin-top:6px}
+.sv-cats{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sv-cats span{background:#fff;border-radius:99px;padding:5px 10px;font-size:12px;font-weight:700;color:var(--ink)}
 
 .fab-wrap{position:fixed;left:50%;transform:translateX(-50%);bottom:max(24px,env(safe-area-inset-bottom));width:calc(100% - 40px);max-width:440px;display:flex;gap:10px}
 .fab{flex:1;border:0;background:var(--accent);color:#fff;font-size:17px;font-weight:800;padding:18px;border-radius:18px;box-shadow:0 8px 24px rgba(242,140,40,.35)}
-.fab.inc{flex:0 0 auto;background:var(--ok);padding:18px 20px;box-shadow:0 8px 24px rgba(47,122,75,.3)}
+.fab.inc,.fab.sav{flex:0 0 auto;padding:18px 16px}
+.fab.inc{background:var(--ok);box-shadow:0 8px 24px rgba(47,122,75,.3)}
+.fab.sav{background:var(--save);box-shadow:0 8px 24px rgba(47,95,158,.3)}
 
 .dim{position:fixed;inset:0;background:rgba(43,33,24,.4);display:none;align-items:flex-end;justify-content:center;z-index:10}
 .dim.show{display:flex}
@@ -93,6 +106,7 @@ input,select{font-family:inherit}
 .sheet h3{margin:0 0 12px;font-size:19px}
 .amt{display:flex;align-items:baseline;gap:6px;border-bottom:2px solid var(--accent);padding:6px 0}
 .sheet.income .amt{border-color:var(--ok)}
+.sheet.saving .amt{border-color:var(--save)}
 .amt input{flex:1;border:0;background:none;font-size:30px;font-weight:800;outline:none;color:var(--ink);min-width:0}
 .amt span{font-size:20px;font-weight:700;color:var(--sub)}
 .quick{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
@@ -103,6 +117,7 @@ label.f{display:block;font-size:13px;font-weight:700;color:var(--sub);margin:16p
 .chip .e{font-size:22px}
 .chip.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink);font-weight:800}
 .sheet.income .chip.on{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.sheet.saving .chip.on{border-color:var(--save);background:var(--save-soft);color:var(--save)}
 input.in,select.in{width:100%;font-size:16px;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);outline:none}
 input.in:focus,select.in:focus{border-color:var(--accent)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -110,6 +125,7 @@ input.in:focus,select.in:focus{border-color:var(--accent)}
 .btn{flex:1;border:0;border-radius:14px;padding:16px;font-size:16px;font-weight:800}
 .btn.pri{background:var(--accent);color:#fff}
 .sheet.income .btn.pri{background:var(--ok)}
+.sheet.saving .btn.pri{background:var(--save)}
 .btn.pri:disabled{opacity:.4}
 .btn.sec{background:var(--card);border:1.5px solid var(--line);color:var(--sub)}
 .btn.del{background:#FDE7DD;color:var(--warn);flex:0 0 auto;padding:16px 18px}
@@ -140,16 +156,23 @@ input.in:focus,select.in:focus{border-color:var(--accent)}
     <div class="row" id="budgetRow"></div>
     <div class="stats">
       <div class="stat"><span>이번 달 수입</span><b id="incTotal" class="pos">0원</b></div>
-      <div class="stat"><span>수입 − 지출</span><b id="net">0원</b></div>
+      <div class="stat"><span title="수입 − 지출 − 저축">쓸 수 있는 돈</span><b id="net">0원</b></div>
       <div class="stat"><span>하루 평균 지출</span><b id="avg">0원</b></div>
       <div class="stat"><span>지출 지난달 대비</span><b id="diff">-</b></div>
     </div>
   </div>
 
+  <div class="card save-card">
+    <div class="card-h"><div class="lbl">🏦 저축</div><span class="tag">자산 · 바로 쓸 수 없는 돈</span></div>
+    <div class="total" id="svTotal">0원</div>
+    <div class="row"><span>지금까지 모은 돈 · 쓸 수 있는 돈에서 빠져요</span><span>이번 달 <b id="svMonth" class="svc">0원</b></span></div>
+    <div class="sv-cats" id="svCats"></div>
+  </div>
+
   <div class="card">
     <div class="card-h">
       <div class="lbl">카테고리별 <span style="font-weight:400">· 눌러서 필터</span></div>
-      <div class="seg" id="catSeg"><button data-t="expense" class="on">지출</button><button data-t="income">수입</button></div>
+      <div class="seg" id="catSeg"><button data-t="expense" class="on">지출</button><button data-t="income">수입</button><button data-t="saving">저축</button></div>
     </div>
     <div class="cats" id="cats"></div>
   </div>
@@ -157,22 +180,23 @@ input.in:focus,select.in:focus{border-color:var(--accent)}
   <div class="sec-t">
     <h2>내역</h2>
     <button class="filter" id="filterBtn" style="display:none"></button>
-    <div class="seg" id="listSeg"><button data-t="all" class="on">전체</button><button data-t="expense">지출</button><button data-t="income">수입</button></div>
+    <div class="seg" id="listSeg"><button data-t="all" class="on">전체</button><button data-t="expense">지출</button><button data-t="income">수입</button><button data-t="saving">저축</button></div>
   </div>
   <input class="search" id="search" placeholder="🔍 메모 검색">
   <div id="list"></div>
 </div>
 
 <div class="fab-wrap">
-  <button class="fab" id="addBtn">+ 지출 추가</button>
+  <button class="fab" id="addBtn">+ 지출</button>
   <button class="fab inc" id="addIncBtn">+ 수입</button>
+  <button class="fab sav" id="addSavBtn">+ 저축</button>
 </div>
 
 <!-- 입력 시트 -->
 <div class="dim" id="editDim">
   <div class="sheet" id="editSheet">
     <h3 id="editTitle">기록하기</h3>
-    <div class="seg big" id="typeSeg"><button data-t="expense">지출</button><button data-t="income">수입</button></div>
+    <div class="seg big" id="typeSeg"><button data-t="expense">지출</button><button data-t="income">수입</button><button data-t="saving">저축</button></div>
     <div class="amt"><input id="fAmt" inputmode="numeric" placeholder="0" autocomplete="off"><span>원</span></div>
     <div class="quick">
       <button data-q="1000">+1천</button><button data-q="5000">+5천</button>
@@ -242,8 +266,20 @@ const CATS = {
     {id:'inc_etc',e:'🪙', n:'기타'},
   ],
 };
-const CAT = Object.fromEntries([...CATS.expense, ...CATS.income].map(c=>[c.id,c]));
-const DEF_CAT = {expense:'food', income:'salary'};
+// 저축은 자산이지만 바로 쓸 수 있는 돈이 아니라서 지출·수입과 따로 셈해요.
+CATS.saving = [
+  {id:'sv_install', e:'🐷', n:'적금'},
+  {id:'sv_deposit', e:'🏦', n:'예금'},
+  {id:'sv_house',   e:'🏡', n:'청약'},
+  {id:'sv_pension', e:'🧓', n:'연금'},
+  {id:'sv_invest',  e:'📊', n:'투자'},
+  {id:'sv_emerg',   e:'🛟', n:'비상금'},
+  {id:'sv_goal',    e:'🎯', n:'목표'},
+  {id:'sv_etc',     e:'💎', n:'기타'},
+];
+const CAT = Object.fromEntries([...CATS.expense, ...CATS.income, ...CATS.saving].map(c=>[c.id,c]));
+const DEF_CAT = {expense:'food', income:'salary', saving:'sv_install'};
+const TYPE_N = {expense:'지출', income:'수입', saving:'저축'};
 const KEY = 'expense-tracker-v1';
 const $ = s => document.querySelector(s);
 const won = n => Math.round(n).toLocaleString('ko-KR') + '원';
@@ -251,8 +287,8 @@ const pad = n => String(n).padStart(2,'0');
 const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const live = () => db.items.filter(i => !i.deleted);
-const typeOf = i => i.type === 'income' ? 'income' : 'expense';   // 예전 데이터(type 없음)는 지출
-const catOf = i => CAT[i.cat] || (typeOf(i)==='income' ? CAT.inc_etc : CAT.etc);
+const typeOf = i => i.type === 'income' || i.type === 'saving' ? i.type : 'expense';   // 예전 데이터(type 없음)는 지출
+const catOf = i => CAT[i.cat] || ({income:CAT.inc_etc, saving:CAT.sv_etc}[typeOf(i)] || CAT.etc);
 
 let db = load();
 let cur = new Date(); cur.setDate(1);
@@ -324,9 +360,19 @@ function render(){
   const income = sumOf(items, 'income');
   $('#total').textContent = won(total);
   $('#incTotal').textContent = won(income);
-  const net = income - total, netEl = $('#net');
+  const saved = sumOf(items, 'saving');
+  const net = income - total - saved, netEl = $('#net');
   netEl.textContent = (net>0?'+':net<0?'−':'') + won(Math.abs(net));
   netEl.className = net>0 ? 'pos' : net<0 ? 'neg' : '';
+
+  // 저축 (누적은 보고 있는 달의 말일까지)
+  const endKey = ymd(new Date(cur.getFullYear(), cur.getMonth()+1, 0));
+  const svAll = live().filter(i => typeOf(i)==='saving' && i.date <= endKey);
+  $('#svTotal').textContent = won(svAll.reduce((s,i)=>s+i.amount,0));
+  $('#svMonth').textContent = won(saved);
+  const svBy = {}; svAll.forEach(i => { const c = catOf(i); svBy[c.id] = (svBy[c.id]||0) + i.amount; });
+  $('#svCats').innerHTML = CATS.saving.filter(c=>svBy[c.id]).sort((a,b)=>svBy[b.id]-svBy[a.id])
+    .map(c => `<span>${c.e} ${c.n} ${won(svBy[c.id])}</span>`).join('');
 
   // 예산
   const bar = $('#budgetBar'), row = $('#budgetRow');
@@ -360,17 +406,17 @@ function render(){
 
   // 카테고리
   setSeg($('#catSeg'), catType);
-  const catTotal = catType==='income' ? income : total;
+  const catTotal = {income, expense:total, saving:saved}[catType];
   const byCat = {}; items.filter(i=>typeOf(i)===catType).forEach(i => { const id = catOf(i).id; byCat[id] = (byCat[id]||0) + i.amount; });
   const sorted = CATS[catType].filter(c=>byCat[c.id]).sort((a,b)=>byCat[b.id]-byCat[a.id]);
   const max = sorted.length ? byCat[sorted[0].id] : 0;
   $('#cats').innerHTML = sorted.length ? sorted.map(c => `
     <button class="ci ${filterCat===c.id?'on':''}" data-cat="${c.id}">
       <span class="e">${c.e}</span><span class="n">${c.n}</span>
-      <span class="bar ${catType==='income'?'inc':''}"><i style="width:${byCat[c.id]/max*100}%"></i></span>
+      <span class="bar ${{income:'inc', saving:'sav'}[catType]||''}"><i style="width:${byCat[c.id]/max*100}%"></i></span>
       <span class="v">${won(byCat[c.id])}</span>
       <span class="p">${Math.round(byCat[c.id]/catTotal*100)}%</span>
-    </button>`).join('') : `<div class="empty">아직 이번 달 ${catType==='income'?'수입':'지출'}이 없어요</div>`;
+    </button>`).join('') : `<div class="empty">아직 이번 달 ${TYPE_N[catType]} 기록이 없어요</div>`;
 
   // 필터 표시
   setSeg($('#listSeg'), listType);
@@ -390,15 +436,16 @@ function render(){
   const W = ['일','월','화','수','목','금','토'];
   $('#list').innerHTML = shown.length ? Object.keys(groups).map(date => {
     const d = new Date(date+'T00:00:00');
-    const out = sumOf(groups[date],'expense'), inc = sumOf(groups[date],'income');
-    const sums = (inc ? `<span class="pos">+${won(inc)}</span>` : '') + (out ? `<span>-${won(out)}</span>` : '');
+    const out = sumOf(groups[date],'expense'), inc = sumOf(groups[date],'income'), sv = sumOf(groups[date],'saving');
+    const sums = (inc ? `<span class="pos">+${won(inc)}</span>` : '') + (sv ? `<span class="svc">저축 ${won(sv)}</span>` : '') + (out ? `<span>-${won(out)}</span>` : '');
     return `<div class="day"><div class="day-h"><span>${d.getMonth()+1}월 ${d.getDate()}일 (${W[d.getDay()]})</span><span class="s">${sums}</span></div>` +
       groups[date].map(i => {
-        const c = catOf(i), isInc = typeOf(i)==='income';
-        const sub = isInc ? `${c.n} · 수입` : `${c.n}${i.pay ? ' · '+esc(i.pay) : ''}`;
+        const c = catOf(i), t = typeOf(i), isInc = t==='income';
+        const sub = t==='expense' ? `${c.n}${i.pay ? ' · '+esc(i.pay) : ''}` : `${c.n} · ${TYPE_N[t]}`;
+        const amt = t==='income' ? ['in','+'] : t==='saving' ? ['sv','🏦 '] : ['','-'];
         return `<button class="item" data-id="${i.id}"><span class="e">${c.e}</span>
           <span class="t"><b>${esc(i.memo || c.n)}</b><span>${sub}</span></span>
-          <span class="a ${isInc?'in':''}">${isInc?'+':'-'}${won(i.amount)}</span></button>`;
+          <span class="a ${amt[0]}">${amt[1]}${won(i.amount)}</span></button>`;
       }).join('') + `</div>`;
   }).join('') : `<div class="empty">${items.length ? '조건에 맞는 내역이 없어요' : '아래 버튼으로 첫 기록을 남겨보세요 ✍️'}</div>`;
 }
@@ -407,10 +454,11 @@ function render(){
 function renderForm(){
   const inc = fType === 'income';
   $('#editSheet').classList.toggle('income', inc);
+  $('#editSheet').classList.toggle('saving', fType === 'saving');
   setSeg($('#typeSeg'), fType);
   $('#fCats').innerHTML = CATS[fType].map(c => `<button class="chip ${fCat===c.id?'on':''}" data-c="${c.id}"><span class="e">${c.e}</span>${c.n}</button>`).join('');
-  $('#payBox').style.visibility = inc ? 'hidden' : '';
-  $('#fMemo').placeholder = inc ? '예: 11월 월급' : '예: 점심 김치찌개';
+  $('#payBox').style.visibility = fType === 'expense' ? '' : 'hidden';
+  $('#fMemo').placeholder = {income:'예: 11월 월급', saving:'예: OO은행 적금 자동이체', expense:'예: 점심 김치찌개'}[fType];
 }
 function parseAmt(v){ return parseInt(String(v).replace(/[^0-9]/g,''),10) || 0; }
 function setAmt(n){ $('#fAmt').value = n ? n.toLocaleString('ko-KR') : ''; $('#fSave').disabled = !n; }
@@ -448,12 +496,12 @@ $('#fSave').onclick = () => {
   const amount = parseAmt($('#fAmt').value);
   const date = $('#fDate').value;
   if (!amount || !date) return;
-  const inc = fType === 'income';
-  const data = { type:fType, amount, cat:fCat, memo:$('#fMemo').value.trim(), date, pay: inc ? '' : $('#fPay').value };
-  if (!inc) localStorage.setItem(KEY+'-pay', data.pay);
+  const isExp = fType === 'expense';
+  const data = { type:fType, amount, cat:fCat, memo:$('#fMemo').value.trim(), date, pay: isExp ? $('#fPay').value : '' };
+  if (isExp) localStorage.setItem(KEY+'-pay', data.pay);
   data.updated = Date.now();
   if (editingId){ Object.assign(db.items.find(i=>i.id===editingId), data); toast('수정했어요'); }
-  else { db.items.push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,6), created: Date.now(), ...data }); toast(inc ? '수입을 기록했어요' : '지출을 기록했어요'); }
+  else { db.items.push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,6), created: Date.now(), ...data }); toast(`${TYPE_N[fType]}을 기록했어요`); }
   save();
   // 다른 달 날짜로 저장하면 그 달로 이동
   const d = new Date(date+'T00:00:00'); cur = new Date(d.getFullYear(), d.getMonth(), 1);
@@ -468,6 +516,7 @@ $('#fMemo').addEventListener('keydown', e => { if (e.key==='Enter' && !$('#fSave
 // ---------- 메인 이벤트 ----------
 $('#addBtn').onclick = () => openEdit(null, 'expense');
 $('#addIncBtn').onclick = () => openEdit(null, 'income');
+$('#addSavBtn').onclick = () => openEdit(null, 'saving');
 $('#list').onclick = e => { const b = e.target.closest('.item'); if (b) openEdit(b.dataset.id); };
 $('#cats').onclick = e => { const b = e.target.closest('.ci'); if (b){ filterCat = filterCat===b.dataset.cat ? null : b.dataset.cat; render(); } };
 $('#catSeg').onclick = e => { const b = e.target.closest('button'); if (b){ catType = b.dataset.t; filterCat = null; render(); } };
@@ -496,8 +545,8 @@ $('#exportCsv').onclick = () => {
   if (!items.length) return toast('이번 달 내역이 없어요');
   const q = s => `"${String(s).replace(/"/g,'""')}"`;
   const csv = '﻿날짜,구분,카테고리,메모,결제수단,금액\n' + items.map(i => {
-    const inc = typeOf(i)==='income';
-    return [i.date, inc?'수입':'지출', catOf(i).n, q(i.memo||''), i.pay||'', inc ? i.amount : -i.amount].join(',');
+    const t = typeOf(i);
+    return [i.date, TYPE_N[t], catOf(i).n, q(i.memo||''), i.pay||'', t==='income' ? i.amount : -i.amount].join(',');
   }).join('\n');
   download(`가계부_${key}.csv`, csv, 'text/csv;charset=utf-8');
 };
