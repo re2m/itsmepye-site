@@ -6,8 +6,8 @@
 			"permanent": true
 		},
 		{
-			"source": "/ricecake/:path*",
-			"destination": "/things/ricecake/:path*",
+			"source": "/ricecake/(.*)",
+			"destination": "/things/ricecake/$1",
 			"permanent": true
 		},
 		{
