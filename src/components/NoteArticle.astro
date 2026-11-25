@@ -14,7 +14,7 @@ interface Props {
 }
 const { title, description, icon, accent, accentInk, body, ogImage } = Astro.props;
 ---
-<BaseLayout title={`${title} — itsmepye`} description={description} current="notes" image={ogImage} type="article">
+<BaseLayout title={`${title} — 프예의 공간`} description={description} current="notes" image={ogImage} type="article">
 	<article class="note" style={`--accent:${accent};--accent-ink:${accentInk}`}>
 		<header class="note-head">
 			<a class="note-back" href="/notes">← Notes</a>
