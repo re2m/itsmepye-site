@@ -2,32 +2,32 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<base href="/ricecake/">
+<base href="/things/ricecake/">
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-MRDKS448');</script>
 <!-- End Google Tag Manager -->
-<link rel="preload" as="image" href="/ricecake/src/assets/figma/figma-kit.webp" fetchpriority="high">
-<link rel="preload" as="image" href="/ricecake/src/assets/figma/figma-moon.webp" fetchpriority="high">
+<link rel="preload" as="image" href="/things/ricecake/src/assets/figma/figma-kit.webp" fetchpriority="high">
+<link rel="preload" as="image" href="/things/ricecake/src/assets/figma/figma-moon.webp" fetchpriority="high">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8925992207022674" crossorigin="anonymous"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>1분 안에 수제 송편 만들기</title>
 <meta name="description" content="직접 만든 송편과 함께 마음을 전해보세요!">
-<link rel="canonical" href="https://www.itsmepye.site/ricecake/">
+<link rel="canonical" href="https://www.itsmepye.site/things/ricecake/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="한입 송편">
-<meta property="og:url" content="https://www.itsmepye.site/ricecake/">
+<meta property="og:url" content="https://www.itsmepye.site/things/ricecake/">
 <meta property="og:title" content="1분 안에 수제 송편 만들기">
 <meta property="og:description" content="직접 만든 송편과 함께 마음을 전해보세요!">
-<meta property="og:image" content="https://www.itsmepye.site/ricecake/src/assets/og/default.png">
+<meta property="og:image" content="https://www.itsmepye.site/things/ricecake/src/assets/og/default.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="한입 송편 만들기">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="1분 안에 수제 송편 만들기">
 <meta name="twitter:description" content="직접 만든 송편과 함께 마음을 전해보세요!">
-<meta name="twitter:image" content="https://www.itsmepye.site/ricecake/src/assets/og/default.png">
-<link rel="icon" type="image/x-icon" href="/ricecake/favicon.ico">
-<link rel="stylesheet" href="/ricecake/src/styles/base.css">
+<meta name="twitter:image" content="https://www.itsmepye.site/things/ricecake/src/assets/og/default.png">
+<link rel="icon" type="image/x-icon" href="/things/ricecake/favicon.ico">
+<link rel="stylesheet" href="/things/ricecake/src/styles/base.css">
 <style>
 :root{--ink:#332c27;
 --muted:#746c65;
@@ -385,8 +385,8 @@ opacity:.55}100%{transform:scale(.6) rotate(-9deg);
 opacity:0}}@media(max-width:560px){.app{padding:0}.phone,.screen{width:100%;
 min-height:100dvh}.phone{box-shadow:none}.screen{padding-top:max(30px,env(safe-area-inset-top))}}
 </style>
-<link rel="stylesheet" href="/ricecake/src/styles/figma-exact.css">
-<link rel="stylesheet" href="/ricecake/src/styles/interaction-fixes.css">
+<link rel="stylesheet" href="/things/ricecake/src/styles/figma-exact.css">
+<link rel="stylesheet" href="/things/ricecake/src/styles/interaction-fixes.css">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRDKS448" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -938,7 +938,7 @@ $('messageNext').onclick=()=>{boja();
 show(11)};
 function giftLink(){const payload={d:(S.d.length?S.d:[selectedDough()]).map(x=>x.n),active:selectedDough().n,b:S.b,shapes:selectedShapeIndexes(),m:msg()};
 const bytes=new TextEncoder().encode(JSON.stringify(payload));let binary='';bytes.forEach(byte=>binary+=String.fromCharCode(byte));
-const token=btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');return `${location.origin}/ricecake/gift/#gift=${token}`}
+const token=btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');return `${location.origin}/things/ricecake/gift/#gift=${token}`}
 function restoreGiftLink(){if(!location.hash.startsWith('#gift='))return false;
 try{const token=location.hash.slice(6).replace(/-/g,'+').replace(/_/g,'/'),binary=atob(token+'='.repeat((4-token.length%4)%4));
 const bytes=Uint8Array.from(binary,char=>char.charCodeAt(0)),payload=JSON.parse(new TextDecoder().decode(bytes));
