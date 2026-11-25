@@ -20,6 +20,10 @@ input,select{font-family:inherit}
 
 .hd{display:flex;align-items:center;justify-content:space-between;margin:8px 0 16px}
 .hd h1{font-size:24px;margin:0;letter-spacing:-.5px}
+.hd-r{display:flex;align-items:center;gap:8px}
+.sync{font-size:12px;font-weight:700;color:var(--sub);white-space:nowrap}
+.sync.ok{color:var(--ok)}
+.sync.warn{color:var(--warn)}
 .icon-btn{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:8px 12px;font-size:13px;font-weight:700;color:var(--sub)}
 
 .month{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:16px}
@@ -120,7 +124,7 @@ input.in:focus,select.in:focus{border-color:var(--accent)}
 <div id="app">
   <div class="hd">
     <h1>📒 내 가계부</h1>
-    <button class="icon-btn" id="menuBtn">설정</button>
+    <div class="hd-r"><span class="sync" id="sync"></span><button class="icon-btn" id="menuBtn">설정</button></div>
   </div>
 
   <div class="month">
@@ -205,10 +209,11 @@ input.in:focus,select.in:focus{border-color:var(--accent)}
       <button id="backup">💾 전체 백업 파일 저장 (JSON)</button>
       <button id="restore">📂 백업 파일 불러오기</button>
       <button id="reset" class="danger">🗑 모든 데이터 지우기</button>
+      <button id="logout">🚪 로그아웃</button>
       <button id="menuClose" style="text-align:center;color:var(--sub)">닫기</button>
     </div>
     <input type="file" id="restoreFile" accept="application/json" style="display:none">
-    <div class="hint">데이터는 이 기기의 브라우저에만 저장돼요. 기기를 바꾸기 전엔 백업 파일을 저장해 두세요.</div>
+    <div class="hint">기록은 클라우드에 저장돼서 다른 기기에서 로그인해도 똑같이 보여요. 인터넷이 끊겼을 땐 이 기기에 먼저 저장했다가 연결되면 자동으로 올려요.</div>
   </div>
 </div>
 
@@ -245,6 +250,7 @@ const won = n => Math.round(n).toLocaleString('ko-KR') + '원';
 const pad = n => String(n).padStart(2,'0');
 const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const live = () => db.items.filter(i => !i.deleted);
 const typeOf = i => i.type === 'income' ? 'income' : 'expense';   // 예전 데이터(type 없음)는 지출
 const catOf = i => CAT[i.cat] || (typeOf(i)==='income' ? CAT.inc_etc : CAT.etc);
 
@@ -254,15 +260,60 @@ let filterCat = null, query = '', listType = 'all', catType = 'expense';
 let editingId = null, fType = 'expense', fCat = 'food';
 
 function load(){
-  try { const d = JSON.parse(localStorage.getItem(KEY)); if (d && Array.isArray(d.items)) return d; } catch(e){}
-  return {items:[], budget:0};
+  try {
+    const d = JSON.parse(localStorage.getItem(KEY));
+    if (d && Array.isArray(d.items)) {
+      // 예전 기록에는 수정 시각이 없어서 만든 시각으로 채워요.
+      d.items.forEach(i => { if (!i.updated) i.updated = i.created || 1; });
+      d.budgetUpdated ||= (d.budget ? 1 : 0);
+      return d;
+    }
+  } catch(e){}
+  return {items:[], budget:0, budgetUpdated:0};
 }
-function save(){ localStorage.setItem(KEY, JSON.stringify(db)); }
+function save(){ localStorage.setItem(KEY, JSON.stringify(db)); dirty(); }
+
+// ---------- 클라우드 동기화 ----------
+const DIRTY_KEY = KEY + '-dirty';
+let syncTimer = null, syncing = false, syncAgain = false;
+function setSync(state){
+  const el = $('#sync');
+  const m = { ok:['☁️ 저장됨','ok'], busy:['☁️ 저장 중…',''], local:['📱 이 기기에만 저장됨','warn'], nostore:['☁️ 클라우드 미연결','warn'] }[state];
+  el.textContent = m[0]; el.className = 'sync ' + m[1];
+}
+function dirty(){ localStorage.setItem(DIRTY_KEY, '1'); clearTimeout(syncTimer); syncTimer = setTimeout(sync, 600); }
+async function sync(){
+  if (syncing){ syncAgain = true; return; }
+  syncing = true; setSync('busy');
+  const sent = JSON.stringify(db);
+  try {
+    const r = await fetch('/api/private/budget', {
+      method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json'}, body: sent,
+    });
+    if (r.status === 401){ location.href = '/private/login/?next=' + encodeURIComponent(location.pathname); return; }
+    if (r.status === 503){ setSync('nostore'); return; }
+    if (!r.ok) throw new Error(r.status);
+    const merged = await r.json();
+    // 보내는 동안 바뀐 게 없을 때만 서버 결과로 바꿔요. 바뀌었으면 한 번 더 보내요.
+    if (JSON.stringify(db) === sent){
+      db = merged; localStorage.setItem(KEY, JSON.stringify(db)); localStorage.removeItem(DIRTY_KEY);
+      render();
+    } else syncAgain = true;
+    setSync('ok');
+  } catch(e){
+    setSync('local');
+  } finally {
+    syncing = false;
+    if (syncAgain){ syncAgain = false; sync(); }
+  }
+}
+window.addEventListener('online', sync);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') sync(); });
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),1800); }
 function setSeg(el, val){ el.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.t === val)); }
 
 const monthKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}`;
-const itemsOf = key => db.items.filter(i => i.date.startsWith(key));
+const itemsOf = key => live().filter(i => i.date.startsWith(key));
 const sumOf = (items, type) => items.reduce((s,i)=> typeOf(i)===type ? s+i.amount : s, 0);
 
 function render(){
@@ -382,6 +433,8 @@ function openEdit(id, type){
   $('#editDim').classList.add('show');
   if (!it) setTimeout(()=>$('#fAmt').focus(), 50);
 }
+// 지운 기록은 '지움' 표시만 남겨서 다른 기기에서 되살아나지 않게 해요.
+function tombstone(it){ if (!it) return; for (const k of Object.keys(it)) if (k !== 'id' && k !== 'created') delete it[k]; it.deleted = true; it.updated = Date.now(); }
 function closeEdit(){ $('#editDim').classList.remove('show'); }
 
 $('#typeSeg').onclick = e => { const b = e.target.closest('button'); if (b && b.dataset.t !== fType){ fType = b.dataset.t; fCat = DEF_CAT[fType]; renderForm(); } };
@@ -398,6 +451,7 @@ $('#fSave').onclick = () => {
   const inc = fType === 'income';
   const data = { type:fType, amount, cat:fCat, memo:$('#fMemo').value.trim(), date, pay: inc ? '' : $('#fPay').value };
   if (!inc) localStorage.setItem(KEY+'-pay', data.pay);
+  data.updated = Date.now();
   if (editingId){ Object.assign(db.items.find(i=>i.id===editingId), data); toast('수정했어요'); }
   else { db.items.push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,6), created: Date.now(), ...data }); toast(inc ? '수입을 기록했어요' : '지출을 기록했어요'); }
   save();
@@ -407,7 +461,7 @@ $('#fSave').onclick = () => {
 };
 $('#fDel').onclick = () => {
   if (!confirm('이 기록을 삭제할까요?')) return;
-  db.items = db.items.filter(i=>i.id!==editingId); save(); closeEdit(); render(); toast('삭제했어요');
+  tombstone(db.items.find(i=>i.id===editingId)); save(); closeEdit(); render(); toast('삭제했어요');
 };
 $('#fMemo').addEventListener('keydown', e => { if (e.key==='Enter' && !$('#fSave').disabled) $('#fSave').click(); });
 
@@ -429,7 +483,7 @@ document.addEventListener('keydown', e => { if (e.key==='Escape') document.query
 $('#menuBtn').onclick = () => { $('#budgetIn').value = db.budget ? db.budget.toLocaleString('ko-KR') : ''; $('#menuDim').classList.add('show'); };
 $('#menuClose').onclick = () => $('#menuDim').classList.remove('show');
 $('#budgetIn').addEventListener('input', e => { const n = parseAmt(e.target.value); e.target.value = n ? n.toLocaleString('ko-KR') : ''; });
-$('#budgetSave').onclick = () => { db.budget = parseAmt($('#budgetIn').value); save(); render(); $('#menuDim').classList.remove('show'); toast(db.budget ? '예산을 저장했어요' : '예산을 껐어요'); };
+$('#budgetSave').onclick = () => { db.budget = parseAmt($('#budgetIn').value); db.budgetUpdated = Date.now(); save(); render(); $('#menuDim').classList.remove('show'); toast(db.budget ? '예산을 저장했어요' : '예산을 껐어요'); };
 
 function download(name, text, type){
   const a = document.createElement('a');
@@ -447,25 +501,33 @@ $('#exportCsv').onclick = () => {
   }).join('\n');
   download(`가계부_${key}.csv`, csv, 'text/csv;charset=utf-8');
 };
-$('#backup').onclick = () => download(`가계부백업_${ymd(new Date())}.json`, JSON.stringify(db, null, 1), 'application/json');
+$('#backup').onclick = () => download(`가계부백업_${ymd(new Date())}.json`, JSON.stringify({ items: live(), budget: db.budget }, null, 1), 'application/json');
+$('#logout').onclick = () => { if (confirm('로그아웃할까요?')) location.href = '/api/private/logout'; };
 $('#restore').onclick = () => $('#restoreFile').click();
 $('#restoreFile').onchange = async e => {
   const f = e.target.files[0]; if (!f) return;
   try {
     const d = JSON.parse(await f.text());
     if (!Array.isArray(d.items)) throw 0;
-    if (!confirm(`${d.items.length}건의 내역으로 현재 데이터를 덮어쓸까요?`)) return;
-    db = { items: d.items, budget: +d.budget || 0 }; save(); render(); toast('불러왔어요');
+    const incoming = d.items.filter(i => i && i.id && !i.deleted);
+    if (!confirm(`${incoming.length}건의 내역으로 현재 데이터를 덮어쓸까요?`)) return;
+    const now = Date.now(), keep = new Set(incoming.map(i => i.id));
+    live().forEach(i => { if (!keep.has(i.id)) tombstone(i); });
+    const others = db.items.filter(i => !keep.has(i.id));
+    db = { items: [...others, ...incoming.map(i => ({...i, updated: now}))], budget: +d.budget || 0, budgetUpdated: now };
+    save(); render(); toast('불러왔어요');
     $('#menuDim').classList.remove('show');
   } catch(_) { toast('올바른 백업 파일이 아니에요'); }
   e.target.value = '';
 };
 $('#reset').onclick = () => {
   if (!confirm('모든 기록과 예산을 지울까요? 되돌릴 수 없어요.')) return;
-  db = {items:[], budget:0}; save(); render(); $('#menuDim').classList.remove('show'); toast('모두 지웠어요');
+  live().forEach(tombstone); db.budget = 0; db.budgetUpdated = Date.now(); save(); render(); $('#menuDim').classList.remove('show'); toast('모두 지웠어요');
 };
 
 render();
+setSync(localStorage.getItem(DIRTY_KEY) ? 'local' : 'ok');
+sync();
 </script>
 </body>
 </html>
