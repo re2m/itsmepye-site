@@ -5,6 +5,9 @@ const links = [
 	{ label: "브런치 글 읽으러 가기", href: "https://brunch.co.kr/@4af4962510ae4a8" },
 	// "포트폴리오 확인하기" is hidden until the portfolio page exists (an inert link reads as unfinished).
 ];
+const instagram = "https://www.instagram.com/itsme_pye/";
+// Instagram previews: the user's own post covers saved as square WebP under /images/instagram/.
+const posts: { href: string; image: string; title: string }[] = [];
 ---
 <BaseLayout title="About — itsmepye" description="마케터이자 새로운 것을 끊임없이 찾는 다능인, 프예를 소개합니다." current="about">
 	<section class="about-hero">
@@ -18,6 +21,23 @@ const links = [
 		</div>
 		<div class="about-photo"><img src="/images/site/profile-about.webp" alt="딸기 모자를 쓰고 웃고 있는 프예" width="1080" height="1080" /></div>
 	</section>
+
+	{posts.length > 0 && (
+		<section class="ig">
+			<h2 class="sec-title"><small>INSTAGRAM</small>요즘 프예는</h2>
+			<ul class="ig-grid">
+				{posts.map((post) => (
+					<li>
+						<a class="ig-card" href={post.href} target="_blank" rel="noreferrer">
+							<span class="ig-thumb"><img src={post.image} alt="" width="600" height="600" loading="lazy" /></span>
+							<span class="ig-title">{post.title}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+			<p class="ig-more"><a class="btn ghost" href={instagram} target="_blank" rel="noreferrer">@itsme_pye 더 보기 ↗</a></p>
+		</section>
+	)}
 
 	<section class="about-cards">
 		<a class="about-card" href="/things"><span class="num">01</span><h2>Things</h2><p>작은 불편을 발견하고 해결하는 실험실. 직접 만든 서비스와 도구를 모았어요.</p><span class="more">Things 보기 →</span></a>
@@ -44,6 +64,15 @@ const links = [
 	.about-card p { margin: 0 0 22px; color: var(--muted); font-size: 15px; line-height: 1.7; }
 	.more { color: var(--accent-dark); font-size: 15px; font-weight: 600; }
 
+	.ig { width: min(1100px, 100%); margin: 120px auto 0; }
+	.ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 0; padding: 0; list-style: none; }
+	.ig-card { display: block; }
+	.ig-thumb { display: block; overflow: hidden; aspect-ratio: 1; background: var(--soft); border-radius: 20px; }
+	.ig-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
+	.ig-card:hover .ig-thumb img { transform: scale(1.04); }
+	.ig-title { display: -webkit-box; margin-top: 14px; overflow: hidden; font-size: 16px; font-weight: 600; line-height: 1.5; word-break: keep-all; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+	.ig-more { margin: 40px 0 0; text-align: center; }
+
 	@media (max-width: 900px) {
 		.about-hero { grid-template-columns: 1fr; min-height: 0; border-radius: 28px; }
 		.about-text { padding: 44px 28px 0; }
@@ -51,5 +80,9 @@ const links = [
 		.about-photo { padding: 32px 28px 28px; }
 		.about-photo img { max-width: none; margin: 0; border-radius: 18px; }
 		.about-cards { grid-template-columns: 1fr; margin-top: 64px; }
+		.ig { margin-top: 80px; }
+		.ig-grid { gap: 12px; }
+		.ig-thumb { border-radius: 12px; }
+		.ig-title { margin-top: 8px; font-size: 14px; }
 	}
 </style>
