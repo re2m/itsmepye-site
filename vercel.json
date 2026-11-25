@@ -20,5 +20,33 @@
 		"api/notion/create.js": {
 			"maxDuration": 60
 		}
-	}
+	},
+	"headers": [
+		{
+			"source": "/private",
+			"headers": [
+				{
+					"key": "X-Robots-Tag",
+					"value": "noindex, nofollow"
+				},
+				{
+					"key": "Cache-Control",
+					"value": "private, no-store"
+				}
+			]
+		},
+		{
+			"source": "/private/(.*)",
+			"headers": [
+				{
+					"key": "X-Robots-Tag",
+					"value": "noindex, nofollow"
+				},
+				{
+					"key": "Cache-Control",
+					"value": "private, no-store"
+				}
+			]
+		}
+	]
 }
