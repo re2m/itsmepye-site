@@ -1,4 +1,4 @@
-"""Shrink the hosted ricecake app's images (run after copying a fresh build into public/ricecake/).
+"""Shrink the hosted ricecake app's images (run after copying a fresh build into public/things/ricecake/).
 
 - Converts every PNG the app references (except share images in src/assets/og/) to WebP,
   keeping transparency and capping width at 1024px, then rewrites the references in the
@@ -10,7 +10,7 @@ usage: python3 scripts/optimize-ricecake.py
 import os, re, glob
 from PIL import Image
 
-ROOT = 'public/ricecake'
+ROOT = 'public/things/ricecake'
 TEXT_FILES = [os.path.join(ROOT, 'index.html'), os.path.join(ROOT, 'gift', 'index.html')] + glob.glob(os.path.join(ROOT, 'src', 'styles', '*.css'))
 MAX_W, QUALITY = 1024, 82
 

@@ -27,7 +27,7 @@ export const categories = {
 } as const;
 
 export const things: Entry[] = [
-	{ title: "1분 안에 수제 송편 만들기", href: "/ricecake/", image: "/images/thumbs/ricecake.svg", label: "서비스", summary: "재료와 모양을 골라 나만의 송편을 빚고, 직접 만든 송편과 함께 마음을 전해보세요." },
+	{ title: "1분 안에 수제 송편 만들기", href: "/things/ricecake/", image: "/images/thumbs/ricecake.svg", label: "서비스", summary: "재료와 모양을 골라 나만의 송편을 빚고, 직접 만든 송편과 함께 마음을 전해보세요." },
 	{ title: "나만의 목표 시스템 만들기", href: "/things/goal/", image: "/images/thumbs/goal.svg", label: "서비스", summary: "노트 2권과 펜 2자루로 만들던 목표 시스템을 3분 만에 질문에 답하면서 완성해요." },
 ];
 
