@@ -32,7 +32,7 @@ Cards on `/things` and `/notes` (`src/components/SectionPage.astro`) use thumbna
 - Use only that page's own palette (background color + ink color); no text, photos, gradients, or shadows.
 - If the page's main color is dark, flip it: use the page's light color (e.g. its cream or white) for the silhouette instead of a dark ink.
 
-Existing examples: `ricecake.svg` (navy `#120C38` with a cream silhouette lifting a songpyeon), `goal.svg` (orange `#F28C28`, figure planting a flag with a target cut-out) and `diary.svg` (warm gray `#F1F1EF`, figure hugging a ring-bound diary with a heart cut-out).
+Existing examples: `ricecake.svg` (navy `#120C38` with a cream silhouette lifting a songpyeon), `goal.svg` (mint `#0E8F85`, figure planting a flag with a target cut-out) and `diary.svg` (warm gray `#F1F1EF`, figure hugging a ring-bound diary with a heart cut-out).
 
 ## Hosted static apps
 
