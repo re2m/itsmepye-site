@@ -121,6 +121,12 @@ label.f{display:block;font-size:13px;font-weight:700;color:var(--sub);margin:16p
 input.in,select.in{width:100%;font-size:16px;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);outline:none}
 input.in:focus,select.in:focus{border-color:var(--accent)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two>div{min-width:0}
+/* iOS Safari: 날짜·선택 칸이 칸 너비를 넘거나 높이가 달라지지 않게 맞춰요 */
+input.in,select.in{display:block;min-width:0;max-width:100%;height:50px;line-height:normal}
+input[type=date].in{-webkit-appearance:none;appearance:none;text-align:left}
+input[type=date].in::-webkit-date-and-time-value{text-align:left;margin:0}
+select.in{-webkit-appearance:none;appearance:none;padding-right:36px;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%237A6A5C' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center}
 .acts{display:flex;gap:10px;margin-top:22px}
 .btn{flex:1;border:0;border-radius:14px;padding:16px;font-size:16px;font-weight:800}
 .btn.pri{background:var(--accent);color:#fff}
