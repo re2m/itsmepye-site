@@ -73,8 +73,11 @@ input,select{font-family:inherit}
 .search:focus{border-color:var(--accent)}
 
 .day{margin-top:14px}
-.day-h{display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:700;color:var(--sub);padding:0 4px 6px}
-.day-h .s{display:flex;gap:8px}
+.day-h{display:flex;justify-content:space-between;align-items:baseline;gap:4px 10px;font-size:13px;font-weight:700;color:var(--sub);padding:0 4px 6px}
+.day-h>span:first-child{white-space:nowrap;flex-shrink:0}
+.day-h .s{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 8px;font-size:12px;min-width:0}
+.day-h .s span{white-space:nowrap}
+.save-card .row span{white-space:nowrap}
 .item{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:6px;width:100%;text-align:left;color:var(--ink)}
 .item .e{font-size:22px}
 .item .t{flex:1;min-width:0}
@@ -171,7 +174,7 @@ select.in{-webkit-appearance:none;appearance:none;padding-right:36px;background:
   <div class="card save-card">
     <div class="card-h"><div class="lbl">🏦 저축</div><span class="tag">자산 · 바로 쓸 수 없는 돈</span></div>
     <div class="total" id="svTotal">0원</div>
-    <div class="row"><span>지금까지 모은 돈 · 쓸 수 있는 돈에서 빠져요</span><span>이번 달 <b id="svMonth" class="svc">0원</b></span></div>
+    <div class="row"><span>지금까지 모은 돈</span><span>이번 달 <b id="svMonth" class="svc">0원</b></span></div>
     <div class="sv-cats" id="svCats"></div>
   </div>
 
